@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第13章 绕射与散射传播</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -41,8 +69,13 @@
             <li><a href="27.html">第27章 AI驱动的天线设计与优化</a></li>
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第13章 绕射与散射传播</h1>
+            <p class="dek">障碍物不会把电波彻底档死：未被遮挡的惠更斯次级波源在阴影区重构波前。本章用菲涅尔-基尔霍夫参数 v 量化刃峰绕射，再延伸到球形地面绕射、多径衰落与散射。</p>
+        </header>
 
         <h2>13.1 惠更斯-菲涅尔原理与绕射</h2>
 
@@ -60,9 +93,16 @@
 
         <p>对于<strong>刃峰绕射（knife-edge diffraction）</strong>，核心参数是<strong>菲涅尔-基尔霍夫绕射参数v</strong>：</p>
 
-        <p style="text-align:center; font-size:1.1rem; margin:15px 0;">
-            v = h · √[2(d₁ + d₂) / (λ d₁ d₂)]
-        </p>
+        <div class="math-equation" role="group" aria-label="菲涅尔-基尔霍夫绕射参数">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="绕射参数 v 公式，可横向滚动">
+                <math display="block" aria-label="绕射参数 v 等于障碍物突出高度乘以根号下二倍 d1 加 d2 除以波长乘 d1 乘 d2">
+                    <mrow>
+                        <mi>v</mi><mo>=</mo><mi>h</mi><mo>·</mo>
+                        <msqrt><mfrac><mrow><mn>2</mn><mo>(</mo><msub><mi>d</mi><mn>1</mn></msub><mo>+</mo><msub><mi>d</mi><mn>2</mn></msub><mo>)</mo></mrow><mrow><mi>λ</mi><msub><mi>d</mi><mn>1</mn></msub><msub><mi>d</mi><mn>2</mn></msub></mrow></mfrac></msqrt>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>其中h是障碍物相对于视距连线的突出高度（正值为遮挡，负值为视线清除），d₁和d₂分别是障碍物到发射点和接收点的距离。v是绕射损耗计算中的"万能参量"。</p>
 
@@ -70,13 +110,49 @@
             <strong>物理含义：</strong>v其实就是障碍物高度相对于第一菲涅尔区半径的归一化——回顾第11章，第一菲涅尔区半径r₁ = √(λd₁d₂/d)，所以v = h·√2/r₁。当v = 0时，障碍物刚好与视线平齐；当v = -1时，障碍物低于视线恰好一个第一菲涅尔区半径——此时绕射损耗几乎为0。
         </div>
 
+        <figure id="fig-knife">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" role="img" aria-labelledby="fig-ke-title fig-ke-desc">
+                <title id="fig-ke-title">刃峰绕射几何</title>
+                <desc id="fig-ke-desc">发射点与接收点之间有一条直线视距；刃峰顶部在视距之上突出高度 h。未被遮挡的次级波源越过刃峰边缘到达阴影区，形成绕射场。</desc>
+                <line x1="80" y1="190" x2="740" y2="190" stroke="#53676d" stroke-width="2" stroke-dasharray="7 6"/>
+                <line x1="410" y1="150" x2="410" y2="335" stroke="#203035" stroke-width="7"/>
+                <rect x="410" y="190" width="330" height="145" fill="#94a3b8" fill-opacity="0.18"/>
+                <path d="M80 190 L410 150 L740 190" fill="none" stroke="#147f80" stroke-width="3"/>
+                <line x1="410" y1="150" x2="410" y2="190" stroke="#d06d4d" stroke-width="2" stroke-dasharray="4 3"/>
+                <circle cx="80" cy="190" r="8" fill="#203035"/>
+                <circle cx="740" cy="190" r="8" fill="#203035"/>
+                <text x="40" y="182" font-family="system-ui, 'PingFang SC', sans-serif" font-size="15" fill="#203035">Tx</text>
+                <text x="752" y="184" font-family="system-ui, 'PingFang SC', sans-serif" font-size="15" fill="#203035">Rx</text>
+                <text x="418" y="176" font-family="system-ui, 'PingFang SC', sans-serif" font-size="15" fill="#d06d4d">h</text>
+                <text x="560" y="300" font-family="system-ui, 'PingFang SC', sans-serif" font-size="15" fill="#53676d">阴影区</text>
+                <line x1="80" y1="320" x2="410" y2="320" stroke="#53676d" stroke-width="1.5"/>
+                <line x1="410" y1="320" x2="740" y2="320" stroke="#53676d" stroke-width="1.5"/>
+                <text x="228" y="314" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#53676d">d₁</text>
+                <text x="558" y="314" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#53676d">d₂</text>
+                <text x="290" y="214" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#53676d">视距</text>
+            </svg>
+            <figcaption><b>图 13-1</b> 刃峰绕射几何：h 为刃峰顶部相对视距的突出高度（正为遮挡），d₁/d₂ 为障碍到两端距离。这些量归一到绕射参数 v 后，就可以用一条曲线查出绕射损耗——无需逐点积分。</figcaption>
+        </figure>
+
         <h2>13.2 刃峰绕射模型</h2>
 
         <p>单个刃峰（理想化的无限薄、无限长的吸收屏）引起的绕射损耗由<strong>菲涅尔积分</strong>计算：</p>
 
-        <p style="text-align:center; font-size:1.0rem; margin:15px 0;">
-            J(v) = -20log₁₀{ |[1 - j]/2 · ∫<sub>v</sub><sup>∞</sup> exp(-jπt²/2) dt| }
-        </p>
+        <div class="math-equation" role="group" aria-label="刃峰绕射损耗的菲涅尔积分">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="菲涅尔积分表达式，可横向滚动">
+                <math display="block" aria-label="刃峰绕射损耗 J v 等于负二十乘以对数底的绝对值，其中绝对值内为二分之一的复数与从 v 到无穷的指数积分的乘积">
+                    <mrow>
+                        <mi>J</mi><mo>(</mo><mi>v</mi><mo>)</mo><mo>=</mo><mo>-</mo><mn>20</mn><msub><mi>log</mi><mn>10</mn></msub>
+                        <mrow><mo>|</mo>
+                            <mfrac><mrow><mn>1</mn><mo>-</mo><mi>j</mi></mrow><mn>2</mn></mfrac>
+                            <msubsup><mo>∫</mo><mi>v</mi><mi>∞</mi></msubsup>
+                            <msup><mi>e</mi><mrow><mo>-</mo><mi>j</mi><mi>π</mi><msup><mi>t</mi><mn>2</mn></msup><mo>/</mo><mn>2</mn></mrow></msup>
+                            <mi>d</mi><mi>t</mi>
+                        <mo>|</mo></mrow>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>看起来很吓人，但工程上有一组简单的近似公式：</p>
 
@@ -131,6 +207,25 @@
             <li><strong>Deygout方法（1966年）：</strong>找到主要障碍物（遮挡最严重的），然后递归地考虑次要障碍物（在主要障碍物两侧分别重新计算）。优点：物理直觉清晰。缺点：对某些几何配置过估计损耗。</li>
             <li><strong>Giovaneli方法（1980s）：</strong>改进了Deygout方法，修正了过估计问题，在ITU-R P.526中被推荐使用。</li>
         </ul>
+
+        <div class="widget" id="widget-knife" role="group" aria-label="刃峰绕射损耗计算器">
+            <h3>交互：刃峰绕射损耗计算器</h3>
+            <p>输入障碍物突出高度与几何，实时得到绕射参数 v 与损耗 J(v)（采用 ITU-R P.526 近似式）。</p>
+            <label for="k-h">突出高度 h：<output id="k-h-out">0 m</output></label>
+            <input id="k-h" type="range" min="-20" max="60" value="0" step="1">
+            <label for="k-d1">d₁：<output id="k-d1-out">5 km</output></label>
+            <input id="k-d1" type="range" min="1" max="100" value="50" step="1">
+            <label for="k-d2">d₂：<output id="k-d2-out">5 km</output></label>
+            <input id="k-d2" type="range" min="1" max="100" value="50" step="1">
+            <label for="k-f">频率 f：<output id="k-f-out">10 GHz</output></label>
+            <input id="k-f" type="range" min="1" max="300" value="100" step="1">
+            <button id="k-calc" type="button">记录到对比表</button>
+            <div class="readout" id="k-out" aria-live="polite"></div>
+            <table>
+                <thead><tr><th>h</th><th>d₁</th><th>d₂</th><th>v</th><th>损耗 J(v)</th></tr></thead>
+                <tbody id="k-rows"></tbody>
+            </table>
+        </div>
 
         <h2>13.3 球形地面绕射</h2>
 
@@ -205,9 +300,16 @@
 
         <p>描述多径信道的关键参数是<strong>时延扩展（delay spread）</strong> σ_τ。它是不同路径到达时间差异的标准差。时延扩展的倒数乘以一个系数可以得到<strong>相干带宽（coherence bandwidth）</strong>：</p>
 
-        <p style="text-align:center; font-size:1.1rem; margin:15px 0;">
-            B<sub>c</sub> ≈ 1 / (5σ<sub>τ</sub>)
-        </p>
+        <div class="math-equation" role="group" aria-label="相干带宽">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="相干带宽公式，可横向滚动">
+                <math display="block" aria-label="相干带宽约等于五倍时延扩展的倒数">
+                    <mrow>
+                        <msub><mi>B</mi><mi>c</mi></msub><mo>≈</mo>
+                        <mfrac><mn>1</mn><mrow><mn>5</mn><msub><mi>σ</mi><mi>τ</mi></msub></mrow></mfrac>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>这告诉我们：如果信道的时延扩展很大（例如在山区或城市峡谷中），相干带宽就很小——意味着即使一个带宽不宽的信号也可能经历频率选择性衰落。</p>
 
@@ -302,6 +404,15 @@ simulate_interference_pattern()</code></pre>
             <strong>MIMO与散射的关系：</strong>你可能听说过MIMO（多输入多输出）天线技术——它是4G/5G的核心技术之一。MIMO的吞吐量增益来源于空间复用（spatial multiplexing）：多个数据流同时在同一频段发送，通过不同的空间路径被接收机区分。而这一技术成立的前提是<strong>散射环境足够丰富</strong>，使得不同收发天线对之间的信道衰落系数相互独立。如果散射体太少（比如沙漠或海上），MIMO的信道矩阵是病态的，空间复用的效果会大打折扣。这就是为什么MIMO在密集城区效果最好、在开阔郊区效果一般。
         </div>
 
+        <section id="references" aria-labelledby="ref-heading">
+            <h2 id="ref-heading">本章参考</h2>
+            <ul>
+                <li>刃峰绕射损耗近似式与多重刃峰方法（Bullington / Deygout）：ITU-R Recommendation P.526, <i>Propagation by diffraction</i>：<a href="https://www.itu.int/rec/R-REC-P.526/en">itu.int/rec/R-REC-P.526</a></li>
+                <li>多径衰落与相干带宽：T. S. Rappaport, <i>Wireless Communications: Principles and Practice</i>，第 5 章关于时延扩展与相干带宽的小节。</li>
+                <li>文中相干带宽经验式 B_c ≈ 1/(5σ_τ) 为常用工程近似（系数随相关系数定义略有差异）。</li>
+            </ul>
+        </section>
+
         <hr style="margin: 30px 0; border: 0; border-top: 2px dashed #fcd34d;">
 
         <p style="font-size: 1.1rem; line-height: 1.8;">
@@ -317,7 +428,47 @@ simulate_interference_pattern()</code></pre>
             <a href="index.html">📖 返回目录</a>
             <a href="14.html">下一章 →</a>
         </div>
-    </div>
+        <script>
+        (function () {
+            var hEl = document.getElementById('k-h');
+            var d1El = document.getElementById('k-d1');
+            var d2El = document.getElementById('k-d2');
+            var fEl = document.getElementById('k-f');
+            var hOut = document.getElementById('k-h-out');
+            var out = document.getElementById('k-out');
+            var rows = document.getElementById('k-rows');
+            function calc() {
+                var h = +hEl.value;
+                var d1 = (+d1El.value) / 10 * 1000;
+                var d2 = (+d2El.value) / 10 * 1000;
+                var fGHz = (+fEl.value) / 10;
+                var lam = 0.3 / fGHz;
+                var v = h * Math.sqrt(2 * (d1 + d2) / (lam * d1 * d2));
+                var J = v <= -0.7 ? 0 : 6.9 + 20 * Math.log10(Math.sqrt((v - 0.1) * (v - 0.1) + 1) + v - 0.1);
+                hOut.textContent = h + ' m';
+                document.getElementById('k-d1-out').textContent = (d1 / 1000).toFixed(1) + ' km';
+                document.getElementById('k-d2-out').textContent = (d2 / 1000).toFixed(1) + ' km';
+                document.getElementById('k-f-out').textContent = fGHz.toFixed(1) + ' GHz';
+                out.textContent = 'v = ' + v.toFixed(2) + '\n绕射损耗 J(v) = ' + J.toFixed(1) + ' dB';
+                return { h: h, d1: d1 / 1000, d2: d2 / 1000, v: v, J: J };
+            }
+            function record() {
+                var r = calc();
+                var tr = document.createElement('tr');
+                [r.h + ' m', r.d1.toFixed(1) + ' km', r.d2.toFixed(1) + ' km', r.v.toFixed(2), r.J.toFixed(1) + ' dB'].forEach(function (t) {
+                    var td = document.createElement('td');
+                    td.textContent = t;
+                    tr.appendChild(td);
+                });
+                rows.appendChild(tr);
+            }
+            [hEl, d1El, d2El, fEl].forEach(function (e) { e.addEventListener('input', calc); });
+            document.getElementById('k-calc').addEventListener('click', record);
+            calc();
+        })();
+        </script>
+    </article>
+    </main>
 </div>
 </div>
 </body>
