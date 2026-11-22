@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第7章 天线阵列基础</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -41,8 +69,13 @@
             <li><a href="27.html">第27章 AI驱动的天线设计与优化</a></li>
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第7章 天线阵列基础</h1>
+            <p class="dek">阵列把 N 个单元的场在远场相干叠加：总方向图等于单元方向图乘阵列因子。本章从方向图乘积定理出发，推导均匀线阵的闭合阵列因子，并说明波束扫描与栅瓣条件。</p>
+        </header>
 
         <h2>7.1 为什么要用阵列？</h2>
 
@@ -72,7 +105,18 @@
 
         <p><strong>阵列的总方向图 = 单元方向图 × 阵列因子</strong></p>
 
-        <p><strong>F<sub>total</sub>(θ, φ) = F<sub>element</sub>(θ, φ) · AF(θ, φ)</strong></p>
+        <div class="math-equation" role="group" aria-label="方向图乘积定理">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="方向图乘积定理，可横向滚动">
+                <math display="block" aria-label="阵列总方向图等于单元方向图乘以阵列因子，均是 theta 和 phi 的函数">
+                    <mrow>
+                        <msub><mi>F</mi><mtext>total</mtext></msub><mrow><mo>(</mo><mi>θ</mi><mo>,</mo><mi>φ</mi><mo>)</mo></mrow>
+                        <mo>=</mo>
+                        <msub><mi>F</mi><mtext>element</mtext></msub><mrow><mo>(</mo><mi>θ</mi><mo>,</mo><mi>φ</mi><mo>)</mo></mrow>
+                        <mo>·</mo><mi>AF</mi><mrow><mo>(</mo><mi>θ</mi><mo>,</mo><mi>φ</mi><mo>)</mo></mrow>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>其中F<sub>element</sub>是单个天线单元的方向图（假设所有单元完全相同且同向放置），AF是<strong>阵列因子（array factor）</strong>——仅由单元的位置和激励系数决定的函数。</p>
 
@@ -97,7 +141,17 @@
 
         <p>阵列因子的定义为所有单元辐射场的复数和（忽略单元方向图）：</p>
 
-        <p><strong>AF = Σ<sub>n=1</sub><sup>N</sup> e^(j(n-1)(k·d·sinθ + β))</strong></p>
+        <div class="math-equation" role="group" aria-label="均匀线阵阵列因子求和式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="阵列因子求和式，可横向滚动">
+                <math display="block" aria-label="阵列因子等于 n 从 1 到 N 的指数项求和，指数为 j 乘 n 减一乘 k d sin theta 加 beta">
+                    <mrow>
+                        <mi>AF</mi><mo>=</mo>
+                        <munderover><mo>Σ</mo><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover>
+                        <msup><mi>e</mi><mrow><mi>j</mi><mo>(</mo><mi>n</mi><mo>-</mo><mn>1</mn><mo>)</mo><mo>(</mo><mi>k</mi><mi>d</mi><mi>sin</mi><mi>θ</mi><mo>+</mo><mi>β</mi><mo>)</mo></mrow></msup>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>设 ψ = kd·sinθ + β，则上式是一个等比级数求和：</p>
 
@@ -105,7 +159,16 @@
 
         <p>取绝对值并归一化：</p>
 
-        <p><strong>|AF| = |sin(Nψ/2) / sin(ψ/2)|</strong></p>
+        <div class="math-equation" role="group" aria-label="均匀线阵阵列因子闭合式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="阵列因子闭合式，可横向滚动">
+                <math display="block" aria-label="归一化阵列因子绝对值等于 sin N psi 除以二 与 sin psi 除以二 之比的绝对值">
+                    <mrow>
+                        <mo>|</mo><mi>AF</mi><mo>|</mo><mo>=</mo>
+                        <mrow><mo>|</mo><mfrac><mrow><mi>sin</mi><mo>(</mo><mi>N</mi><mi>ψ</mi><mo>/</mo><mn>2</mn><mo>)</mo></mrow><mrow><mi>sin</mi><mo>(</mo><mi>ψ</mi><mo>/</mo><mn>2</mn><mo>)</mo></mrow></mfrac><mo>|</mo></mrow>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>这个简洁的闭合表达式就是均匀线阵的阵列因子。它的形状由三个参数决定：</p>
 
@@ -138,13 +201,43 @@
             <strong>踩坑故事：</strong>一个5G基站天线项目在初始设计时采用了均匀加权的8×8阵列，仿真增益达到了27 dBi，客户非常满意。但实际测试时发现副瓣电平只达到 -11 dB（理论值 -13.5 dB），略高于指标要求的 -13 dB。项目验收时测试工程师发现有两路功放模块的增益不一致，导致幅度加权偏离了均匀分布——上层4行和下层4行之间出现了约1.5 dB的幅度差。这个"意外锥削"反而使副瓣变差了。最终我们更换了更精确的功放模块并加入了微调衰减器才解决问题。教训：<strong>阵列的幅度一致性非常重要</strong>——馈电网络的幅度误差直接影响副瓣性能。
         </div>
 
+        <figure id="fig-af">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" role="img" aria-labelledby="fig-af-title fig-af-desc">
+                <title id="fig-af-title">均匀线阵的阵列因子方向图</title>
+                <desc id="fig-af-desc">N=8 均匀加权、侧射时的归一化阵列因子纵轴为 dB：d 等于 λ/2 时主瓣在 0°、副瓣约 -13.5 dB、无栅瓣；d 等于 λ 时栅瓣出现在正负 90° 附近。</desc>
+                <line x1="80" y1="300" x2="760" y2="300" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="80" y1="40" x2="80" y2="300" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="80" y1="127.8" x2="760" y2="127.8" stroke="#916c22" stroke-width="1" stroke-dasharray="6 5"/>
+                <text x="686" y="122" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#916c22">-13.5 dB</text>
+                <polyline points="80.0,40.0 91.3,40.0 102.7,40.2 114.0,40.9 125.3,42.8 136.7,47.0 148.0,54.8 159.3,68.8 170.7,94.0 182.0,148.7 193.3,191.4 204.7,129.8 216.0,125.3 227.3,158.6 238.7,238.6 250.0,151.7 261.3,155.3 272.7,278.1 284.0,167.5 295.3,162.7 306.7,300.0 318.0,161.8 329.3,173.8 340.7,202.5 352.0,146.8 363.3,224.9 374.7,137.1 386.0,134.3 397.3,133.5 408.7,57.1 420.0,40.0 431.3,57.1 442.7,133.5 454.0,134.3 465.3,137.1 476.7,224.9 488.0,146.8 499.3,202.5 510.7,173.8 522.0,161.8 533.3,300.0 544.7,162.7 556.0,167.5 567.3,278.1 578.7,155.3 590.0,151.7 601.3,238.6 612.7,158.6 624.0,125.3 635.3,129.8 646.7,191.4 658.0,148.7 669.3,94.0 680.7,68.8 692.0,54.8 703.3,47.0 714.7,42.8 726.0,40.9 737.3,40.2 748.7,40.0 760.0,40.0" fill="none" stroke="#d06d4d" stroke-width="2.5"/>
+                <polyline points="80.0,300.0 91.3,300.0 102.7,300.0 114.0,263.0 125.3,231.0 136.7,206.9 148.0,188.3 159.3,174.0 170.7,163.8 182.0,157.7 193.3,156.5 204.7,161.7 216.0,177.0 227.3,215.7 238.7,291.2 250.0,188.9 261.3,158.6 272.7,147.3 284.0,151.0 295.3,177.2 306.7,300.0 318.0,167.6 329.3,132.8 340.7,123.2 352.0,136.5 363.3,229.3 374.7,131.8 386.0,82.1 397.3,57.0 408.7,44.1 420.0,40.0 431.3,44.1 442.7,57.0 454.0,82.1 465.3,131.8 476.7,229.3 488.0,136.5 499.3,123.2 510.7,132.8 522.0,167.6 533.3,300.0 544.7,177.2 556.0,151.0 567.3,147.3 578.7,158.6 590.0,188.9 601.3,291.2 612.7,215.7 624.0,177.0 635.3,161.7 646.7,156.5 658.0,157.7 669.3,163.8 680.7,174.0 692.0,188.3 703.3,206.9 714.7,231.0 726.0,263.0 737.3,300.0 748.7,300.0 760.0,300.0" fill="none" stroke="#147f80" stroke-width="2.5"/>
+                <text x="430" y="76" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#d06d4d">d = λ（栅瓣）</text>
+                <text x="398" y="104" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#147f80">d = λ/2</text>
+                <text x="70" y="304" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">-40</text>
+                <text x="70" y="44" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">0</text>
+                <text x="80" y="320" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">-90°</text>
+                <text x="404" y="320" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">0°</text>
+                <text x="726" y="320" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">90°</text>
+            </svg>
+            <figcaption><b>图 7-1</b> N=8 均匀加权侧射阵列的归一化阵列因子（纵轴 dB）。青色 d=λ/2：副瓣约 -13.5 dB、无栅瓣；橙色 d=λ：主瓣变窄但栅瓣落在 ±90°（可见空间边缘）——这正是间距必须满足 d/λ &lt; 1/(1+|sinθ₀|) 的原因。</figcaption>
+        </figure>
+
         <h2>7.4 波束扫描与栅瓣条件</h2>
 
         <h3>波束扫描</h3>
 
         <p>在ULA中，通过改变相邻单元之间的渐进相位β，主瓣方向随之改变。关系很简单：</p>
 
-        <p><strong>θ₀ = arcsin(-β / kd)</strong></p>
+        <div class="math-equation" role="group" aria-label="主瓣指向与渐进相位的关系">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="主瓣指向公式，可横向滚动">
+                <math display="block" aria-label="主瓣指向角等于反正弦负 beta 除以 k d">
+                    <mrow>
+                        <msub><mi>θ</mi><mn>0</mn></msub><mo>=</mo>
+                        <mi>arcsin</mi><mrow><mo>(</mo><mfrac><mrow><mo>-</mo><mi>β</mi></mrow><mrow><mi>k</mi><mi>d</mi></mrow></mfrac><mo>)</mo></mrow>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>其中k = 2π/λ是波数。当β由负变正时，主瓣从一侧扫描到另一侧。在实际系统中，β由<strong>移相器（phase shifter）</strong>或<strong>数字波束赋形</strong>实现。</p>
 
@@ -160,7 +253,16 @@
 
         <p>栅瓣出现的数学条件：当|sin(Nψ/2) / sin(ψ/2)|的分子和分母同时为零时，函数达到极大值。这发生在ψ = ±2mπ（m=0,1,2,...）时。m=0对应主瓣。为了避免m=±1栅瓣出现在可见空间（|sinθ| ≤ 1）中，需要：</p>
 
-        <p><strong>避免栅瓣条件：d/λ < 1 / (1 + |sinθ₀|)</strong></p>
+        <div class="math-equation" role="group" aria-label="避免栅瓣条件">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="避免栅瓣条件公式，可横向滚动">
+                <math display="block" aria-label="避免栅瓣的条件是 d 比 lambda 小于 1 除以 1 加 sin theta0 的绝对值">
+                    <mrow>
+                        <mfrac><mi>d</mi><mi>λ</mi></mfrac><mo>&lt;</mo>
+                        <mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><mrow><mo>|</mo><mi>sin</mi><msub><mi>θ</mi><mn>0</mn></msub><mo>|</mo></mrow></mrow></mfrac>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>对于侧射（θ₀ = 0°）：d < λ（实际上通常取d = λ/2作为安全边界）<br>
         对于全半球扫描（|θ₀| < 90°）：d < λ/2<br>
@@ -170,6 +272,20 @@
 
         <div class="highlight">
             <strong>直觉训练：</strong>想象一组等间距排列的人，每个人手里举着一个手电筒。如果所有人同时把手电筒指向正前方，光线叠加形成一个明亮的"主瓣"。但如果你让相邻的人偏转一个微小角度——这相当于给每个手电筒增加一个相位——光线就会朝另一个方向汇聚。然而，当间距太大时（大于λ/2），除了这个"主瓣"方向之外，还有其他方向上的光线也恰好同相叠加——这就是"栅瓣"。
+        </div>
+
+        <div class="widget" id="widget-af" role="group" aria-label="均匀线阵方向图估算器">
+            <h3>交互：均匀线阵波束估算</h3>
+            <p>移动滑块改变单元数 N、间距 d/λ 与扫描角 θ₀，估算半功率波束宽度并判断是否出现栅瓣（均匀加权）。</p>
+            <label for="a-n">单元数 N：<output id="a-n-out">8</output></label>
+            <input id="a-n" type="range" min="2" max="32" value="8" step="1">
+            <label for="a-d">间距 d/λ：<output id="a-d-out">0.50</output></label>
+            <input id="a-d" type="range" min="30" max="120" value="50" step="5">
+            <label for="a-t">扫描角 θ₀：<output id="a-t-out">0°</output></label>
+            <input id="a-t" type="range" min="-60" max="60" value="0" step="5">
+            <button id="a-calc" type="button">记录到对比表</button>
+            <div class="readout" id="a-out" aria-live="polite"></div>
+            <table><thead><tr><th>N</th><th>d/λ</th><th>θ₀</th><th>预计 HPBW</th><th>栅瓣</th></tr></thead><tbody id="a-rows"></tbody></table>
         </div>
 
         <h2>7.5 均匀面阵与圆阵简介</h2>
@@ -293,6 +409,15 @@ print("1. N增大 → 主瓣变窄, 增益升高, 但第一副瓣保持在 -13.5
 print("2. d > λ 时会出现栅瓣, 工程上取 d = λ/2 作为标准间距")
 print("3. 波束扫描时 HPBW 按 1/cosθ₀ 展宽, 增益相应下降")</code></pre>
 
+        <section id="references" aria-labelledby="ref-heading">
+            <h2 id="ref-heading">本章参考</h2>
+            <ul>
+                <li>方向图乘积定理、均匀线阵阵列因子与栅瓣条件：C. A. Balanis, <i>Antenna Theory: Analysis and Design</i>，第 6 章“Arrays”。</li>
+                <li>文中均匀加权第一副瓣电平 -13.5 dB、HPBW ≈ 0.886λ/(N d cosθ₀) 均为该书给出的标准结果。</li>
+                <li>上图曲线由 |sin(Nψ/2)/sin(ψ/2)| 归一化到 N 后直接计算，N=8、侧射（β=0）。</li>
+            </ul>
+        </section>
+
         <hr style="margin: 30px 0; border: 0; border-top: 2px dashed #fcd34d;">
 
         <p style="font-size: 1.1rem; line-height: 1.8;">
@@ -308,7 +433,43 @@ print("3. 波束扫描时 HPBW 按 1/cosθ₀ 展宽, 增益相应下降")</code
             <a href="index.html">📖 返回目录</a>
             <a href="08.html">下一章 →</a>
         </div>
-    </div>
+        <script>
+        (function () {
+            var nEl = document.getElementById('a-n');
+            var dEl = document.getElementById('a-d');
+            var tEl = document.getElementById('a-t');
+            var out = document.getElementById('a-out');
+            var rows = document.getElementById('a-rows');
+            function calc() {
+                var n = +nEl.value;
+                var dlam = (+dEl.value) / 100;
+                var t0 = +tEl.value;
+                var rad = t0 * Math.PI / 180;
+                var hpbw = 50.76 / (n * dlam * Math.cos(rad));
+                var gl = dlam >= 1 / (1 + Math.abs(Math.sin(rad)));
+                document.getElementById('a-n-out').textContent = n;
+                document.getElementById('a-d-out').textContent = dlam.toFixed(2);
+                document.getElementById('a-t-out').textContent = t0 + '°';
+                out.textContent = 'N = ' + n + '，d/λ = ' + dlam.toFixed(2) + '，θ₀ = ' + t0 + '°\n预计 HPBW ≈ ' + hpbw.toFixed(1) + '°（均匀加权）\n栅瓣：' + (gl ? '会出现（间距过大）' : '无（满足 d/λ < 1/(1+|sinθ₀|)）');
+                return { n: n, dlam: dlam, t0: t0, hpbw: hpbw, gl: gl };
+            }
+            function record() {
+                var r = calc();
+                var tr = document.createElement('tr');
+                [r.n, r.dlam.toFixed(2), r.t0 + '°', r.hpbw.toFixed(1) + '°', r.gl ? '有' : '无'].forEach(function (t) {
+                    var td = document.createElement('td');
+                    td.textContent = t;
+                    tr.appendChild(td);
+                });
+                rows.appendChild(tr);
+            }
+            [nEl, dEl, tEl].forEach(function (e) { e.addEventListener('input', calc); });
+            document.getElementById('a-calc').addEventListener('click', record);
+            calc();
+        })();
+        </script>
+    </article>
+    </main>
 </div>
 </div>
 </body>
