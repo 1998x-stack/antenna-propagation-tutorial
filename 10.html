@@ -5,11 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第10章 口径天线与反射面天线</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .schematic-note { display: inline-block; font-size: .78rem; color: #92400e; background: #fef9c3; border: 1px solid #facc15; border-radius: 40px; padding: .1rem .6rem; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -41,8 +70,13 @@
             <li><a href="27.html">第27章 AI驱动的天线设计与优化</a></li>
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第10章 口径天线与反射面天线</h1>
+            <p class="dek">口径天线用一块精心设计的开口来代替电流元辐射：口径面上的场分布经二维傅里叶变换即得远场方向图。本章从场等效原理出发，依次讨论喇叭、抛物面、卡塞格伦/格里高利双反射面，以及大口径天线的表面精度与变形挑战。</p>
+        </header>
 
         <h2>10.1 口径天线的共同原理</h2>
 
@@ -60,9 +94,18 @@
 
         <p>更进一步，远场与口径场分布之间是<strong>傅里叶变换关系</strong>：</p>
 
-        <p style="text-align:center; font-size:1.0rem; margin:15px 0;">
-            E(θ, φ) ∝ ℱ{E<sub>aperture</sub>(x, y)}
-        </p>
+        <div class="math-equation" role="group" aria-label="口径场与远场的傅里叶变换关系">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="口径场与远场关系公式，可横向滚动">
+                <math display="block" aria-label="远场方向图正比于口径面场分布的二维傅里叶变换">
+                    <mrow>
+                        <mi>E</mi><mo>(</mo><mi>θ</mi><mo>,</mo><mi>φ</mi><mo>)</mo>
+                        <mo>∝</mo>
+                        <mi>ℱ</mi>
+                        <mo>{</mo><msub><mi>E</mi><mtext>aperture</mtext></msub><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo><mo>}</mo>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>也就是说：口径面上的场分布经过一个二维傅里叶变换，就得到了远场方向图。这个关系极具实践意义——它告诉我们：</p>
         <ul>
@@ -73,6 +116,33 @@
         <div class="highlight">
             <strong>工程权衡：</strong>口径效率（aperture efficiency）与副瓣电平之间存在不可调和的矛盾。追求最大增益就用均匀分布，牺牲副瓣；追求低副瓣就用锥削分布，牺牲增益。在雷达中，低副瓣优先级高于增益（低副瓣意味着更好的杂波抑制）。在卫星通信中，往往优先优化增益。
         </div>
+
+        <figure id="fig-aperture">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" role="img" aria-labelledby="fig-ap-title fig-ap-desc">
+                <title id="fig-ap-title">口径照射分布与远场方向图的对应关系（教学示意）</title>
+                <desc id="fig-ap-desc">左图对比均匀照射（矩形）与锥削照射（中间强、边缘弱）两种口径场分布；右图为对应的远场方向图，均匀照射主瓣最窄但第一副瓣约 -13.2 dB（蓝），锥削照射主瓣变宽但副瓣明显下降（绿）。</desc>
+                <text x="220" y="34" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#1e3a8a">(a) 口径面上的场分布</text>
+                <line x1="60" y1="300" x2="380" y2="300" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="60" y1="60" x2="60" y2="300" stroke="#94a3b8" stroke-width="1.5"/>
+                <polyline points="80,300 80,180 360,180 360,300" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+                <polyline points="80,258 100,240.7 120,224.2 140,209.3 160,197.1 180,187.7 200,181.9 220,180 240,181.9 260,187.7 280,197.1 300,209.3 320,224.2 340,240.7 360,258" fill="none" stroke="#15803d" stroke-width="2.5"/>
+                <text x="300" y="150" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#2563eb">均匀照射</text>
+                <text x="250" y="262" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#15803d">锥削照射</text>
+                <text x="382" y="304" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">x</text>
+                <text x="54" y="56" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">|E|</text>
+                <text x="620" y="34" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#1e3a8a">(b) 远场方向图（相对功率）</text>
+                <line x1="460" y1="300" x2="780" y2="300" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="460" y1="60" x2="460" y2="300" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="460" y1="247.9" x2="780" y2="247.9" stroke="#916c22" stroke-width="1" stroke-dasharray="6 5"/>
+                <text x="778" y="243" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#916c22">-13.2 dB</text>
+                <polyline points="545,300 560,248 575,300 590,300 605,120 615,70 620,60 625,70 635,120 650,300 665,248 680,300 695,268 710,300" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+                <polyline points="520,300 540,278 560,300 580,150 600,80 620,60 640,80 660,150 680,300 700,278 720,300" fill="none" stroke="#15803d" stroke-width="2.5"/>
+                <text x="647" y="110" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#2563eb">均匀：副瓣高</text>
+                <text x="695" y="205" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#15803d">锥削：副瓣低</text>
+                <text x="620" y="344" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">θ</text>
+            </svg>
+            <figcaption><span class="schematic-note">教学示意</span> <b>图 10-1</b> 口径场分布经傅里叶变换决定远场方向图。均匀照射（蓝）主瓣最窄、方向性最高，但第一副瓣约 -13.2 dB；锥削照射（绿）把能量从边缘移到中央，副瓣显著降低，代价是主瓣展宽、方向性下降——这就是口径效率与副瓣电平的不可调和矛盾。</figcaption>
+        </figure>
 
         <h2>10.2 喇叭天线</h2>
 
@@ -116,52 +186,88 @@
             <li>典型的F/D范围：0.3 - 0.8</li>
         </ul>
 
+        <figure id="fig-parabola">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" role="img" aria-labelledby="fig-par-title fig-par-desc">
+                <title id="fig-par-title">抛物面反射天线的几何与射线路径（教学示意）</title>
+                <desc id="fig-par-desc">左侧为开口向右的抛物面主反射面，焦点处放置馈源。从焦点发出的两条射线经抛物面反射后成为与轴平行的平面波；图中标出焦距 F、口径 D 与焦径比 F/D。</desc>
+                <line x1="140" y1="170" x2="790" y2="170" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="7 5"/>
+                <polyline points="180,50 162.5,80 150,110 142.5,140 140,170 142.5,200 150,230 162.5,260 180,290" fill="none" stroke="#1e40af" stroke-width="3"/>
+                <line x1="230" y1="170" x2="180" y2="290" stroke="#d06d4d" stroke-width="1.8"/>
+                <line x1="180" y1="290" x2="770" y2="290" stroke="#d06d4d" stroke-width="1.8"/>
+                <line x1="230" y1="170" x2="180" y2="50" stroke="#d06d4d" stroke-width="1.8"/>
+                <line x1="180" y1="50" x2="770" y2="50" stroke="#d06d4d" stroke-width="1.8"/>
+                <line x1="230" y1="170" x2="140" y2="170" stroke="#15803d" stroke-width="2"/>
+                <circle cx="230" cy="170" r="6" fill="#b45309"/>
+                <circle cx="140" cy="170" r="4" fill="#1e40af"/>
+                <text x="238" y="166" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#b45309">焦点 / 馈源</text>
+                <text x="120" y="192" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#1e3a8a">顶点</text>
+                <text x="150" y="140" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#15803d">F</text>
+                <line x1="205" y1="50" x2="205" y2="290" stroke="#53676d" stroke-width="1.2" stroke-dasharray="4 4"/>
+                <text x="212" y="46" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">D（口径）</text>
+                <text x="470" y="40" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#d06d4d">反射后为平行平面波（发射）</text>
+                <text x="470" y="318" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#1e3a8a">焦径比 F/D 典型 0.3 – 0.8</text>
+            </svg>
+            <figcaption><span class="schematic-note">教学示意</span> <b>图 10-2</b> 抛物面的几何：焦点处馈源发出的球面波经反射面反射成与轴平行的平面波（发射时形成窄波束，接收时把平行波汇聚到焦点）。F/D 越大馈源照射越均匀、交叉极化越低但结构越长；F/D 越小结构越紧凑但照射角度大。</figcaption>
+        </figure>
+
         <p><strong>馈源遮挡（feed blockage）</strong>是前馈抛物面天线的主要问题。馈源及其支撑结构位于波束路径上，会遮挡一部分口径，导致：损失约1-2 dB的增益，增加副瓣电平。解决方法是<strong>偏馈（offset feed）</strong>——只使用抛物面的一部分，馈源放在反射面的侧面，完全避开波束路径。偏馈抛物面天线广泛用于家用卫星电视接收（俗称"小锅"），因为它的轮廓线在门窗外墙上看起来不那么突兀。</p>
 
         <table>
             <tr>
                 <th>天线口径 (m)</th>
                 <th>工作频率 (GHz)</th>
-                <th>理论增益 (dBi)</th>
-                <th>半功率波束宽度 (°)</th>
+                <th>增益估算 (dBi, η≈0.55)</th>
+                <th>HPBW 估算 (°)</th>
                 <th>典型应用</th>
             </tr>
             <tr>
                 <td>0.6</td>
                 <td>12.5 (Ku-band)</td>
-                <td>38.2</td>
-                <td>2.3</td>
+                <td>35.3</td>
+                <td>2.8</td>
                 <td>家用卫星电视</td>
             </tr>
             <tr>
                 <td>1.8</td>
                 <td>14.25 (Ku-band)</td>
-                <td>47.5</td>
+                <td>46.0</td>
                 <td>0.8</td>
                 <td>VSAT卫星通信</td>
             </tr>
             <tr>
                 <td>4.5</td>
                 <td>6.0 (C-band)</td>
-                <td>44.0</td>
-                <td>0.9</td>
+                <td>46.4</td>
+                <td>0.8</td>
                 <td>卫星通信地面站</td>
             </tr>
             <tr>
                 <td>9.0</td>
                 <td>4.0 (C-band)</td>
-                <td>48.6</td>
+                <td>48.9</td>
                 <td>0.6</td>
                 <td>国际网关站</td>
             </tr>
             <tr>
                 <td>32.0</td>
                 <td>8.4 (X-band)</td>
-                <td>67.5</td>
+                <td>66.4</td>
                 <td>0.08</td>
                 <td>深空探测（DSN）</td>
             </tr>
         </table>
+
+        <div class="widget" id="widget-dish" role="group" aria-label="抛物面天线增益估算器">
+            <h3>交互：抛物面天线增益与波束宽度估算</h3>
+            <p>拖动滑块改变口径 D 与频率 f（口径效率固定为 0.55）。G = η(πD/λ)²，HPBW ≈ 70λ/D。结果为估算值，实际效率受馈源照射/溢出/遮挡/Ruze 损失影响。</p>
+            <label for="w-D">口径 D：<output id="w-D-out">3.0 m</output></label>
+            <input id="w-D" type="range" min="3" max="400" value="30" step="1">
+            <label for="w-f">频率 f：<output id="w-f-out">12.0 GHz</output></label>
+            <input id="w-f" type="range" min="10" max="400" value="120" step="5">
+            <button id="w-calc" type="button">记录到对比表</button>
+            <div class="readout" id="w-out" aria-live="polite"></div>
+            <table><thead><tr><th>D (m)</th><th>f (GHz)</th><th>G (dBi)</th><th>HPBW (°)</th></tr></thead><tbody id="w-rows"></tbody></table>
+        </div>
 
         <h2>10.4 卡塞格伦与格里高利天线</h2>
 
@@ -181,19 +287,95 @@
 
         <p>格里高利天线是卡塞格伦的"表亲"——它用<strong>椭球面（ellipsoid）</strong>作为副反射面而不是双曲面。椭球面的好处是：焦点的位置在反射面之前，使得总体结构和布局更加灵活。格里高利天线在某些卫星通信地面站中广泛使用，尤其要求非常低副瓣的应用场合。</p>
 
+        <figure id="fig-cassegrain">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 320" role="img" aria-labelledby="fig-cas-title fig-cas-desc">
+                <title id="fig-cas-title">卡塞格伦与格里高利双反射面天线对比（教学示意）</title>
+                <desc id="fig-cas-desc">左图为卡塞格伦构型：主抛物面配凸面双曲面副镜，副镜位于顶点与焦点之间；右图为格里高利构型：主抛物面配凹面椭球副镜，副镜位于焦点之外。两者都将馈源移到主反射面后方。</desc>
+                <text x="200" y="26" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#1e3a8a">卡塞格伦（双曲面副镜）</text>
+                <polyline points="230,70 190,120 180,170 190,220 230,270" fill="none" stroke="#1e40af" stroke-width="3"/>
+                <polyline points="330,140 322,170 330,200" fill="none" stroke="#d06d4d" stroke-width="3"/>
+                <circle cx="150" cy="170" r="5" fill="#b45309"/>
+                <line x1="150" y1="170" x2="324" y2="150" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="324" y1="150" x2="200" y2="118" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="200" y1="118" x2="396" y2="118" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="150" y1="170" x2="324" y2="190" stroke="#e8a0a0" stroke-width="1.5"/>
+                <line x1="324" y1="190" x2="200" y2="222" stroke="#e8a0a0" stroke-width="1.5"/>
+                <line x1="200" y1="222" x2="396" y2="222" stroke="#e8a0a0" stroke-width="1.5"/>
+                <text x="120" y="166" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#b45309">馈源</text>
+                <text x="334" y="170" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#d06d4d">副镜</text>
+                <text x="200" y="296" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#1e40af">主抛物面</text>
+                <text x="620" y="26" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#1e3a8a">格里高利（椭球副镜）</text>
+                <polyline points="650,70 610,120 600,170 610,220 650,270" fill="none" stroke="#1e40af" stroke-width="3"/>
+                <polyline points="742,140 758,170 742,200" fill="none" stroke="#d06d4d" stroke-width="3"/>
+                <circle cx="570" cy="170" r="5" fill="#b45309"/>
+                <line x1="570" y1="170" x2="750" y2="150" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="750" y1="150" x2="620" y2="118" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="620" y1="118" x2="810" y2="118" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="570" y1="170" x2="750" y2="190" stroke="#e8a0a0" stroke-width="1.5"/>
+                <line x1="750" y1="190" x2="620" y2="222" stroke="#e8a0a0" stroke-width="1.5"/>
+                <line x1="620" y1="222" x2="810" y2="222" stroke="#e8a0a0" stroke-width="1.5"/>
+                <text x="540" y="166" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#b45309">馈源</text>
+                <text x="766" y="170" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#d06d4d">副镜</text>
+                <text x="620" y="296" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#1e40af">主抛物面</text>
+            </svg>
+            <figcaption><span class="schematic-note">教学示意</span> <b>图 10-3</b> 两类双反射面天线。卡塞格伦用凸双曲面副镜（位于抛物面顶点与焦点之间），格里高利用凹椭球副镜（位于焦点之外）。两者都把馈源和接收机移到主反射面后方：便于维护屏蔽，并让馈源指向副镜、副镜对向冷空，降低接收噪声温度。</figcaption>
+        </figure>
+
+
+
         <h2>10.5 大口径天线的工程挑战</h2>
 
         <p>当天线的口径增大到数十米甚至数百米时，一系列新问题出现了。</p>
 
         <p><strong>表面精度</strong>是第一大挑战。实际反射面的表面与理想抛物面之间的偏差（RMS误差）会造成增益损失。经典的<strong>Ruze公式</strong>给出了估计：</p>
 
-        <p style="text-align:center; font-size:1.0rem; margin:15px 0;">
-            G/G₀ = exp[-(4πσ/λ)²]
-        </p>
+        <div class="math-equation" role="group" aria-label="Ruze 增益损失公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="Ruze 增益损失公式，可横向滚动">
+                <math display="block" aria-label="实际增益与理想增益之比等于指数负括号四派 sigma 除以 lambda 的平方">
+                    <mrow>
+                        <mfrac><mi>G</mi><msub><mi>G</mi><mn>0</mn></msub></mfrac>
+                        <mo>=</mo>
+                        <mi>exp</mi>
+                        <mo>[</mo><mo>−</mo>
+                        <msup><mrow><mo>(</mo><mfrac><mrow><mn>4</mn><mi>π</mi><mi>σ</mi></mrow><mi>λ</mi></mfrac><mo>)</mo></mrow><mn>2</mn></msup>
+                        <mo>]</mo>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
-        <p>其中σ是表面RMS误差。当σ = λ/16时，增益损失约0.5 dB；σ = λ/8时，损失约2 dB。工程上的经验准则是：<strong>表面精度必须优于λ/16</strong>。</p>
+        <p>其中σ是表面RMS误差。按上式：σ = λ/16 时增益损失约 2.7 dB，σ = λ/8 时损失约 10.7 dB（小误差下可近似为 损失(dB) ≈ 686 (σ/λ)²）。工程上的经验准则是：<strong>表面精度通常要求优于 λ/16</strong>（约 2.7 dB 损失），要求更高时取 λ/20 ~ λ/30（约 1.7 ~ 0.8 dB）。</p>
 
         <p>对于10 GHz的工作频率（λ=3 cm），这就要求表面RMS误差小于1.9 mm——对一座50米口径的钢结构天线而言，这是一个极其苛刻的精度要求！</p>
+
+        <figure id="fig-ruze">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 320" role="img" aria-labelledby="fig-ruze-title fig-ruze-desc">
+                <title id="fig-ruze-title">Ruze 公式下增益损失随表面误差的变化（教学示意）</title>
+                <desc id="fig-ruze-desc">横轴为表面 RMS 误差与波长之比 sigma/lambda，纵轴为相对增益损失 dB。曲线按 G/G0 等于指数负四派 sigma 除以 lambda 的平方绘制，在 lambda/16 处损失约 2.7 dB，在 lambda/8 处约 10.7 dB，误差越大损失急剧增加。</desc>
+                <line x1="80" y1="290" x2="760" y2="290" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="80" y1="40" x2="80" y2="290" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="80" y1="111.1" x2="760" y2="111.1" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4 5"/>
+                <line x1="80" y1="162.2" x2="760" y2="162.2" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4 5"/>
+                <line x1="80" y1="213.3" x2="760" y2="213.3" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4 5"/>
+                <line x1="80" y1="264.4" x2="760" y2="264.4" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4 5"/>
+                <polyline points="80,60 129.6,61.4 179.2,65.6 204,68.7 235,73.7 278.4,82.4 328,95.1 390,114.7 452,138.7 576,200.0 700,279.3" fill="none" stroke="#d06d4d" stroke-width="2.5"/>
+                <circle cx="235" cy="73.7" r="4" fill="#147f80"/>
+                <circle cx="390" cy="114.7" r="4" fill="#147f80"/>
+                <text x="240" y="66" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#147f80">λ/16：−2.7 dB</text>
+                <text x="396" y="132" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#147f80">λ/8：−10.7 dB</text>
+                <text x="74" y="64" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">0</text>
+                <text x="74" y="115" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">−10</text>
+                <text x="74" y="166" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">−20</text>
+                <text x="74" y="217" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">−30</text>
+                <text x="74" y="268" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">−40</text>
+                <text x="235" y="310" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">1/16</text>
+                <text x="390" y="310" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">1/8</text>
+                <text x="700" y="310" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">0.25</text>
+                <text x="700" y="286" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">σ/λ</text>
+                <text x="88" y="36" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#1e3a8a">损失 (dB)</text>
+            </svg>
+            <figcaption><span class="schematic-note">教学示意</span> <b>图 10-4</b> 按 Ruze 公式 G/G₀ = exp[−(4πσ/λ)²] 计算的增益损失（纵轴 dB）。误差较小时可近似为 686(σ/λ)²：σ = λ/16 损失约 2.7 dB，σ = λ/8 已达 10.7 dB。大口径天线提高频率时必须把表面 RMS 控制到更小的波长分数。</figcaption>
+        </figure>
 
         <p><strong>重力和热变形</strong>是另一个大问题。天线在不同仰角时，重力分布发生变化，反射面形状会发生<strong>重力变形（gravitational deformation）</strong>。温度变化（特别是日照不均）也会导致热变形。大型天线通常采用以下措施应对：</p>
         <ul>
@@ -254,10 +436,10 @@ for name, D, f, eff in antennas:
 # 输出示例:
 # 天线类型    | 口径(m) | 频率(GHz) | 增益(dBi) | HPBW(°)
 # ----------------------------------------------------------------
-# 家用卫星锅  | 0.6    | 12.50    | 33.6     | 1.12
-# VSAT终端    | 1.8    | 14.25    | 44.1     | 0.41
-# C波段地面站 | 4.5    | 6.00     | 42.3     | 0.78
-# DSN深空站   | 70.0   | 8.40     | 80.2     | 0.01</code></pre>
+# 家用卫星锅  | 0.6    | 12.50    | 35.7     | 2.80
+# VSAT终端    | 1.8    | 14.25    | 46.2     | 0.82
+# C波段地面站 | 4.5    | 6.00     | 46.4     | 0.78
+# DSN深空站   | 70.0   | 8.40     | 72.8     | 0.04</code></pre>
 
         <div class="warning">
             <strong>关于口径效率：</strong>上面代码中我们用efficiency=0.5-0.6作为典型值，但实际工程中的效率受多种因素影响——馈源照射效率（illumination efficiency，锥削导致）、溢出效率（spillover efficiency，部分能量漏到反射面外）、遮挡效率（blockage efficiency，馈源和支架遮挡）、表面公差效率（Ruze损失）、相位效率（馈源相位中心偏移）等。一个好的抛物面天线设计师需要精心平衡这五个效率分量。
@@ -273,12 +455,56 @@ for name, D, f, eff in antennas:
             从下一章开始，我们将从天线转向电波传播领域。之前7章我们一直在研究"电磁波是怎么从天线辐射出去的"——现在我们要问：<strong>"辐射出去的电磁波，在空间中经历了什么才到达接收端？"</strong>第11章将从最理想的情况开始——<strong>自由空间电波传播</strong>，并推导出每个通信工程师必须背熟的Friis传输方程。
         </p>
 
+        <section id="references" aria-labelledby="ref-heading">
+            <h2 id="ref-heading">本章参考</h2>
+            <ul>
+                <li>S. Silver (ed.), <i>Microwave Antenna Theory and Design</i>, MIT Radiation Laboratory Series, McGraw-Hill, 1949。口径场等效原理与傅里叶变换关系的经典出处。</li>
+                <li>A. W. Love (ed.), <i>Electromagnetic Horn Antennas</i>, IEEE Press, 1976。呶叭天线（含角锥、波纹呶叭）的设计与最佳相位误差 0.25λ。</li>
+                <li>J. Ruze, “Antenna Tolerance Theory — A Review,” <i>Proc. IEEE</i>, vol. 54, no. 4, pp. 633–640, 1966。表面 RMS 误差与增益损失的 Ruze 公式。</li>
+                <li>A. A. Penzias and R. W. Wilson, “A Measurement of Excess Antenna Temperature at 4080 Mc/s,” <i>Astrophys. J.</i>, vol. 142, pp. 419–421, 1965。Holmdel 呶叭天线发现宇宙微波背景辐射的原始论文。</li>
+                <li>A. J. Simmons and A. F. Kay, “The Scalar Feed,” Air Force Cambridge Research Labs Technical Report, 1963。波纹呶叭（scalar feed）对称方向图与低交叉极化的早期工作。</li>
+                <li>上表增益与 HPBW 为按 G = η(πD/λ)²（η≈0.55）、HPBW ≈ 70λ/D 估算的教学参考值，实际系统以厂商数据手册为准。</li>
+            </ul>
+        </section>
+
         <div class="footer-nav">
             <a href="09.html">← 上一章</a>
             <a href="index.html">📖 返回目录</a>
             <a href="11.html">下一章 →</a>
         </div>
-    </div>
+        <script>
+        (function () {
+            var dEl = document.getElementById('w-D');
+            var fEl = document.getElementById('w-f');
+            var out = document.getElementById('w-out');
+            var rows = document.getElementById('w-rows');
+            function calc() {
+                var D = (+dEl.value) / 10;
+                var fGHz = (+fEl.value) / 10;
+                var lam = 0.3 / fGHz;
+                var G = 10 * Math.log10(0.55 * Math.pow(Math.PI * D / lam, 2));
+                var hpbw = 70 * lam / D;
+                document.getElementById('w-D-out').textContent = D.toFixed(1) + ' m';
+                document.getElementById('w-f-out').textContent = fGHz.toFixed(1) + ' GHz';
+                out.textContent = 'D = ' + D.toFixed(1) + ' m，f = ' + fGHz.toFixed(1) + ' GHz\nG ≈ ' + G.toFixed(1) + ' dBi（η=0.55）\nHPBW ≈ ' + hpbw.toFixed(2) + '°';
+                return { D: D, f: fGHz, G: G, h: hpbw };
+            }
+            function record() {
+                var r = calc();
+                var tr = document.createElement('tr');
+                [r.D.toFixed(1), r.f.toFixed(1), r.G.toFixed(1), r.h.toFixed(2)].forEach(function (t) {
+                    var td = document.createElement('td'); td.textContent = t; tr.appendChild(td);
+                });
+                rows.appendChild(tr);
+            }
+            dEl.addEventListener('input', calc);
+            fEl.addEventListener('input', calc);
+            document.getElementById('w-calc').addEventListener('click', record);
+            calc();
+        })();
+        </script>
+    </article>
+    </main>
 </div>
 </div>
 </body>
