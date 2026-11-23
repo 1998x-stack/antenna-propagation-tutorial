@@ -5,11 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第9章 宽带天线与频率无关天线</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .schematic-note { display: inline-block; font-size: .78rem; color: #92400e; background: #fef9c3; border: 1px solid #facc15; border-radius: 40px; padding: .1rem .6rem; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -41,8 +70,13 @@
             <li><a href="27.html">第27章 AI驱动的天线设计与优化</a></li>
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第9章 宽带天线与频率无关天线</h1>
+            <p class="dek">窄带天线的根本限制来自 Chu 极限：小电尺寸下 Q 值下限与 (ka)<sup>-3</sup> 成正比。本章先讲清这一物理约束，再介绍以 Rumsey 角度自相似原理和对数周期结构为代表的频率无关天线，最后落到螺旋、自补与 Vivaldi 行波天线。</p>
+        </header>
 
         <h2>9.1 带宽受限的物理根源</h2>
 
@@ -52,15 +86,33 @@
 
         <p>1950年代，Chu（朱兰成）提出：如果一个天线可以被包围在一个半径为a的球形区域内，那么它的<strong>最小Q值</strong>由以下关系决定：</p>
 
-        <p style="text-align:center; font-size:1.1rem; margin:15px 0;">
-            Q ≈ 1/(ka)³（对于ka << 1）
-        </p>
+        <p>更精确地说，对包围在半径 a 球内的理想天线，Chu 极限常写成（ka ≪ 1 时第一项主导）：</p>
 
-        <p>其中k = 2π/λ是波数。而Q值与带宽成反比：BW ≈ 1/Q。所以：</p>
+        <div class="math-equation" role="group" aria-label="Chu 极限 Q 值">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="Chu 极限 Q 值公式，可横向滚动">
+                <math display="block" aria-label="Chu 极限 Q 约等于 k a 立方的倒数 加 k a 的倒数，ka 远小于 1 时主导项为 k a 立方的倒数">
+                    <mrow>
+                        <mi>Q</mi><mo>≈</mo>
+                        <mfrac><mn>1</mn><msup><mrow><mo>(</mo><mi>k</mi><mi>a</mi><mo>)</mo></mrow><mn>3</mn></msup></mfrac>
+                        <mo>+</mo>
+                        <mfrac><mn>1</mn><mrow><mi>k</mi><mi>a</mi></mrow></mfrac>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
-        <p style="text-align:center; font-size:1.1rem; margin:15px 0;">
-            BW ∝ (ka)³
-        </p>
+        <p>其中k = 2π/λ是波数，a 是包围天线的最小球半径。而Q值与带宽成反比：BW ≈ 1/Q。所以在电小尺寸下：</p>
+
+        <div class="math-equation" role="group" aria-label="电小天线带宽立方律">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="电小天线带宽比例式，可横向滚动">
+                <math display="block" aria-label="带宽正比于 k a 的立方">
+                    <mrow>
+                        <mi>BW</mi><mo>∝</mo>
+                        <msup><mrow><mo>(</mo><mi>k</mi><mi>a</mi><mo>)</mo></mrow><mn>3</mn></msup>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>这意味着：如果天线尺寸缩小到原来的二分之一，带宽将缩小到原来的1/8！这个"立方律"限制是物理定律，不是工程师能绕过去的。</p>
 
@@ -68,7 +120,44 @@
             <strong>关键理解：</strong>Chu极限告诉我们一个残酷的事实——在给定电尺寸下，天线的带宽上限是被物理学锁死的。想要更宽的带宽，要么把天线做大，要么接受更低的辐射效率（通过引入电阻性损耗来展宽带宽，但这是以牺牲增益为代价的）。
         </div>
 
+        <figure id="fig-chu">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" role="img" aria-labelledby="fig-chu-title fig-chu-desc">
+                <title id="fig-chu-title">Chu 极限 Q 值随电尺寸 ka 的变化（教学示意）</title>
+                <desc id="fig-chu-desc">纵轴为 Q 值（对数坐标，从 1 到 1000），横轴为电尺寸 ka（0.1 到 1.0）。曲线按 Q 等于 ka 立方的倒数加 ka 的倒数绘制，在 ka 远小于 1 时 Q 迅速上升，说明小天线带宽被物理锁死。</desc>
+                <line x1="80" y1="300" x2="760" y2="300" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="80" y1="40" x2="80" y2="300" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="80" y1="40" x2="760" y2="40" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4 5"/>
+                <line x1="80" y1="126.7" x2="760" y2="126.7" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4 5"/>
+                <line x1="80" y1="213.3" x2="760" y2="213.3" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4 5"/>
+                <polyline points="100.0,39.7 140.0,116.8 180.0,160.8 220.0,191.0 260.0,213.3 300.0,230.7 340.0,244.7 380.0,256.2 420.0,265.7 460.0,273.9" fill="none" stroke="#d06d4d" stroke-width="2.5"/>
+                <circle cx="100" cy="39.7" r="3.5" fill="#d06d4d"/>
+                <text x="92" y="32" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#b45309">Q≈1000</text>
+                <text x="466" y="266" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#147f80">ka = 0.9，Q≈2.5</text>
+                <text x="150" y="80" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#475569">ka ≪ 1：Q ∝ (ka)⁻³</text>
+                <text x="78" y="44" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">1000</text>
+                <text x="78" y="130" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">100</text>
+                <text x="78" y="217" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">10</text>
+                <text x="78" y="304" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">1</text>
+                <text x="100" y="320" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">0.1</text>
+                <text x="452" y="320" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">1.0</text>
+                <text x="470" y="316" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">ka</text>
+                <text x="88" y="30" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#1e3a8a">Q</text>
+            </svg>
+            <figcaption><span class="schematic-note">教学示意</span> <b>图 9-1</b> Chu 极限下 Q 随电尺寸 ka 的变化（曲线按 Q ≈ (ka)⁻³ + (ka)⁻¹ 绘制，纵轴对数）。ka 从 1 减小到 0.1，Q 从约 2 激增到约 1000——这就是小天线带宽难以做宽的根本原因。</figcaption>
+        </figure>
+
+        <div class="widget" id="widget-chu" role="group" aria-label="Chu 极限带宽估算器">
+            <h3>交互：Chu 极限带宽估算</h3>
+            <p>拖动滑块改变电尺寸 ka，查看 Chu 极限给出的最小 Q 与近似分数带宽（教学示意：无损近似 BW ≈ 1/Q，忽略匹配网络与损耗带来的展宽）。</p>
+            <label for="c-ka">电尺寸 ka：<output id="c-ka-out">0.50</output></label>
+            <input id="c-ka" type="range" min="10" max="200" value="50" step="1">
+            <button id="c-calc" type="button">记录到对比表</button>
+            <div class="readout" id="c-out" aria-live="polite"></div>
+            <table><thead><tr><th>ka</th><th>Q 下限</th><th>BW ≈ 1/Q</th></tr></thead><tbody id="c-rows"></tbody></table>
+        </div>
+
         <p>除Chu极限外，实际工程中带宽还受以下因素限制：</p>
+
         <ul>
             <li><strong>阻抗匹配：</strong>偏离中心频率时，输入阻抗发生剧烈变化，导致VSWR > 2:1</li>
             <li><strong>方向图退化：</strong>主瓣宽度、副瓣电平、前后比等随频率变化</li>
@@ -93,9 +182,19 @@
 
         <p>另一个关键概念是<strong>自补天线（self-complementary antenna）</strong>。日本学者<strong>Mushiake（虫明康人）</strong>提出：如果一个天线的结构与其互补结构完全一致（即把导体部分和空隙部分交换后形状不变），那么它的输入阻抗恒为：</p>
 
-        <p style="text-align:center; font-size:1.1rem; margin:15px 0;">
-            Z_in = η₀/2 = 188.5 Ω
-        </p>
+        <div class="math-equation" role="group" aria-label="自补天线输入阻抗">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="自补天线输入阻抗公式，可横向滚动">
+                <math display="block" aria-label="自补天线的输入阻抗等于自由空间波阻抗的一半，约等于 188.5 欧姆">
+                    <mrow>
+                        <msub><mi>Z</mi><mtext>in</mtext></msub>
+                        <mo>=</mo>
+                        <mfrac><msub><mi>η</mi><mn>0</mn></msub><mn>2</mn></mfrac>
+                        <mo>=</mo>
+                        <mn>188.5</mn><mspace width="0.3em"/><mi>Ω</mi>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>这来自Babinet原理在电磁学中的推广——即<strong>Mushiake原理</strong>。自补天线的阻抗不随频率变化，这是实现超宽带匹配的关键。</p>
 
@@ -149,7 +248,7 @@
             <tr>
                 <td>振子数 N</td>
                 <td>8 - 20</td>
-                <td>决定可实现的带宽比：B = τ^{N-1}</td>
+                <td>决定可实现的带宽比：B = τ<sup>1−N</sup> = (1/τ)<sup>N−1</sup>（τ&lt;1，故 N 越大带宽比越大）</td>
             </tr>
             <tr>
                 <td>增益</td>
@@ -161,6 +260,39 @@
         <div class="warning">
             <strong>工程经验：</strong>制作LPDA时，馈线的交叉连接是最容易出错的地方。千万记住：相邻振子的馈线必须交叉（transposed）。如果弄错了相位，活跃区将无法形成，天线会变成一个糟糕的匹配负载。初学者最常见的错误就是画PCB时忘了把馈线做交叉。
         </div>
+
+        <figure id="fig-lpda">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" role="img" aria-labelledby="fig-lpda-title fig-lpda-desc">
+                <title id="fig-lpda-title">对数周期偶极子阵列结构示意（教学示意）</title>
+                <desc id="fig-lpda-desc">九个长度按比例因子逐渐递减的偶极子沿中心轴线排列，左侧为长振子低频端，右侧为短振子高频端；相邻振子间的叉号表示馈线的交叉连接。虚线椭圆标出当前频率下的活跃区，即长度接近半波长、被强烈激励的几个振子。</desc>
+                <line x1="60" y1="170" x2="760" y2="170" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 5"/>
+                <line x1="90" y1="50" x2="90" y2="290" stroke="#1e40af" stroke-width="2.5"/>
+                <line x1="168" y1="68" x2="168" y2="272" stroke="#1e40af" stroke-width="2.5"/>
+                <line x1="246" y1="84" x2="246" y2="256" stroke="#1e40af" stroke-width="2.5"/>
+                <line x1="324" y1="98" x2="324" y2="242" stroke="#1e40af" stroke-width="2.5"/>
+                <line x1="402" y1="110" x2="402" y2="230" stroke="#1e40af" stroke-width="2.5"/>
+                <line x1="480" y1="120" x2="480" y2="220" stroke="#1e40af" stroke-width="2.5"/>
+                <line x1="558" y1="129" x2="558" y2="211" stroke="#1e40af" stroke-width="2.5"/>
+                <line x1="636" y1="136" x2="636" y2="204" stroke="#1e40af" stroke-width="2.5"/>
+                <line x1="714" y1="142" x2="714" y2="198" stroke="#1e40af" stroke-width="2.5"/>
+                <g stroke="#d06d4d" stroke-width="2">
+                    <line x1="122" y1="163" x2="136" y2="177"/><line x1="122" y1="177" x2="136" y2="163"/>
+                    <line x1="200" y1="163" x2="214" y2="177"/><line x1="200" y1="177" x2="214" y2="163"/>
+                    <line x1="278" y1="163" x2="292" y2="177"/><line x1="278" y1="177" x2="292" y2="163"/>
+                    <line x1="356" y1="163" x2="370" y2="177"/><line x1="356" y1="177" x2="370" y2="163"/>
+                    <line x1="434" y1="163" x2="448" y2="177"/><line x1="434" y1="177" x2="448" y2="163"/>
+                    <line x1="512" y1="163" x2="526" y2="177"/><line x1="512" y1="177" x2="526" y2="163"/>
+                    <line x1="590" y1="163" x2="604" y2="177"/><line x1="590" y1="177" x2="604" y2="163"/>
+                    <line x1="668" y1="163" x2="682" y2="177"/><line x1="668" y1="177" x2="682" y2="163"/>
+                </g>
+                <ellipse cx="441" cy="170" rx="72" ry="96" fill="none" stroke="#147f80" stroke-width="2" stroke-dasharray="7 5"/>
+                <text x="441" y="56" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#147f80">活跃区（≈ λ/2）</text>
+                <text x="90" y="306" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#1e3a8a">长振子 · 低频端</text>
+                <text x="714" y="306" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#1e3a8a">短振子 · 高频端</text>
+                <text x="410" y="330" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#b45309">× 表示相邻振子馈线的交叉连接（transposed feed）</text>
+            </svg>
+            <figcaption><span class="schematic-note">教学示意</span> <b>图 9-2</b> LPDA 的结构与活跃区。振子长度按比例因子 τ 递减，相邻振子馈线交叉。工作频率变化时，长度接近 λ/2 的活跃区沿阵列在短振子端与长振子端之间移动，从而使整个阵列成为宽带天线。</figcaption>
+        </figure>
 
         <h2>9.4 螺旋天线</h2>
 
@@ -208,7 +340,7 @@
         <p>Vivaldi天线的带宽可以轻松超过10:1。一个设计良好的Vivaldi天线可以从500 MHz工作到6 GHz，覆盖了从UHF到C波段的整个射频频谱。端射方向图（end-fire radiation）使Vivaldi易于组成阵列。</p>
 
         <div class="highlight">
-            <strong>为什么叫Vivaldi？</strong>这个天线由P.J. Gibson在1979年提出，最初命名为"Vivaldi aerial"——灵感来自作曲家维瓦尔第（Antonio Vivaldi）的小提琴协奏曲《四季》？不完全是命名原因，但确实有些文献认为是指数渐变曲线的优雅"小提琴曲线"与Vivaldi这个名字有关联。按照Gibson本人的说法，他起这个名字纯粹是因为槽线的渐变曲线让他联想到了一把优雅的小提琴。
+            <strong>关于“Vivaldi”这个名字：</strong>这个天线由 P. J. Gibson 于 1979 年提出，最初命名为 “Vivaldi aerial”。命名由来在原始文献中并未给出可考的明确解释；流传较广的说法是槽线的指数渐变轮廓让人联想到小提琴的优雅曲线（Vivaldi 是著名作曲家）。这属于轶事，并非史实，理解天线本身不依赖它。
         </div>
 
         <p>Vivaldi天线的应用场景：</p>
@@ -223,7 +355,7 @@
 
         <pre><code>import numpy as np
 
-def vivaldi_profile(R_start=0.5, R_end=15, alpha=0.08, N=200):
+def vivaldi_profile(R_start=0.5, R_end=72, alpha=0.08, N=200):
     """
     生成Vivaldi天线的指数槽线轮廓
 
@@ -255,16 +387,38 @@ f_low = 3e5 / (2 * slot_width_max)  # 频率 (MHz)
 
 print(f"最大槽宽: {slot_width_max:.1f} mm")
 print(f"估计低频截止: {f_low:.0f} MHz")
-# 输出示例:
-# 最大槽宽: 30.0 mm
-# 估计低频截止: 5000 MHz
+# 输出示例（以上默认参数）:
+# 最大槽宽: 304.9 mm
+# 估计低频截止: 492 MHz
 
 # 高频截止: 取决于馈电点和槽线最小缝隙的加工精度
 slot_width_min = 2 * 0.5  # 起始宽度 = 1 mm
 f_high = 3e5 / (2 * slot_width_min)
 print(f"估计高频截止: {f_high:.0f} MHz")
 # 输出示例:
-# 估计高频截止: 300000 MHz (实际受巴伦和介质影响会低很多)</code></pre>
+# 估计高频截止: 150000 MHz (实际上限受巴伦和介质损耗影响，会低很多)</code></pre>
+
+        <figure id="fig-vivaldi">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" role="img" aria-labelledby="fig-vivaldi-title fig-vivaldi-desc">
+                <title id="fig-vivaldi-title">Vivaldi 天线的指数渐变槽线轮廓（教学示意）</title>
+                <desc id="fig-vivaldi-desc">槽线从左侧很窄的馈电端开始，按指数规律向右逐渐张开，到右侧辐射端宽度最大。上方标注槽线模式沿槽传播、随槽宽增大逐渐向空间辐射的过程。</desc>
+                <polygon points="130,166.0 187,164.4 244,162.3 301,159.2 358,154.0 415,149.1 472,140.9 529,129.5 586,113.7 643,91.6 700,60.9 700,279.1 643,248.4 586,226.3 529,210.5 472,199.1 415,190.9 358,186.0 301,180.8 244,177.7 187,175.6 130,174.0" fill="#dbeafe" stroke="none"/>
+                <polyline points="130,166.0 187,164.4 244,162.3 301,159.2 358,154.0 415,149.1 472,140.9 529,129.5 586,113.7 643,91.6 700,60.9" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+                <polyline points="130,174.0 187,175.6 244,177.7 301,180.8 358,186.0 415,190.9 472,199.1 529,210.5 586,226.3 643,248.4 700,279.1" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+                <line x1="120" y1="170" x2="120" y2="170" stroke="#d06d4d" stroke-width="4"/>
+                <text x="112" y="150" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#b45309">馈电端</text>
+                <text x="112" y="166" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#b45309">窄（巴伦）</text>
+                <text x="716" y="150" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#1e3a8a">辐射端</text>
+                <text x="716" y="166" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#1e3a8a">宽（最大槽宽）</text>
+                <line x1="180" y1="80" x2="230" y2="140" stroke="#147f80" stroke-width="1.5" marker-end="url(#arw9)"/>
+                <text x="240" y="76" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#147f80">槽线模式沿槽传播</text>
+                <line x1="430" y1="60" x2="540" y2="40" stroke="#147f80" stroke-width="1.5" marker-end="url(#arw9)"/>
+                <text x="548" y="44" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#147f80">逐渐脱离束缚向空间辐射</text>
+                <defs><marker id="arw9" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 z" fill="#147f80"/></marker></defs>
+                <text x="130" y="322" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">y（沿槽线方向）→</text>
+            </svg>
+            <figcaption><span class="schematic-note">教学示意</span> <b>图 9-3</b> Vivaldi（指数渐变槽线）天线的轮廓。窄端以槽线模式馈电，电磁波沿指数渐变槽传播，随槽宽增大逐渐向空间辐射（端射）。对应上文代码参数可得最大槽宽约 305 mm、估值低频截止约 492 MHz。</figcaption>
+        </figure>
 
         <div class="warning">
             <strong>重要设计细节：</strong>Vivaldi天线的馈电区域需要一个从微带线到槽线的过渡（巴伦）。常用的方法是使用<strong>扇形槽线短路线（radial stub）</strong>和<strong>微带-槽线过渡结构</strong>。这个过渡区域的设计质量直接决定了Vivaldi的低频性能和带内匹配。很多Vivaldi设计失败的原因正是馈电巴伦没做好——槽线没被很好地激励，或者产生了不必要的谐振。
@@ -280,12 +434,54 @@ print(f"估计高频截止: {f_high:.0f} MHz")
             但以上所有天线都有一个共同点：它们都是通过某种"直接辐射"结构工作的。下一章我们将转向另一个方向——<strong>口径天线与反射面天线</strong>。这类天线通过一个大型口径（aperture）来汇聚电磁波，实现极高的增益和极窄的波束。从抛物面碟形天线到喇叭天线，从射电天文望远镜到卫星通信地面站——下一章我们将走进"大口径天线"的世界。
         </p>
 
+        <section id="references" aria-labelledby="ref-heading">
+            <h2 id="ref-heading">本章参考</h2>
+            <ul>
+                <li>L. J. Chu, “Physical Limitations of Omni-Directional Antennas,” <i>J. Appl. Phys.</i>, vol. 19, no. 12, pp. 1163–1175, 1948。电小天线 Q 值下限的原始出处。</li>
+                <li>J. S. McLean, “A Re-Examination of the Fundamental Limits on the Radiation Q of Electrically Small Antennas,” <i>IEEE Trans. Antennas Propag.</i>, vol. 44, no. 5, pp. 672–676, 1996。将 Chu 极限写成 Q ≈ (ka)⁻³ + (ka)⁻¹ 的常用形式。</li>
+                <li>V. H. Rumsey, “Frequency Independent Antennas,” 1957 IRE National Convention Record, pt. 1, pp. 114–118。角度自相似（频率无关）原理的提出。</li>
+                <li>R. L. Carrel, “Analysis and Design of the Log-Periodic Dipole Antenna,” Ph.D. dissertation, Univ. of Illinois, 1961。LPDA 的系统设计方法（Carrel 方法）。</li>
+                <li>P. J. Gibson, “The Vivaldi Aerial,” in <i>Proc. 9th European Microwave Conference</i>, 1979, pp. 101–105。Vivaldi（ETSA）天线的原始文献。</li>
+                <li>J. D. Kraus, <i>Antennas</i>, McGraw-Hill。螺旋天线（轴向模/法向模）的经典论述。</li>
+                <li>Y. Mushiake, “Self-Complementary Antennas,” <i>IEEE Antennas Propag. Mag.</i>, vol. 34, no. 6, pp. 23–29, 1992。自补天线恒阻抗（η₀/2）原理。</li>
+            </ul>
+        </section>
+
         <div class="footer-nav">
             <a href="08.html">← 上一章</a>
             <a href="index.html">📖 返回目录</a>
             <a href="10.html">下一章 →</a>
         </div>
-    </div>
+        <script>
+        (function () {
+            var kaEl = document.getElementById('c-ka');
+            var out = document.getElementById('c-out');
+            var rows = document.getElementById('c-rows');
+            function calc() {
+                var ka = (+kaEl.value) / 100;
+                var Q = 1 / (ka * ka * ka) + 1 / ka;
+                var bw = 1 / Q;
+                document.getElementById('c-ka-out').textContent = ka.toFixed(2);
+                out.textContent = 'ka = ' + ka.toFixed(2) + '\nChu 极限 Q ≈ ' + Q.toFixed(2) + '\n近似分数带宽 BW ≈ 1/Q = ' + (bw * 100).toFixed(1) + '%（教学示意，未计匹配网络与损耗）';
+                return { ka: ka, Q: Q, bw: bw };
+            }
+            function record() {
+                var r = calc();
+                var tr = document.createElement('tr');
+                [r.ka.toFixed(2), r.Q.toFixed(1), (r.bw * 100).toFixed(1) + '%'].forEach(function (t) {
+                    var td = document.createElement('td');
+                    td.textContent = t;
+                    tr.appendChild(td);
+                });
+                rows.appendChild(tr);
+            }
+            kaEl.addEventListener('input', calc);
+            document.getElementById('c-calc').addEventListener('click', record);
+            calc();
+        })();
+        </script>
+    </article>
+    </main>
 </div>
 </div>
 </body>
