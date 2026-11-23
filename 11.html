@@ -237,7 +237,7 @@ for name, d, f, Gt, Gr, Le in scenarios:
 # 输出示例:
 # 场景      | 距离(m) | 频率   | FSPL(dB) | Pr(dBm)
 # --------------------------------------------------------
-# FM广播    | 100000  | 100 MHz |  92.4    | -46.4
+# FM广播    | 100000  | 100 MHz | 112.4    | -66.4
 # 4G基站    |  40000  | 2.1 GHz | 130.9    | -67.9
 # 5G毫米波  |    100  | 28 GHz  | 101.4    | -30.4</code></pre>
 
@@ -396,8 +396,30 @@ for name, d, f, Gt, Gr, Le in scenarios:
 
         <p><strong>工程清除准则：</strong>为了保证传播接近自由空间条件，障碍物必须至少清除第一菲涅尔区的60%。也就是说，如果天线之间有个建筑物，它的顶部必须低于Tx-Rx连线的垂直距离至少0.6×r₁。如果清除不满足，就会产生额外的绕射损耗。</p>
 
+        <figure id="fig-fresnel">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" role="img" aria-labelledby="fig-fr-title fig-fr-desc">
+                <title id="fig-fr-title">第一/第二菲涅尔区与 60% 清除准则（教学示意）</title>
+                <desc id="fig-fr-desc">发射与接收之间的直线视距上，嵌套着两组椭球形菲涅尔区：实线为第一菲涅尔区，虚线为第二菲涅尔区。一个障碍物侵入第一菲涅尔区，图中标出需要清除的 60% 半径高度。</desc>
+                <ellipse cx="410" cy="120" rx="330" ry="100" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="7 6"/>
+                <ellipse cx="410" cy="120" rx="330" ry="70" fill="#ccfbf1" fill-opacity="0.35" stroke="#147f80" stroke-width="2"/>
+                <line x1="80" y1="120" x2="740" y2="120" stroke="#53676d" stroke-width="2" stroke-dasharray="8 6"/>
+                <circle cx="80" cy="120" r="8" fill="#d06d4d"/>
+                <circle cx="740" cy="120" r="8" fill="#147f80"/>
+                <text x="80" y="100" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#d06d4d">Tx</text>
+                <text x="740" y="100" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#147f80">Rx</text>
+                <rect x="285" y="150" width="42" height="160" fill="#cbd5e1" stroke="#64748b" stroke-width="1.5"/>
+                <line x1="262" y1="159.6" x2="352" y2="159.6" stroke="#b45309" stroke-width="1.5" stroke-dasharray="4 4"/>
+                <text x="356" y="163" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#b45309">60% r₁ 清除线</text>
+                <text x="306" y="330" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#475569">障碍物</text>
+                <text x="516" y="86" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#147f80">第一菲涅尔区</text>
+                <text x="600" y="40" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#94a3b8">第二菲涅尔区</text>
+                <text x="410" y="146" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">视距 LOS</text>
+            </svg>
+            <figcaption><span class="schematic-note">教学示意</span> <b>图 11-2</b> 菲涅尔区与清除准则。第一菲涅尔区（实线椭球）贡献大部分接收能量；第二菲涅尔区（虚线）相位相反。障碍物必须清除第一菲涅尔区半径的 60% 以上，否则引入绕射损耗（障碍物与视线相切时约 6 dB）。</figcaption>
+        </figure>
+
         <div class="tip">
-            <strong>实用口诀：</strong>对于典型的微波链路（6-40 GHz），第一菲涅尔区半径随距离和频率的变化大致是：d(km)和f(GHz)用公式r₁(m) = 8.66√(d/f)来估算。例如10 km、15 GHz的链路，中点处r₁≈22 m。这意味着你需要清出22 m×60%≈13 m的净空高度。
+            <strong>实用口诀：</strong>对于典型的微波链路（6-40 GHz），第一菲涅尔区半径随距离和频率的变化大致是：d(km)和f(GHz)用公式r₁(m) = 8.66√(d/f)来估算。例如10 km、15 GHz的链路，中点处r₁≈7.1 m。这意味着你需要清出 7.1 m×60%≈4.3 m 的净空高度。
         </div>
 
         <p>当障碍物侵入第一菲涅尔区时，会引入额外的<strong>绕射损耗</strong>（diffraction loss）。如果障碍物刚好与视线相切（即0%清除），损耗约为6 dB。如果障碍物阻塞到视线以下，损耗迅速增加。具体的绕射损耗计算我们将在第13章详细讲解。</p>
