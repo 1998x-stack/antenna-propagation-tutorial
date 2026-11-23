@@ -169,6 +169,30 @@
 
         <p>一个特别重要的工程现象是<strong>布鲁斯特角（Brewster angle）</strong>：当入射角满足某种条件时，垂直极化（TM）波的反射系数为零——反射波完全消失。这个现象只发生在平行极化波上（即电场平行于入射面）。对地面而言，垂直极化波的布鲁斯特角大约在60°-80°之间（取决于地面的介电常数）。</p>
 
+        <figure id="fig-fresnel-coef">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" role="img" aria-labelledby="fig-fc-title fig-fc-desc">
+                <title id="fig-fc-title">地面反射系数随入射角的变化（教学示意）</title>
+                <desc id="fig-fc-desc">取相对介电常数 15 的典型地面，横轴为入射角（0 到 90 度），纵轴为反射系数幅值。水平极化（TE）从法向入射的小值单调上升到掠入射时的 1；垂直极化（TM）在约 75 度的布鲁斯特角降到最低后回升。</desc>
+                <line x1="90" y1="300" x2="760" y2="300" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="90" y1="60" x2="90" y2="300" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="90" y1="180" x2="760" y2="180" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4 5"/>
+                <line x1="652" y1="60" x2="652" y2="300" stroke="#b45309" stroke-width="1.2" stroke-dasharray="6 5"/>
+                <polyline points="90,159 135,158 179,157 224,155 269,152 313,148 358,144 403,138 447,132 492,124 537,116 581,107 626,97 671,85 715,73 760,60" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+                <polyline points="90,159 135,159 179,160 224,162 269,165 313,170 358,175 403,182 447,192 492,204 537,221 581,243 626,275 671,278 715,202 760,60" fill="none" stroke="#15803d" stroke-width="2.5"/>
+                <text x="470" y="112" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#2563eb">TE（水平极化）</text>
+                <text x="500" y="256" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#15803d">TM（垂直极化）</text>
+                <text x="660" y="78" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#b45309">布鲁斯特角≈75.5°</text>
+                <text x="84" y="64" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">1.0</text>
+                <text x="84" y="184" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">0.5</text>
+                <text x="86" y="304" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">0</text>
+                <text x="90" y="320" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">0°</text>
+                <text x="745" y="320" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">90°</text>
+                <text x="420" y="336" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">入射角 θᵢ</text>
+                <text x="46" y="56" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#1e3a8a">|Γ|</text>
+            </svg>
+            <figcaption><span class="schematic-note">教学示意</span> <b>图 12-2</b> 典型地面（ε_r≈15）的反射系数幅值随入射角变化。水平极化（TE）反射系数随入射角单调增大，掠入射时趋于 1；垂直极化（TM）在布鲁斯特角（≈75.5°）附近降到极低，这正是移动通信偏爱垂直极化以抑制强地面反射的原因。</figcaption>
+        </figure>
+
         <div class="tip">
             <strong>这个性质的实际含义：</strong>为什么电视广播（VHF/UHF）爱用水平极化，而手机通信（蜂窝网络）用垂直极化？因为垂直极化的地面反射系数有时会很小（接近布鲁斯特角时），可以减少多径干扰。但事情没这么简单——在移动通信中，手持设备的姿态变化会导致极化旋转，所以没有绝对的"最优极化"。两种极化在实际工程中各有优缺点：水平极化的地面反射更强、覆盖更均匀；垂直极化更适合近距离、非视距场景。
         </div>
@@ -180,50 +204,50 @@
                 <th>地面类型</th>
                 <th>相对介电常数 ε_r</th>
                 <th>电导率 σ (S/m)</th>
-                <th>100 MHz 穿透深度 (m)</th>
-                <th>1 GHz 穿透深度 (m)</th>
+                <th>趋肤深度 100 MHz (m)</th>
+                <th>趋肤深度 1 GHz (m)</th>
             </tr>
             <tr>
                 <td>海水</td>
                 <td>81</td>
                 <td>4-5</td>
-                <td>0.4</td>
-                <td>0.02</td>
+                <td>0.024</td>
+                <td>0.008</td>
             </tr>
             <tr>
                 <td>湿地/农田</td>
                 <td>10-30</td>
                 <td>0.01-0.03</td>
-                <td>3-9</td>
-                <td>0.3-0.9</td>
+                <td>0.36</td>
+                <td>0.11</td>
             </tr>
             <tr>
                 <td>干地/沙地</td>
                 <td>3-6</td>
                 <td>0.001-0.005</td>
-                <td>9-30</td>
-                <td>0.9-3</td>
+                <td>0.92</td>
+                <td>0.29</td>
             </tr>
             <tr>
                 <td>淡水（湖泊/河流）</td>
                 <td>80</td>
                 <td>0.01-0.05</td>
-                <td>2-5</td>
-                <td>0.2-0.5</td>
+                <td>0.29</td>
+                <td>0.09</td>
             </tr>
             <tr>
                 <td>城市地面/混凝土</td>
                 <td>5-8</td>
                 <td>0.001-0.01</td>
-                <td>6-20</td>
-                <td>0.6-2</td>
+                <td>0.71</td>
+                <td>0.23</td>
             </tr>
             <tr>
                 <td>冰雪</td>
                 <td>1.5-3</td>
                 <td>0.0001-0.001</td>
-                <td>10-100</td>
-                <td>1-10</td>
+                <td>2.3</td>
+                <td>0.71</td>
             </tr>
         </table>
 
@@ -317,66 +341,45 @@
             <strong>Millington方法的局限性：</strong>Millington方法基于大量实测数据的经验拟合，在大多数情况下准确度可接受（±3 dB）。但它假设地面是水平分层的，且忽略地形起伏。在复杂地形（多山、城市密集区）下误差会显著增大。现代的ITU-R P.1546和P.526模型提供了更精确的传播预测。
         </div>
 
-        <p>下面是一个简化版本的地波场强计算Python实现：</p>
+        <p>下面这段代码演示地波相关的两个可验证量（自由空间参考场强与地面趋肤深度；真实的地波场强预测请查阅 ITU-R P.368 曲线）：</p>
 
         <pre><code>import numpy as np
 
-def ground_wave_field_strength(f, d, sigma, epsilon_r, P_t=1000):
+def ground_wave_demo(f, d, sigma, P_t=1000):
     """
-    计算地波传播的场强 (简化模型)
-    基于ITU-R P.368的近似解析公式
+    演示地波相关的两个可验证量（教学示意，非完整地波模型）：
+      1) 自由空间参考场强 E0（短单极子，增益 0 dB）
+      2) 地面趋肤深度 delta = 1 / sqrt(pi f mu0 sigma)
 
-    参数:
-        f        : 频率 (Hz)
-        d        : 距离 (m)
-        sigma    : 地面电导率 (S/m)
-        epsilon_r: 地面相对介电常数
-        P_t      : 发射功率 (W)，默认1 kW
-    返回:
-        E        : 场强 (dBμV/m)
+    注意：真实地波场强还取决于地面电参数、极化、地球曲率与地形，
+    工程预测请查阅 ITU-R P.368 / P.1546 曲线，勿用本函数做设计。
     """
-    c = 3e8
-    lam = c / f
-    eta0 = 120 * np.pi  # 自由空间波阻抗
+    mu0 = 4 * np.pi * 1e-7
+    E0 = np.sqrt(30 * P_t) / d                     # V/m
+    E0_dBuV = 20 * np.log10(E0 * 1e6)              # dBμV/m
+    delta = 1 / np.sqrt(np.pi * f * mu0 * sigma)   # m（趋肤深度，导电地面近似）
+    return E0_dBuV, delta
 
-    # 数值距离 p (Sommerfeld数值距离的简化)
-    # 对于垂直极化地波
-    p = (np.pi * d) / (lam) * np.sqrt((epsilon_r - 1j * sigma/(2*np.pi*f*8.85e-12))) / \
-        (np.sqrt(epsilon_r - 1j * sigma/(2*np.pi*f*8.85e-12)) - 1)
-    # 实际数值距离更复杂，这里仅做演示
+# 示例：100 km 处、干地（sigma = 0.005 S/m）下的两个量
+frequencies = [500e3, 1e6, 5e6, 10e6]
+d = 100000
+sigma = 0.005
 
-    # 自由空间场强 (作为参考)
-    E0 = np.sqrt(30 * P_t) / d
-    E0_dBuV = 20 * np.log10(E0 * 1e6)
-
-    # 简化衰减函数 (A(p)经验近似)
-    A = 1.0 / (1 + 0.3 * p + 0.02 * p**2)
-
-    E = E0 * A
-    E_dBuV = 20 * np.log10(E * 1e6)
-    return E_dBuV
-
-# 示例对比：不同频率下的地波衰减
-frequencies = [500e3, 1e6, 5e6, 10e6]  # 500 kHz ~ 10 MHz
-d = 100000  # 100 km
-sigma = 0.005  # 干地
-er = 5
-
-print("频率       | 100 km 场强 (dBμV/m)")
-print("-" * 35)
+print("频率      | 参考 E0 (dBμV/m) | 趋肤深度 delta (m)")
+print("-" * 50)
 for f in frequencies:
-    E = ground_wave_field_strength(f, d, sigma, er)
+    E0, delta = ground_wave_demo(f, d, sigma)
     freq_str = f"{f/1e3:.0f} kHz" if f < 1e6 else f"{f/1e6:.1f} MHz"
-    print(f"{freq_str:8s} | {E:.1f}")
-# 输出示例:
-# 频率       | 100 km 场强 (dBμV/m)
-# -----------------------------------
-# 500 kHz    | 57.3
-# 1.0 MHz    | 44.1
-# 5.0 MHz    | 18.6
-# 10.0 MHz   | 6.2
+    print(f"{freq_str:8s} | {E0:14.1f} | {delta:.2f}")
+# 输出示例（以上参数的实际运行结果）:
+# 频率      | 参考 E0 (dBμV/m) | 趋肤深度 delta (m)
+# 500 kHz  |           64.8 | 10.07
+# 1.0 MHz  |           64.8 | 7.12
+# 5.0 MHz  |           64.8 | 3.18
+# 10.0 MHz |           64.8 | 2.25
 
-# 结论: 频率越高，地波衰减越严重</code></pre>
+# 说明: 参考场强与频率无关；趋肤深度随频率升高而减小，
+# 反映地面损耗随频率加剧——这是地波在高频衰减更快的原因之一。</code></pre>
 
         <div class="highlight">
             <strong>工程总结：</strong>地波传播的几个要点要牢记：
@@ -393,7 +396,7 @@ for f in frequencies:
             <ul>
                 <li>双射线（平面地球）模型与断点距离：T. S. Rappaport, <i>Wireless Communications: Principles and Practice</i>，第 3–4 章关于两径/反射地面模型的推导。</li>
                 <li>地面电参数与反射系数：ITU-R Recommendation P.527, <i>Electrical characteristics of the surface of the Earth</i>：<a href="https://www.itu.int/rec/R-REC-P.527/en">itu.int/rec/R-REC-P.527</a></li>
-                <li>表 12-1 的电参数/穿透深度为典型量级参考，实际值随土壤湿度、温度与频率变化。</li>
+                <li>表中的相对介电常数 ε_r 与电导率 σ 为典型量级参考，实际值随土壤湿度、温度与频率变化；趋肤深度按 δ = 1/√(πfμ₀σ) 估算（导电地面近似）。</li>
             </ul>
         </section>
 
