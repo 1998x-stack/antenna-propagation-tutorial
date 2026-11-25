@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第8章 微带天线理论与设计</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -41,10 +69,15 @@
             <li><a href="27.html">第27章 AI驱动的天线设计与优化</a></li>
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第8章 微带天线理论与设计</h1>
+            <p class="dek">微带天线是一块“印”在基板上的铜皮谐振器。本章从结构与优缺点出发，用腔模模型推导矩形贴片的谐振频率与尺寸修正，比较四种馈电方式，并给出圆极化与阵列的设计流程。</p>
+        </header>
 
-        <h2>8.1 微带天线的结构与优势</h2>
+        <h2 id="s81">8.1 微带天线的结构与优势</h2>
 
         <p>大家好，我是你们的讲师。在上一章中，我们学习了天线阵列如何通过单元排布来合成所需的波束方向图。从今天开始，我们将聚焦于天线工程中最重要的一类天线——<strong>微带天线（microstrip patch antenna）</strong>。</p>
 
@@ -55,6 +88,31 @@
         <div class="highlight">
             <strong>核心洞察：</strong>微带天线本质上是接地板与辐射贴片之间的一段"开口谐振腔"。电磁场在贴片下方谐振，通过贴片边缘的缝隙向外辐射能量。你不必把它想得太复杂——它就是一个漏了点缝的谐振器。
         </div>
+
+        <figure id="fig-ms">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" role="img" aria-labelledby="fig-ms-title fig-ms-desc">
+                <title id="fig-ms-title">矩形微带天线的截面结构</title>
+                <desc id="fig-ms-desc">微带天线由下至上依次为接地板、介质基板与辐射贴片；贴片两侧边缘的缝隙向外泄漏电磁场，形成辐射，贴片与接地板之间构成谐振腔。</desc>
+                <text x="20" y="28" font-family="system-ui, 'PingFang SC', sans-serif" font-size="15" fill="#1e3a8a">微带天线截面：贴片 / 基板 / 接地板</text>
+                <rect x="120" y="150" width="580" height="70" fill="#fdf3dc" stroke="#d9b26a" stroke-width="1.5"/>
+                <rect x="120" y="224" width="580" height="16" fill="#b9bec7" stroke="#6b7280" stroke-width="1.5"/>
+                <rect x="280" y="140" width="260" height="12" fill="#f0a23a" stroke="#b45309" stroke-width="1.5"/>
+                <path d="M280 140 q-40 -34 -78 -18" fill="none" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="4 4"/>
+                <path d="M540 140 q40 -34 78 -18" fill="none" stroke="#2563eb" stroke-width="1.6" stroke-dasharray="4 4"/>
+                <path d="M280 140 q-30 30 -66 22" fill="none" stroke="#2563eb" stroke-width="1.4" stroke-dasharray="4 4"/>
+                <path d="M540 140 q30 30 66 22" fill="none" stroke="#2563eb" stroke-width="1.4" stroke-dasharray="4 4"/>
+                <text x="410" y="132" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#b45309">辐射贴片（铜）</text>
+                <text x="150" y="188" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#8a6d2f">介质基板</text>
+                <text x="700" y="238" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#4b5563">接地板</text>
+                <text x="600" y="100" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#2563eb">边缘缝涂漏场 → 辐射</text>
+                <line x1="280" y1="266" x2="540" y2="266" stroke="#334155" stroke-width="1.2"/>
+                <polygon points="280,266 290,262 290,270" fill="#334155"/><polygon points="540,266 530,262 530,270" fill="#334155"/>
+                <text x="410" y="284" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#334155">贴片宽度 W</text>
+                <line x1="740" y1="150" x2="740" y2="224" stroke="#334155" stroke-width="1.2"/>
+                <text x="748" y="192" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#334155">h</text>
+            </svg>
+            <figcaption><b>图 8-1</b> 矩形微带天线截面（教学示意）。贴片与接地板之间的介质基板（厚度 h）构成谐振腔，主模 TM₁₀ 振荡；贴片两端的边缘场向空间泄漏，这两条“辐射缝”可作为两个同相缝隙来近似分析。</figcaption>
+        </figure>
 
         <p>微带天线的优势让它成了现代无线设备的首选：</p>
         <ul>
@@ -86,32 +144,62 @@
 
         <p>对于长度为L、宽度为W的矩形贴片，<strong>主模（dominant mode）</strong>是TM₁₀模，其电场分布为：</p>
 
-        <p style="text-align:center; font-size:1.1rem; margin:15px 0;">
-            E_z = E₀ cos(πx/L)
-        </p>
+        <div class="math-equation" role="group" aria-label="TM10 主模的电场分布">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="TM10 主模的电场分布，可横向滚动">
+                <math display="block" aria-label="电场 z 分量等于 E0 乘 cos pi x 除以 L">
+                    <mrow><msub><mi>E</mi><mi>z</mi></msub><mo>=</mo><msub><mi>E</mi><mn>0</mn></msub><mi>cos</mi><mo>(</mo><mfrac><mrow><mi>π</mi><mi>x</mi></mrow><mi>L</mi></mfrac><mo>)</mo></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>TM₁₀模的谐振频率为：</p>
 
-        <p style="text-align:center; font-size:1.1rem; margin:15px 0;">
-            f_r = c / (2L<sub>eff</sub> √ε<sub>r</sub>)
-        </p>
+        <div class="math-equation" role="group" aria-label="矩形贴片的谐振频率">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="矩形贴片的谐振频率，可横向滚动">
+                <math display="block" aria-label="谐振频率 f_r 等于光速 c 除以 2 乘有效长度 L eff 乘根号 epsilon r">
+                    <mrow><msub><mi>f</mi><mi>r</mi></msub><mo>=</mo><mfrac><mi>c</mi><mrow><mn>2</mn><msub><mi>L</mi><mtext>eff</mtext></msub><msqrt><msub><mi>ε</mi><mi>r</mi></msub></msqrt></mrow></mfrac></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>其中L<sub>eff</sub>是考虑了<strong>边缘效应（fringing effect）</strong>后的有效长度。实际贴片周围的边缘场会延伸到贴片边界之外，就像平行板电容器的边缘效应一样。等效的长度伸长约ΔL通常由以下经验公式给出：</p>
 
-        <p style="text-align:center; font-size:1.0rem; margin:15px 0;">
-            ΔL = 0.412h · (ε<sub>eff</sub> + 0.3)(W/h + 0.264) / [(ε<sub>eff</sub> - 0.258)(W/h + 0.8)]
-        </p>
+        <div class="math-equation" role="group" aria-label="边缘延伸长度经验公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="边缘延伸长度经验公式，可横向滚动">
+                <math display="block" aria-label="边缘延伸 Delta L 等于 0.412 h 乘 eps_eff 加 0.3 乘 W 除以 h 加 0.264 除以 eps_eff 减 0.258 乘 W 除以 h 加 0.8">
+                    <mrow><mi>Δ</mi><mi>L</mi><mo>=</mo><mn>0.412</mn><mi>h</mi><mfrac><mrow><mo>(</mo><msub><mi>ε</mi><mtext>eff</mtext></msub><mo>+</mo><mn>0.3</mn><mo>)</mo><mo>(</mo><mfrac><mi>W</mi><mi>h</mi></mfrac><mo>+</mo><mn>0.264</mn><mo>)</mo></mrow><mrow><mo>(</mo><msub><mi>ε</mi><mtext>eff</mtext></msub><mo>−</mo><mn>0.258</mn><mo>)</mo><mo>(</mo><mfrac><mi>W</mi><mi>h</mi></mfrac><mo>+</mo><mn>0.8</mn><mo>)</mo></mrow></mfrac></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>其中h为基板厚度，ε<sub>eff</sub>为有效介电常数。于是：</p>
 
-        <p style="text-align:center; font-size:1.0rem; margin:15px 0;">
-            L<sub>eff</sub> = L + 2ΔL
-        </p>
+        <div class="math-equation" role="group" aria-label="有效长度">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="有效长度，可横向滚动">
+                <math display="block" aria-label="有效长度 L eff 等于物理长度 L 加 2 倍的边缘延伸 Delta L">
+                    <mrow><msub><mi>L</mi><mtext>eff</mtext></msub><mo>=</mo><mi>L</mi><mo>+</mo><mn>2</mn><mi>Δ</mi><mi>L</mi></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>实际物理贴片长度L要略短于λ_g/2（波导波长的一半），正是由于边缘效应导致了等效的电长度延展。</p>
 
         <div class="warning">
             <strong>常见误区：</strong>很多初学者直接用自由空间波长的一半来算L，结果做出来的天线谐振频率偏差10-20%。这是因为没有考虑介质中的波长缩短效应和边缘效应。记住：f_r = c/(2L√ε_r)只是一个粗略的初值，设计时必须用全波仿真软件进行微调。
+        </div>
+
+        <div class="widget" id="widget-patch" role="group" aria-label="矩形贴片尺寸估算器">
+            <h3>交互：矩形贴片尺寸估算（腔模模型）</h3>
+            <p>改变谐振频率、基板相对介电常数与厚度，按腔模公式初算贴片宽度 W、长度 L 与有效介电常数 ε_eff（教学示意，实际须用全波仿真微调）。</p>
+            <label for="pt-f">谐振频率 f_r：<output id="pt-f-out">5.8 GHz</output></label>
+            <input id="pt-f" type="range" min="10" max="120" value="58" step="1">
+            <label for="pt-er">相对介电常数 ε_r：<output id="pt-er-out">3.48</output></label>
+            <input id="pt-er" type="range" min="20" max="120" value="35" step="1">
+            <label for="pt-h">基板厚度 h：<output id="pt-h-out">0.80 mm</output></label>
+            <input id="pt-h" type="range" min="1" max="30" value="8" step="1">
+            <button id="pt-calc" type="button">记录到对比表</button>
+            <div class="readout" id="pt-out" aria-live="polite"></div>
+            <table><thead><tr><th>f_r</th><th>ε_r</th><th>W</th><th>L</th></tr></thead><tbody id="pt-rows"></tbody></table>
         </div>
 
         <p>下表列出了常用的微带基板材料参数：</p>
@@ -347,6 +435,15 @@ print(f"边缘延伸 ΔL = {dL*1e3:.3f} mm")
             <strong>重要提醒：</strong>腔模模型给出的尺寸只是一个"第一版"初值。实际加工前，必须用全波仿真软件（HFSS/CST）进行迭代优化。影响谐振频率的实际因素包括：馈电网络对贴片的加载效应、相邻单元间的互耦（对于阵列）、制造公差。通常仿真会发现需要将贴片长度缩短2-5%才能回到目标频率。
         </div>
 
+        <section id="references" aria-labelledby="ref-heading">
+            <h2 id="ref-heading">本章参考</h2>
+            <ul>
+                <li>腔模理论、TM₁₀ 主模、谐振频率与边缘延伸经验式、四种馈电方式：C. A. Balanis, <i>Antenna Theory: Analysis and Design</i>（第 14 章“Microstrip Antennas”）。</li>
+                <li>单馈/双馈圆极化与轴比：同上书第 14 章。基板参数表（FR-4、RO4350B、RT/duroid 等）为标准材料手册典型值。</li>
+                <li>贴片尺寸滑块按腔模公式与表中经验式实现，结果为教学示意，实际须全波仿真微调。</li>
+            </ul>
+        </section>
+
         <hr style="margin: 30px 0; border: 0; border-top: 2px dashed #fcd34d;">
 
         <p style="font-size: 1.1rem; line-height: 1.8;">
@@ -362,7 +459,36 @@ print(f"边缘延伸 ΔL = {dL*1e3:.3f} mm")
             <a href="index.html">📖 返回目录</a>
             <a href="09.html">下一章 →</a>
         </div>
-    </div>
+        <script>
+        (function () {
+            var fEl = document.getElementById('pt-f'), eEl = document.getElementById('pt-er'), hEl = document.getElementById('pt-h');
+            var out = document.getElementById('pt-out'), rows = document.getElementById('pt-rows');
+            var C = 3e8;
+            function calc() {
+                var f = (+fEl.value) / 10 * 1e9, er = (+eEl.value) / 10, h = (+hEl.value) / 10 / 1000;
+                var W = C / (2 * f) * Math.sqrt(2 / (er + 1));
+                var eeff = (er + 1) / 2 + (er - 1) / 2 * Math.pow(1 + 12 * h / W, -0.5);
+                var dL = 0.412 * h * ((eeff + 0.3) * (W / h + 0.264)) / ((eeff - 0.258) * (W / h + 0.8));
+                var L = C / (2 * f * Math.sqrt(eeff)) - 2 * dL;
+                document.getElementById('pt-f-out').textContent = (f / 1e9).toFixed(1) + ' GHz';
+                document.getElementById('pt-er-out').textContent = er.toFixed(2);
+                document.getElementById('pt-h-out').textContent = (h * 1000).toFixed(2) + ' mm';
+                out.textContent = 'f_r = ' + (f / 1e9).toFixed(1) + ' GHz，ε_r = ' + er.toFixed(2) + '，h = ' + (h * 1000).toFixed(2) + ' mm\nW ≈ ' + (W * 1000).toFixed(2) + ' mm\nL ≈ ' + (L * 1000).toFixed(2) + ' mm\nε_eff ≈ ' + eeff.toFixed(3) + '，ΔL ≈ ' + (dL * 1000).toFixed(3) + ' mm';
+                return { f: (f / 1e9).toFixed(1) + ' GHz', er: er.toFixed(2), W: (W * 1000).toFixed(1) + ' mm', L: (L * 1000).toFixed(1) + ' mm' };
+            }
+            function record() {
+                var v = calc();
+                var tr = document.createElement('tr');
+                [v.f, v.er, v.W, v.L].forEach(function (t) { var td = document.createElement('td'); td.textContent = t; tr.appendChild(td); });
+                rows.appendChild(tr);
+            }
+            [fEl, eEl, hEl].forEach(function (e) { e.addEventListener('input', calc); });
+            document.getElementById('pt-calc').addEventListener('click', record);
+            calc();
+        })();
+        </script>
+    </article>
+    </main>
 </div>
 </div>
 </body>
