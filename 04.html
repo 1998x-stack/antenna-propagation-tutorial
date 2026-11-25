@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第4章 天线辐射基本原理</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -41,10 +69,15 @@
             <li><a href="27.html">第27章 AI驱动的天线设计与优化</a></li>
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第4章 天线辐射基本原理</h1>
+            <p class="dek">天线是导行波与自由空间辐射波之间的换能器。本章从“加速电荷才辐射”出发，推导赫兹电偶极子的完整场分布，划清近场与远场，并引入远场方向图与辐射电阻两个核心概念。</p>
+        </header>
 
-        <h2>4.1 天线如何产生辐射？</h2>
+        <h2 id="s41">4.1 天线如何产生辐射？</h2>
 
         <p>大家好，我是你们的讲师。我们已经学习了Maxwell方程组和电磁波在空间中的传播行为。现在问题来了：<strong>电磁波最开始是怎么产生的？</strong>天线的那根金属线里到底发生了什么神奇的事情，让原本在电路里规规矩矩流动的电子，突然向空间"甩出"了电磁波？</p>
 
@@ -91,6 +124,19 @@
         <p><strong>远场近似：</strong><br>
         E<sub>θ</sub> = jη₀ · (I₀ dl · k · e^(-jkr) / (4πr)) · sinθ<br>
         H<sub>φ</sub> = E<sub>θ</sub> / η₀</p>
+
+        <div class="math-equation" role="group" aria-label="赫兹偶极子远场电场">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="赫兹偶极子远场电场，可横向滚动">
+                <math display="block" aria-label="远场电场 theta 分量等于 j eta0 乘 I0 dl k 除以 4 pi r 再乘 e 的负 jkr 次幂再乘 sin theta">
+                    <mrow>
+                        <msub><mi>E</mi><mi>θ</mi></msub><mo>=</mo><mi>j</mi><msub><mi>η</mi><mn>0</mn></msub>
+                        <mfrac><mrow><msub><mi>I</mi><mn>0</mn></msub><mi>d</mi><mi>l</mi><mi>k</mi></mrow><mrow><mn>4</mn><mi>π</mi><mi>r</mi></mrow></mfrac>
+                        <msup><mi>e</mi><mrow><mo>−</mo><mi>j</mi><mi>k</mi><mi>r</mi></mrow></msup>
+                        <mi>sin</mi><mi>θ</mi>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>注意到远场中：E和H相互垂直、同相、幅度比为η₀，传播方向为径向r̂——这正是我们第2章讲过的均匀平面波的特性！所以在离天线足够远的地方，电磁波看起来就像一个局部均匀的平面波。</p>
 
@@ -149,13 +195,43 @@
             <strong>踩坑故事：</strong>我参与过的一个5G基站天线项目中，测试团队在一个小型暗室里测量一款1.8米长的面板天线在2.6 GHz频段的方向图。按计算，远场条件要求 r > 2×(1.8)²/0.115 ≈ 56米——而暗室长度只有30米。他们在Fresnel区测出的方向图副瓣电平比真实值高了约2 dB，导致项目验收一度无法通过。最终我们不得不采用柱面近场扫描+NF-FF变换来获得准确的远场方向图。所以请记住：<strong>远场条件不是一个建议——它是一个硬性的数学要求</strong>。
         </div>
 
-        <h2>4.4 远场方向图与辐射电阻</h2>
+        <figure id="fig-regions">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 250" role="img" aria-labelledby="fig-regions-title fig-regions-desc">
+                <title id="fig-regions-title">天线近场区、辐射近场区与远场区的划分</title>
+                <desc id="fig-regions-desc">沿距离 r 的三个场区：电抗近场区（r 小于 0.62 乘 D 立方除以 lambda 的平方根）、辐射近场区（Fresnel 区，直到 2 D 平方除以 lambda）以及远场区（Fraunhofer 区）。</desc>
+                <text x="20" y="28" font-family="system-ui, 'PingFang SC', sans-serif" font-size="15" fill="#1e3a8a">天线周围场区划分（距离 r，示意、不成比例）</text>
+                <rect x="120" y="70" width="150" height="90" fill="#fee2e2" stroke="#f87171"/>
+                <rect x="270" y="70" width="330" height="90" fill="#fef9c3" stroke="#facc15"/>
+                <rect x="600" y="70" width="170" height="90" fill="#dcfce7" stroke="#4ade80"/>
+                <line x1="120" y1="115" x2="120" y2="85" stroke="#475569" stroke-width="2.5"/>
+                <line x1="120" y1="115" x2="120" y2="145" stroke="#475569" stroke-width="2.5"/>
+                <line x1="100" y1="115" x2="790" y2="115" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 4"/>
+                <line x1="270" y1="60" x2="270" y2="170" stroke="#f87171" stroke-width="1.5" stroke-dasharray="5 4"/>
+                <line x1="600" y1="60" x2="600" y2="170" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="5 4"/>
+                <text x="195" y="112" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#991b1b">电抗近场</text>
+                <text x="195" y="130" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#991b1b">r &lt; 0.62√(D³/λ)</text>
+                <text x="435" y="108" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#854d0e">辐射近场（Fresnel）</text>
+                <text x="435" y="126" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#854d0e">0.62√(D³/λ) &lt; r &lt; 2D²/λ</text>
+                <text x="685" y="108" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#166534">远场（Fraunhofer）</text>
+                <text x="685" y="126" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#166534">r &gt; 2D²/λ</text>
+                <text x="120" y="200" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">例：D = 1 m、λ = 0.1 m（3 GHz）→ 边界约 1.96 m 与 20 m</text>
+            </svg>
+            <figcaption><b>图 4-2</b> 天线周围的三个场区（教学示意，横向不成比例）。近场里电抗性储能占优、方向图随距离变化；只有进入远场区（r &gt; 2D²/λ）方向图才稳定，天线增益、极化等指标都在远场定义。</figcaption>
+        </figure>
+
+        <h2 id="s44">4.4 远场方向图与辐射电阻</h2>
 
         <h3>归一化方向图</h3>
 
         <p>从赫兹偶极子的远场表达式可以看出，场强E<sub>θ</sub>与sinθ成正比——即在垂直于偶极子轴线的方向（θ=90°）辐射最强，沿轴线方向（θ=0°或180°）辐射为零。这个空间分布就是天线的<strong>辐射方向图（radiation pattern）</strong>。</p>
 
-        <p><strong>归一化方向图函数：</strong>F(θ, φ) = E(θ, φ) / E_max</p>
+        <div class="math-equation" role="group" aria-label="归一化方向图函数">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="归一化方向图函数，可横向滚动">
+                <math display="block" aria-label="归一化方向图 F 等于方向图 E 除以最大电场 Emax">
+                    <mrow><mi>F</mi><mo>(</mo><mi>θ</mi><mo>,</mo><mi>φ</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mi>E</mi><mo>(</mo><mi>θ</mi><mo>,</mo><mi>φ</mi><mo>)</mo></mrow><msub><mi>E</mi><mtext>max</mtext></msub></mfrac></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>对于赫兹偶极子：F(θ) = sinθ。这是一个典型的"甜甜圈"形状方向图：在赤道面（H面，θ=90°平面）是全向的，在子午面（E面，φ=常数平面）是8字形的。</p>
 
@@ -165,6 +241,24 @@
             <li><strong>H面</strong>（θ=90°平面）：垂直于z轴，方向图是圆（全向）。F(φ) = 1</li>
         </ul>
 
+        <figure id="fig-pattern">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" role="img" aria-labelledby="fig-pattern-title fig-pattern-desc">
+                <title id="fig-pattern-title">赫兹偶极子的 E 面与 H 面方向图</title>
+                <desc id="fig-pattern-desc">沿 z 轴放置的赫兹偶极子：E 面（含 z 轴的平面）方向图为 8 字形，场强正比于 sin theta；H 面（垂直于 z 轴的赤道面）方向图为圆，全向辐射。</desc>
+                <text x="20" y="28" font-family="system-ui, 'PingFang SC', sans-serif" font-size="15" fill="#1e3a8a">赫兹偶极子的主平面方向图（F(θ) = sinθ）</text>
+                <line x1="210" y1="36" x2="210" y2="260" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="6 5"/>
+                <text x="216" y="48" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#64748b">偶极子轴 z</text>
+                <line x1="95" y1="148" x2="325" y2="148" stroke="#e2e8f0" stroke-width="1"/>
+                <polyline points="210.0,148.0 210.8,138.9 213.2,130.0 217.0,121.8 222.3,114.3 228.8,107.8 236.2,102.5 244.5,98.7 253.4,96.3 262.5,95.5 271.6,96.3 280.5,98.7 288.8,102.5 296.2,107.8 302.7,114.3 308.0,121.8 311.8,130.0 314.2,138.9 315.0,148.0 314.2,157.1 311.8,166.0 308.0,174.2 302.7,181.7 296.2,188.2 288.8,193.5 280.5,197.3 271.6,199.7 262.5,200.5 253.4,199.7 244.5,197.3 236.2,193.5 228.8,188.2 222.3,181.7 217.0,174.3 213.2,166.0 210.8,157.1 210.0,148.0 209.2,157.1 206.8,166.0 203.0,174.2 197.7,181.7 191.2,188.2 183.8,193.5 175.5,197.3 166.6,199.7 157.5,200.5 148.4,199.7 139.5,197.3 131.3,193.5 123.8,188.2 117.3,181.7 112.0,174.2 108.2,166.0 105.8,157.1 105.0,148.0 105.8,138.9 108.2,130.0 112.0,121.8 117.3,114.3 123.8,107.8 131.2,102.5 139.5,98.7 148.4,96.3 157.5,95.5 166.6,96.3 175.5,98.7 183.7,102.5 191.2,107.8 197.7,114.3 203.0,121.8 206.8,130.0 209.2,138.9 210.0,148.0" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+                <text x="210" y="286" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#2563eb">E 面（含 z 轴）：8 字形</text>
+                <circle cx="610" cy="148" r="100" fill="none" stroke="#16a34a" stroke-width="2.5"/>
+                <line x1="500" y1="148" x2="720" y2="148" stroke="#e2e8f0" stroke-width="1"/>
+                <line x1="610" y1="38" x2="610" y2="258" stroke="#e2e8f0" stroke-width="1"/>
+                <text x="610" y="286" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#16a34a">H 面（赤道面）：全向圆</text>
+            </svg>
+            <figcaption><b>图 4-1</b> 赫兹偶极子的主平面方向图（教学示意）。E 面（含偶极子轴的平面）为“8”字形，场强正比于 sinθ，在轴向（θ=0°/180°）为零；H 面（θ=90° 的赤道面）为圆，垂直偶极子轴方向全向辐射，最大方向 θ=90°。</figcaption>
+        </figure>
+
         <h3>辐射电阻</h3>
 
         <p>天线辐射出去的功率可以用一个等效电阻上的焦耳热损耗来类比——这个等效电阻就是<strong>辐射电阻（radiation resistance）R<sub>rad</sub></strong>。</p>
@@ -173,7 +267,13 @@
 
         <p>对于赫兹偶极子：</p>
 
-        <p><strong>R<sub>rad</sub> = 80π² (dl/λ)² (Ω)</strong></p>
+        <div class="math-equation" role="group" aria-label="赫兹偶极子辐射电阻">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="赫兹偶极子辐射电阻，可横向滚动">
+                <math display="block" aria-label="辐射电阻 R rad 等于 80 pi 平方乘 dl 除以 lambda 的平方">
+                    <mrow><msub><mi>R</mi><mtext>rad</mtext></msub><mo>=</mo><mn>80</mn><msup><mi>π</mi><mn>2</mn></msup><msup><mrow><mo>(</mo><mfrac><mrow><mi>d</mi><mi>l</mi></mrow><mi>λ</mi></mfrac><mo>)</mo></mrow><mn>2</mn></msup></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>这个公式的意义非常深刻：</p>
         <ul>
@@ -186,7 +286,17 @@
             <strong>工程直觉：</strong>辐射电阻是天线最重要的指标之一。一个设计良好的半波偶极子的辐射电阻约73 Ω，大约等于标准传输线的特性阻抗（50 Ω或75 Ω），因此可以直接匹配。而一个电小环天线的辐射电阻可能只有0.1 Ω量级——这就是为什么电小天线必须使用高Q匹配网络（并且带宽很窄）的原因。
         </div>
 
-        <h2>4.5 对偶原理与磁流元</h2>
+        <div class="widget" id="widget-rad" role="group" aria-label="赫兹偶极子辐射电阻与效率估算器">
+            <h3>交互：辐射电阻与效率</h3>
+            <p>改变电长度 dl/λ，估算赫兹偶极子的辐射电阻 R<sub>rad</sub> = 80π²(dl/λ)²，并假设欧姆损耗 R<sub>loss</sub> = 2 Ω（教学示意），给出辐射效率。</p>
+            <label for="rd-l">电长度 dl/λ：<output id="rd-l-out">0.010</output></label>
+            <input id="rd-l" type="range" min="1" max="100" value="10" step="1">
+            <button id="rd-calc" type="button">记录到对比表</button>
+            <div class="readout" id="rd-out" aria-live="polite"></div>
+            <table><thead><tr><th>dl/λ</th><th>R<sub>rad</sub></th><th>效率</th></tr></thead><tbody id="rd-rows"></tbody></table>
+        </div>
+
+        <h2 id="s45">4.5 对偶原理与磁流元</h2>
 
         <p>天线理论中有一个非常优雅的<strong>对偶原理（duality principle）</strong>。它指出：如果我们将电场与磁场互换、电流与磁流互换、介电常数与磁导率互换，那么Maxwell方程组的形式保持不变。利用这一对称性，我们可以从已知的电偶极子解直接得到<strong>磁流元（magnetic current element）</strong>的解。</p>
 
@@ -295,6 +405,15 @@ for th_deg in range(0, 180, 1):
 print(f"球面积分验证辐射功率: {P_rad_int*1000:.4f} mW")
 print(f"两者一致!")</code></pre>
 
+        <section id="references" aria-labelledby="ref-heading">
+            <h2 id="ref-heading">本章参考</h2>
+            <ul>
+                <li>赫兹偶极子场分量、远场近似、方向图与辐射场 1/r 衰减：C. A. Balanis, <i>Antenna Theory: Analysis and Design</i>（第 4 章“Radiation Integrals and Auxiliary Potential Functions”）。</li>
+                <li>近场/远场区划分 0.62√(D³/λ) 与 2D²/λ：同上书第 2 章。</li>
+                <li>辐射电阻 R<sub>rad</sub> = 80π²(dl/λ)² 与对偶原理/Babinet 原理：同上书第 4、12 章。效率滑块的 R<sub>loss</sub> = 2 Ω 为教学示意。</li>
+            </ul>
+        </section>
+
         <hr style="margin: 30px 0; border: 0; border-top: 2px dashed #fcd34d;">
 
         <p style="font-size: 1.1rem; line-height: 1.8;">
@@ -310,7 +429,32 @@ print(f"两者一致!")</code></pre>
             <a href="index.html">📖 返回目录</a>
             <a href="05.html">下一章 →</a>
         </div>
-    </div>
+        <script>
+        (function () {
+            var lEl = document.getElementById('rd-l');
+            var out = document.getElementById('rd-out'), rows = document.getElementById('rd-rows');
+            var Rloss = 2.0;
+            function calc() {
+                var r = (+lEl.value) / 1000;
+                var Rrad = 80 * Math.PI * Math.PI * r * r;
+                var eff = Rrad / (Rrad + Rloss);
+                document.getElementById('rd-l-out').textContent = r.toFixed(3);
+                out.textContent = 'dl/λ = ' + r.toFixed(3) + '\nR_rad ≈ ' + Rrad.toFixed(3) + ' Ω\n效率 η = R_rad/(R_rad+2) ≈ ' + (eff * 100).toFixed(1) + ' %（' + (10 * Math.log10(eff)).toFixed(2) + ' dB）';
+                return { r: r.toFixed(3), Rrad: Rrad.toFixed(3) + ' Ω', eff: (eff * 100).toFixed(1) + ' %' };
+            }
+            function record() {
+                var v = calc();
+                var tr = document.createElement('tr');
+                [v.r, v.Rrad, v.eff].forEach(function (t) { var td = document.createElement('td'); td.textContent = t; tr.appendChild(td); });
+                rows.appendChild(tr);
+            }
+            lEl.addEventListener('input', calc);
+            document.getElementById('rd-calc').addEventListener('click', record);
+            calc();
+        })();
+        </script>
+    </article>
+    </main>
 </div>
 </div>
 </body>
