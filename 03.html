@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第3章 电磁波的极化与边界条件</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -42,9 +70,14 @@
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
     </div>
-    <div class="main-content">
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第3章 电磁波的极化与边界条件</h1>
+            <p class="dek">极化是电场矢量在垂直于传播方向的平面内的轨迹，而它在链路中是一个常常被忽视的匹配维度。本章讲清线/圆/椭圆极化、极化失配损耗，以及电磁波在介质分界面上的反射、透射与 Fresnel 公式。</p>
+        </header>
 
-        <h2>3.1 什么是极化？直观理解</h2>
+        <h2 id="s31">3.1 什么是极化？直观理解</h2>
 
         <p>大家好，欢迎回到课堂。想象你在一个平静的湖面上扔下一块石头，水面泛起一圈圈涟漪——水面上每一个点都在上下振动，振动方向是垂直的。现在再取一根绳子，一端固定，你用手上下抖动另一端——绳子上产生一个波，每个质点的振动方向仍然是垂直的。但如果你的手改为左右抖动呢？振动的方向就变成了水平。</p>
 
@@ -60,7 +93,20 @@
 
         <p>从数学上看，极化就是电场矢量末端的<strong>轨迹</strong>。设电磁波沿+z方向传播，电场由两个正交分量组成：</p>
 
-        <p><strong>E</strong>(z, t) = E<sub>x</sub> cos(ωt - kz + φ<sub>x</sub>) <strong>ẑ</strong> + E<sub>y</sub> cos(ωt - kz + φ<sub>y</sub>) <strong>ŷ</strong></p>
+        <div class="math-equation" role="group" aria-label="电场矢量两正交分量表达式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="电场矢量表达式，可横向滚动">
+                <math display="block" aria-label="电场 E 等于 x 方向分量 Ex 乘 cos omega t 减 kz 加 phix，加上 y 方向分量 Ey 乘 cos omega t 减 kz 加 phiy">
+                    <mrow>
+                        <mi mathvariant="bold">E</mi><mo>=</mo>
+                        <mover><mi mathvariant="bold">x</mi><mo>^</mo></mover><msub><mi>E</mi><mi>x</mi></msub>
+                        <mi>cos</mi><mo>(</mo><mi>ω</mi><mi>t</mi><mo>−</mo><mi>k</mi><mi>z</mi><mo>+</mo><msub><mi>φ</mi><mi>x</mi></msub><mo>)</mo>
+                        <mo>+</mo>
+                        <mover><mi mathvariant="bold">y</mi><mo>^</mo></mover><msub><mi>E</mi><mi>y</mi></msub>
+                        <mi>cos</mi><mo>(</mo><mi>ω</mi><mi>t</mi><mo>−</mo><mi>k</mi><mi>z</mi><mo>+</mo><msub><mi>φ</mi><mi>y</mi></msub><mo>)</mo>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>在固定z处观察，E<sub>x</sub>和E<sub>y</sub>随时间变化，其矢端轨迹决定了极化类型。E<sub>x</sub>和E<sub>y</sub>的<strong>幅度比</strong>和<strong>相位差</strong>Δφ = φ<sub>y</sub> - φ<sub>x</sub>是决定极化形状的两个关键参数。</p>
 
@@ -137,11 +183,42 @@
             </tr>
         </table>
 
-        <h2>3.3 极化匹配与极化失配损耗</h2>
+        <figure id="fig-pol">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 260" role="img" aria-labelledby="fig-pol-title fig-pol-desc">
+                <title id="fig-pol-title">线极化、圆极化与椭圆极化的电矢量轨迹</title>
+                <desc id="fig-pol-desc">三个面板分别画出电场矢量在横截面内的轨迹：线极化是一条直线（相位差 0° 或 180°），圆极化是一个圆（相位差 ±90° 且等幅），椭圆极化是椭圆（一般幅度比与相位差）。</desc>
+                <text x="20" y="30" font-family="system-ui, 'PingFang SC', sans-serif" font-size="15" fill="#1e3a8a">电场矢量在横截面（垂直于传播方向）内的轨迹</text>
+                <g stroke="#e2e8f0" stroke-width="1">
+                    <line x1="80" y1="130" x2="220" y2="130"/><line x1="150" y1="60" x2="150" y2="200"/>
+                    <line x1="340" y1="130" x2="480" y2="130"/><line x1="410" y1="60" x2="410" y2="200"/>
+                    <line x1="600" y1="130" x2="740" y2="130"/><line x1="670" y1="60" x2="670" y2="200"/>
+                </g>
+                <line x1="97" y1="160" x2="203" y2="94" stroke="#2563eb" stroke-width="2.5"/>
+                <circle cx="410" cy="130" r="54" fill="none" stroke="#16a34a" stroke-width="2.5"/>
+                <polygon points="420,78 409,82 417,91" fill="#16a34a"/>
+                <ellipse cx="670" cy="130" rx="62" ry="26" transform="rotate(-28 670 130)" fill="none" stroke="#d97706" stroke-width="2.5"/>
+                <circle cx="150" cy="130" r="3" fill="#475569"/><circle cx="410" cy="130" r="3" fill="#475569"/><circle cx="670" cy="130" r="3" fill="#475569"/>
+                <text x="150" y="235" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#2563eb">线极化 Δφ = 0°/180°</text>
+                <text x="410" y="235" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#16a34a">圆极化 Δφ = ±90°、等幅</text>
+                <text x="670" y="235" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#d97706">椭圆极化：一般情况</text>
+            </svg>
+            <figcaption><b>图 3-1</b> 极化就是电场矢量末端的轨迹。幅度比 E<sub>y</sub>/E<sub>x</sub> 与相位差 Δφ 两个参数决定形状：直线（线极化）、正圆（圆极化）或椭圆（一般情况）；图中圆环上的小箭头表示圆极化的旋转方向。</figcaption>
+        </figure>
+
+        <h2 id="s33">3.3 极化匹配与极化失配损耗</h2>
 
         <p>在无线链路中，发射天线和接收天线的极化方向必须"对上"才能有效传输能量。这个"对上的程度"用<strong>极化匹配因子（Polarization Matching Factor）</strong>或<strong>极化损耗因子（Polarization Loss Factor, PLF）</strong>来量化：</p>
 
-        <p><strong>PLF = |ê<sub>tx</sub> · ê<sub>rx</sub>*|²</strong></p>
+        <div class="math-equation" role="group" aria-label="极化匹配因子">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="极化匹配因子，可横向滚动">
+                <math display="block" aria-label="极化匹配因子 PLF 等于发射极化单位矢量点乘接收极化单位矢量共轭的模的平方">
+                    <mrow>
+                        <mi>PLF</mi><mo>=</mo>
+                        <msup><mrow><mo>|</mo><msub><mover><mi mathvariant="bold">e</mi><mo>^</mo></mover><mtext>tx</mtext></msub><mo>·</mo><msubsup><mover><mi mathvariant="bold">e</mi><mo>^</mo></mover><mtext>rx</mtext><mo>*</mo></msubsup><mo>|</mo></mrow><mn>2</mn></msup>
+                    </mrow>
+                </math>
+            </div>
+        </div>
 
         <p>其中ê<sub>tx</sub>和ê<sub>rx</sub>分别是发射和接收天线的极化单位矢量（可以是复数形式以描述椭圆极化）。PLF的取值范围是0到1，对应的dB值为：</p>
 
@@ -157,6 +234,18 @@
 
         <div class="highlight">
             <strong>工程直觉：</strong>在布置WiFi网络时，如果你把AP的天线垂直放置，那么你的手机天线也应该尽量与垂直对齐。但由于人手握持手机会自然倾斜，实际上存在一定程度的极化失配——这就是为什么有时候"转一下手机"信号会变好。MIMO系统利用多极化（如±45°双极化面板天线）来减轻这个问题：两个正交极化路径提供了极化分集。
+        </div>
+
+        <div class="widget" id="widget-pol" role="group" aria-label="极化椭圆与失配损耗估算器">
+            <h3>交互：极化椭圆与失配损耗</h3>
+            <p>给定两正交分量的幅度比 E<sub>y</sub>/E<sub>x</sub> 与相位差 Δφ，估算轴比 AR，以及与 x 向线极化天线之间的极化失配损耗（教学示意）。</p>
+            <label for="p-r">幅度比 E<sub>y</sub>/E<sub>x</sub>：<output id="p-r-out">1.00</output></label>
+            <input id="p-r" type="range" min="0" max="150" value="100" step="1">
+            <label for="p-d">相位差 Δφ：<output id="p-d-out">90°</output></label>
+            <input id="p-d" type="range" min="-180" max="180" value="90" step="5">
+            <button id="p-calc" type="button">记录到对比表</button>
+            <div class="readout" id="p-out" aria-live="polite"></div>
+            <table><thead><tr><th>E<sub>y</sub>/E<sub>x</sub></th><th>Δφ</th><th>AR</th><th>失配损耗</th></tr></thead><tbody id="p-rows"></tbody></table>
         </div>
 
         <p>特别值得注意的是，<strong>地面反射可以改变极化</strong>。一个垂直极化的信号在从地面反射后，其水平分量和垂直分量的反射系数不同（Fresnel反射系数），导致合成极化状态发生改变。这就是为什么在移动通信中，到达接收天线的信号常常是椭圆极化的——即使发射天线是完美的线极化。</p>
@@ -205,11 +294,40 @@
 
         <p>其中η₁和η₂是两种介质的本征阻抗，θ<sub>i</sub>和θ<sub>t</sub>是入射角和透射角（由Snell定律联系）。</p>
 
+        <figure id="fig-fresnel">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 350" role="img" aria-labelledby="fig-fresnel-title fig-fresnel-desc">
+                <title id="fig-fresnel-title">Fresnel 反射系数随入射角的变化（n1=1, n2=2）</title>
+                <desc id="fig-fresnel-desc">空气到 n=2 介质（对应相对介电常数约 4）时，TE 与 TM 极化反射系数幅值随入射角变化：垂直入射时两者均为 1/3，TM 在布儒斯特角 63.4° 处降为零，两者在 90° 掠入射时都趋于 1。</desc>
+                <line x1="100" y1="300" x2="775" y2="300" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="100" y1="50" x2="100" y2="300" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="100" y1="175" x2="760" y2="175" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="5 5"/>
+                <line x1="565" y1="60" x2="565" y2="300" stroke="#9333ea" stroke-width="1.5" stroke-dasharray="6 4"/>
+                <text x="571" y="76" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#9333ea">布儒斯特角 63.4°</text>
+                <polyline points="100.0,216.7 118.3,216.6 136.7,216.3 155.0,215.9 173.3,215.4 191.7,214.7 210.0,213.8 228.3,212.7 246.7,211.4 265.0,210.0 283.3,208.4 301.7,206.6 320.0,204.5 338.3,202.2 356.7,199.7 375.0,197.0 393.3,194.0 411.7,190.7 430.0,187.1 448.3,183.3 466.7,179.1 485.0,174.5 503.3,169.6 521.7,164.3 540.0,158.6 558.3,152.4 576.7,145.8 595.0,138.7 613.3,131.1 631.7,123.0 650.0,114.4 668.3,105.2 686.7,95.4 705.0,84.9 723.3,73.9 741.7,62.3 760.0,50.0" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+                <polyline points="100.0,216.7 118.3,216.7 136.7,217.0 155.0,217.4 173.3,217.9 191.7,218.7 210.0,219.6 228.3,220.7 246.7,222.0 265.0,223.5 283.3,225.2 301.7,227.1 320.0,229.3 338.3,231.7 356.7,234.5 375.0,237.6 393.3,241.0 411.7,244.8 430.0,249.1 448.3,253.8 466.7,259.1 485.0,264.9 503.3,271.5 521.7,278.8 540.0,287.0 558.3,296.3 576.7,293.3 595.0,281.6 613.3,268.3 631.7,253.1 650.0,235.8 668.3,215.8 686.7,192.6 705.0,165.6 723.3,133.7 741.7,95.7 760.0,50.0" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+                <text x="300" y="120" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#2563eb">|Γ_TE|</text>
+                <text x="200" y="280" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#dc2626">|Γ_TM|</text>
+                <text x="78" y="304" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">0</text>
+                <text x="78" y="179" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">0.5</text>
+                <text x="78" y="54" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">1.0</text>
+                <text x="100" y="322" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">0°</text>
+                <text x="424" y="322" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">45°</text>
+                <text x="740" y="322" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">90°</text>
+            </svg>
+            <figcaption><b>图 3-2</b> 空气到 n₂ = 2（ε<sub>r</sub> ≈ 4）介质的 Fresnel 反射系数幅值（教学示意，按 Fresnel 公式直接计算）。垂直入射时 TE 与 TM 相等（|Γ| = 1/3）；TM 在布儒斯特角 63.4° 降为零——TM 全透，反射波只剩 TE 分量；掠入射（90°）时两者都趋于全反射。</figcaption>
+        </figure>
+
         <h3>布儒斯特角（Brewster Angle）</h3>
 
         <p>Fresnel公式最引人注目的结论是：当入射角满足特定条件时，TM极化的反射系数会变为零——也就是说，反射波中完全不含TM分量，只有TE分量！这个特殊角度称为<strong>布儒斯特角（Brewster angle）</strong>：</p>
 
-        <p><strong>tan θ<sub>B</sub> = n₂ / n₁</strong></p>
+        <div class="math-equation" role="group" aria-label="布儒斯特角">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="布儒斯特角公式，可横向滚动">
+                <math display="block" aria-label="布儒斯特角 theta B 的正切等于 n2 除以 n1">
+                    <mrow><mi>tan</mi><msub><mi>θ</mi><mi>B</mi></msub><mo>=</mo><mfrac><msub><mi>n</mi><mn>2</mn></msub><msub><mi>n</mi><mn>1</mn></msub></mfrac></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>这意味着：如果以布儒斯特角入射一个圆极化波或任意极化的波，反射波将是纯TE极化。这个性质有非常实用的工程应用：</p>
         <ul>
@@ -222,7 +340,13 @@
 
         <p>当电磁波从光密介质（n₁大）入射到光疏介质（n₂小）时，如果入射角大于某个<strong>临界角（critical angle）</strong>，那么透射波将不复存在——能量全部反射：</p>
 
-        <p><strong>sin θ<sub>c</sub> = n₂ / n₁</strong></p>
+        <div class="math-equation" role="group" aria-label="全反射临界角">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="临界角公式，可横向滚动">
+                <math display="block" aria-label="临界角 theta c 的正弦等于 n2 除以 n1">
+                    <mrow><mi>sin</mi><msub><mi>θ</mi><mi>c</mi></msub><mo>=</mo><mfrac><msub><mi>n</mi><mn>2</mn></msub><msub><mi>n</mi><mn>1</mn></msub></mfrac></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>这个现象称为<strong>全内反射（Total Internal Reflection, TIR）</strong>。虽然全反射在光学中更常见（光纤通信就是基于这个原理），但在微波领域也有重要应用：</p>
         <ul>
@@ -287,6 +411,15 @@ for th in np.arange(0, 90, 0.1):
               f"(理论值: {np.rad2deg(np.arctan(np.sqrt(eps2))):.1f}°)")
         break</code></pre>
 
+        <section id="references" aria-labelledby="ref-heading">
+            <h2 id="ref-heading">本章参考</h2>
+            <ul>
+                <li>极化类型、轴比与极化匹配因子：C. A. Balanis, <i>Antenna Theory: Analysis and Design</i>（第 2 章“Fundamental Parameters”）。</li>
+                <li>Fresnel 公式、布儒斯特角与全反射：C. A. Balanis, <i>Advanced Engineering Electromagnetics</i>（第 5 章“Wave Reflection and Transmission”）。</li>
+                <li>图 3-2 的曲线由 n₁ = 1、n₂ = 2 的 Fresnel 公式直接计算，布儒斯特角理论值 arctan(2) ≈ 63.4°。</li>
+            </ul>
+        </section>
+
         <hr style="margin: 30px 0; border: 0; border-top: 2px dashed #fcd34d;">
 
         <p style="font-size: 1.1rem; line-height: 1.8;">
@@ -302,7 +435,37 @@ for th in np.arange(0, 90, 0.1):
             <a href="index.html">📖 返回目录</a>
             <a href="04.html">下一章 →</a>
         </div>
-    </div>
+        <script>
+        (function () {
+            var rEl = document.getElementById('p-r'), dEl = document.getElementById('p-d');
+            var out = document.getElementById('p-out'), rows = document.getElementById('p-rows');
+            function calc() {
+                var r = (+rEl.value) / 100, d = (+dEl.value) * Math.PI / 180;
+                var S3 = 2 * r * Math.sin(d), S0 = 1 + r * r;
+                var x = Math.max(-1, Math.min(1, S3 / S0));
+                var eps = 0.5 * Math.asin(x);
+                var ar = Math.abs(1 / Math.tan(eps));
+                var arTxt = ar > 1e3 ? '∞（线极化）' : (20 * Math.log10(ar)).toFixed(2) + ' dB';
+                var loss = 10 * Math.log10(1 + r * r);
+                document.getElementById('p-r-out').textContent = r.toFixed(2);
+                document.getElementById('p-d-out').textContent = (+dEl.value) + '°';
+                out.textContent = 'E_y/E_x = ' + r.toFixed(2) + '，Δφ = ' + (+dEl.value) + '°\n轴比 AR ≈ ' + arTxt + '\n与 x 向线极化天线的失配损耗 ≈ ' + loss.toFixed(2) + ' dB';
+                return { r: r.toFixed(2), d: (+dEl.value) + '°', ar: arTxt, loss: loss.toFixed(2) + ' dB' };
+            }
+            function record() {
+                var v = calc();
+                var tr = document.createElement('tr');
+                [v.r, v.d, v.ar, v.loss].forEach(function (t) { var td = document.createElement('td'); td.textContent = t; tr.appendChild(td); });
+                rows.appendChild(tr);
+            }
+            rEl.addEventListener('input', calc);
+            dEl.addEventListener('input', calc);
+            document.getElementById('p-calc').addEventListener('click', record);
+            calc();
+        })();
+        </script>
+    </article>
+    </main>
 </div>
 </div>
 </body>
