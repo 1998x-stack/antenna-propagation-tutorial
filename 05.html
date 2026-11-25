@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第5章 天线基本参数</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -41,10 +69,15 @@
             <li><a href="27.html">第27章 AI驱动的天线设计与优化</a></li>
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第5章 天线基本参数</h1>
+            <p class="dek">要客观比较天线，必须有一套标准化参数。本章围绕 IEEE 145 体系讲清方向性、增益、效率、输入阻抗与带宽、极化与有效口径，并用 Chu 极限揭示尺寸-带宽-效率之间的物理权衡。</p>
+        </header>
 
-        <h2>5.1 天线参数体系概述</h2>
+        <h2 id="s51">5.1 天线参数体系概述</h2>
 
         <p>大家好，欢迎回到课堂。想象一下你去电子市场买一个路由器用的天线。商家告诉你：这是一个"12 dBi的高增益天线"。你花了几十块钱买回家，换上之后发现信号确实好了不少。但"12 dBi"到底是什么意思？这个数值是如何测量和定义的？如果另一个商家卖"9 dBi的天线"，是不是12就一定比9好？</p>
 
@@ -74,15 +107,45 @@
 
         <p>最大方向性系数（通常简称为"方向性"或"方向性系数"）D₀出现在方向图的主瓣峰值方向：</p>
 
-        <p><strong>D₀ = 4π · U_max / P<sub>rad</sub></strong></p>
+        <div class="math-equation" role="group" aria-label="最大方向性系数">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="最大方向性系数，可横向滚动">
+                <math display="block" aria-label="最大方向性系数 D0 等于 4 pi 乘最大辐射强度 U max 除以辐射功率 P rad">
+                    <mrow><msub><mi>D</mi><mn>0</mn></msub><mo>=</mo><mfrac><mrow><mn>4</mn><mi>π</mi><msub><mi>U</mi><mtext>max</mtext></msub></mrow><msub><mi>P</mi><mtext>rad</mtext></msub></mfrac></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>对于前面讲过的赫兹偶极子：U(θ) = (η₀/2) · |I₀ dl k / (4π)|² · sin²θ，经积分得D₀ = 1.5（即1.76 dBi）。对于半波偶极子（下一章会讲），D₀ = 1.64（2.15 dBi）。</p>
+
+        <figure id="fig-hpbw">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 350" role="img" aria-labelledby="fig-hpbw-title fig-hpbw-desc">
+                <title id="fig-hpbw-title">半波偶极子 E 面方向图上的 HPBW 与 FNBW</title>
+                <desc id="fig-hpbw-desc">半波偶极子 E 面归一化方向图（极坐标）：最大方向在 theta 等于 90°，-3 dB 圆交方向图于两点，夹角即半功率波束宽度 HPBW 约 78°，-20 dB 圆给出近似第一零点波束宽度。</desc>
+                <text x="20" y="28" font-family="system-ui, 'PingFang SC', sans-serif" font-size="15" fill="#1e3a8a">半波偶极子 E 面方向图：HPBW 与 FNBW</text>
+                <line x1="125" y1="180" x2="375" y2="180" stroke="#e2e8f0" stroke-width="1"/>
+                <line x1="250" y1="50" x2="250" y2="300" stroke="#e2e8f0" stroke-width="1"/>
+                <circle cx="250" cy="180" r="88.5" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6 4"/>
+                <circle cx="250" cy="180" r="12.5" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4 4"/>
+                <polyline points="250.0,180.0 250.2,175.5 250.8,171.1 251.7,166.7 253.1,162.4 254.8,158.2 257.0,154.0 259.4,150.1 262.3,146.2 265.5,142.6 269.1,139.1 273.0,135.9 277.2,133.0 281.7,130.3 286.4,128.0 291.5,126.0 296.7,124.3 302.1,123.1 307.7,122.3 313.4,121.9 319.2,122.0 325.0,122.5 330.7,123.5 336.4,125.0 341.9,126.9 347.3,129.4 352.4,132.3 357.2,135.6 361.7,139.3 365.8,143.5 369.4,148.0 372.6,152.8 375.2,157.9 377.3,163.2 378.8,168.7 379.7,174.3 380.0,180.0 379.7,185.7 378.8,191.3 377.3,196.8 375.2,202.1 372.6,207.2 369.4,212.0 365.8,216.5 361.7,220.7 357.2,224.4 352.4,227.7 347.3,230.6 341.9,233.1 336.4,235.0 330.7,236.5 325.0,237.5 319.2,238.0 313.4,238.1 307.7,237.7 302.1,236.9 296.7,235.7 291.5,234.0 286.4,232.0 281.7,229.7 277.2,227.0 273.0,224.1 269.1,220.9 265.5,217.4 262.3,213.8 259.4,209.9 257.0,206.0 254.8,201.8 253.1,197.6 251.7,193.3 250.8,188.9 250.2,184.5 250.0,180.0 249.8,184.5 249.2,188.9 248.3,193.3 246.9,197.6 245.2,201.8 243.0,206.0 240.6,209.9 237.7,213.8 234.5,217.4 230.9,220.9 227.0,224.1 222.8,227.0 218.3,229.7 213.6,232.0 208.5,234.0 203.3,235.7 197.9,236.9 192.3,237.7 186.6,238.1 180.8,238.0 175.0,237.5 169.3,236.5 163.6,235.0 158.1,233.1 152.7,230.6 147.6,227.7 142.8,224.4 138.3,220.7 134.2,216.5 130.6,212.0 127.4,207.2 124.8,202.1 122.7,196.8 121.2,191.3 120.3,185.7 120.0,180.0 120.3,174.3 121.2,168.7 122.7,163.2 124.8,157.9 127.4,152.8 130.6,148.0 134.2,143.5 138.3,139.3 142.8,135.6 147.6,132.3 152.7,129.4 158.1,126.9 163.6,125.0 169.3,123.5 175.0,122.5 180.8,122.0 186.6,121.9 192.3,122.3 197.9,123.1 203.3,124.3 208.5,126.0 213.6,128.0 218.3,130.3 222.8,133.0 227.0,135.9 230.9,139.1 234.5,142.6 237.7,146.2 240.6,150.1 243.0,154.0 245.2,158.2 246.9,162.4 248.3,166.7 249.2,171.1 249.8,175.5 250.0,180.0" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+                <text x="420" y="120" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#2563eb">半波偶极子方向图</text>
+                <text x="420" y="146" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#b45309">-3 dB 圆（HPBW ≈ 78°）</text>
+                <text x="420" y="170" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#64748b">-20 dB 圆（近似虚无方向，FNBW = 180°）</text>
+                <text x="250" y="330" text-anchor="middle" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">theta = 90° 方向为最大辐射，轴向 theta = 0°/180° 为零</text>
+            </svg>
+            <figcaption><b>图 5-1</b> 半波偶极子 E 面归一化方向图（极坐标，教学示意）。最大辐射在 θ = 90°，−3 dB 圆与方向图的两交点夹角即半功率波束宽度 HPBW ≈ 78°；轴向（θ = 0°/180°）场强为零，故第一零点波束宽度 FNBW = 180°。</figcaption>
+        </figure>
 
         <h3>增益（Gain）</h3>
 
         <p><strong>增益G</strong>与方向性系数D的区别在于：增益考虑了天线本身的损耗。定义如下：</p>
 
-        <p><strong>G(θ, φ) = η · D(θ, φ)</strong></p>
+        <div class="math-equation" role="group" aria-label="增益与方向性系数">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="增益与方向性系数，可横向滚动">
+                <math display="block" aria-label="增益 G theta phi 等于效率 eta 乘方向性系数 D theta phi">
+                    <mrow><mi>G</mi><mo>(</mo><mi>θ</mi><mo>,</mo><mi>φ</mi><mo>)</mo><mo>=</mo><mi>η</mi><mi>D</mi><mo>(</mo><mi>θ</mi><mo>,</mo><mi>φ</mi><mo>)</mo></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>其中<strong>η = 辐射效率 = P<sub>rad</sub> / P<sub>in</sub> = R<sub>rad</sub> / (R<sub>rad</sub> + R<sub>loss</sub>)</strong></p>
 
@@ -109,7 +172,38 @@
 
         <p>1952年，MIT的Lan Jen Chu（储兰）提出了一个深刻的天线理论极限：<strong>当一个天线可以被完全包含在半径为a的球体内时，它的最小Q值（品质因数）受球体尺寸限制</strong>。</p>
 
-        <p><strong>Chu极限：Q ≥ 1/(ka) + 1/(ka)³</strong>，其中k = 2π/λ</p>
+        <div class="math-equation" role="group" aria-label="Chu 极限">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="Chu 极限，可横向滚动">
+                <math display="block" aria-label="品质因数 Q 大于等于 1 除以 ka 加上 1 除以 ka 的立方">
+                    <mrow><mi>Q</mi><mo>≥</mo><mfrac><mn>1</mn><mrow><mi>k</mi><mi>a</mi></mrow></mfrac><mo>+</mo><mfrac><mn>1</mn><msup><mrow><mo>(</mo><mi>k</mi><mi>a</mi><mo>)</mo></mrow><mn>3</mn></msup></mfrac></mrow>
+                </math>
+            </div>
+        </div>
+
+        <p>其中 k = 2π/λ。</p>
+
+        <figure id="fig-chu">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 350" role="img" aria-labelledby="fig-chu-title fig-chu-desc">
+                <title id="fig-chu-title">Chu 极限：最小品质因数随电尺寸 ka 的变化</title>
+                <desc id="fig-chu-desc">双对数坐标下的 Chu 极限曲线 Q 等于 1 除以 ka 加 1 除以 ka 立方：ka 越小（天线电尺寸越小），最小品质因数急剧上升，带宽越窄、效率越低。</desc>
+                <text x="20" y="28" font-family="system-ui, 'PingFang SC', sans-serif" font-size="15" fill="#1e3a8a">Chu 极限：最小 Q 随电尺寸 ka 的变化（双对数）</text>
+                <line x1="100" y1="300" x2="775" y2="300" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="100" y1="40" x2="100" y2="300" stroke="#94a3b8" stroke-width="1.5"/>
+                <polyline points="100.0,105.3 111.0,109.4 122.0,113.5 133.0,117.5 144.0,121.6 155.0,125.6 166.0,129.7 177.0,133.7 188.0,137.8 199.0,141.8 210.0,145.8 221.0,149.9 232.0,153.9 243.0,157.9 254.0,161.8 265.0,165.8 276.0,169.8 287.0,173.7 298.0,177.6 309.0,181.5 320.0,185.4 331.0,189.2 342.0,193.1 353.0,196.9 364.0,200.6 375.0,204.3 386.0,208.0 397.0,211.7 408.0,215.3 419.0,218.8 430.0,222.3 441.0,225.8 452.0,229.1 463.0,232.5 474.0,235.7 485.0,238.9 496.0,242.0 507.0,245.1 518.0,248.1 529.0,251.0 540.0,253.8 551.0,256.5 562.0,259.2 573.0,261.8 584.0,264.3 595.0,266.7 606.0,269.1 617.0,271.4 628.0,273.6 639.0,275.8 650.0,277.9 661.0,279.9 672.0,281.9 683.0,283.9 694.0,285.7 705.0,287.6 716.0,289.4 727.0,291.1 738.0,292.8 749.0,294.5 760.0,296.2" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+                <line x1="412" y1="217" x2="412" y2="300" stroke="#16a34a" stroke-width="1.3" stroke-dasharray="5 4"/>
+                <circle cx="412" cy="217" r="3.5" fill="#16a34a"/>
+                <text x="418" y="232" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#166534">ka = 0.5 → Q_min ≈ 10</text>
+                <text x="86" y="109" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">1000</text>
+                <text x="86" y="164" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">100</text>
+                <text x="86" y="219" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">10</text>
+                <text x="86" y="274" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">1</text>
+                <text x="100" y="322" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">0.1</text>
+                <text x="400" y="322" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">1</text>
+                <text x="750" y="322" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#53676d">3</text>
+                <text x="500" y="80" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#53676d">横轴：电尺寸 ka；纵轴：最小品质因数 Q</text>
+            </svg>
+            <figcaption><b>图 5-2</b> Chu 极限曲线 Q ≥ 1/(ka) + 1/(ka)³（双对数坐标，教学示意）。ka 越小，最小 Q 越大，而 Q 与相对带宽近似成反比（B ≈ 1/Q），于是小天线被迫在带宽与效率间取舍；ka ≈ 0.5 时 Q_min 已达约 10。</figcaption>
+        </figure>
 
         <p>由于Q值与带宽成反比（B ≈ 1/Q，对于匹配良好的天线），这个公式揭示了一个残酷的物理限制：<strong>天线越小（ka越小），它的最小可能Q值就越大，因此带宽越窄、效率越低</strong>。反过来，如果要在小体积内达到高效率（低损耗），就必须牺牲带宽——反之亦然。这是天线设计的"不可能三角"。</p>
 
@@ -180,11 +274,29 @@
 
         <p>天线与传输线（通常是50 Ω同轴线）之间的匹配程度用以下三个相互关联的参数描述：</p>
 
-        <p><strong>反射系数：</strong>Γ = (Z<sub>in</sub> - Z₀) / (Z<sub>in</sub> + Z₀)<br>
-        <strong>电压驻波比 VSWR：</strong>VSWR = (1 + |Γ|) / (1 - |Γ|)<br>
-        <strong>回波损耗 Return Loss：</strong>RL = -20 log₁₀|Γ| (dB)</p>
+        <div class="math-equation" role="group" aria-label="反射系数、VSWR 与回波损耗">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="反射系数、VSWR 与回波损耗，可横向滚动">
+                <math display="block" aria-label="反射系数 Gamma 等于 Zin 减 Z0 除以 Zin 加 Z0；VSWR 等于 1 加 Gamma 的模除以 1 减 Gamma 的模；回波损耗等于负 20 log Gamma 的模">
+                    <mtable>
+                        <mtr><mtd><mrow><mi>Γ</mi><mo>=</mo><mfrac><mrow><msub><mi>Z</mi><mtext>in</mtext></msub><mo>−</mo><msub><mi>Z</mi><mn>0</mn></msub></mrow><mrow><msub><mi>Z</mi><mtext>in</mtext></msub><mo>+</mo><msub><mi>Z</mi><mn>0</mn></msub></mrow></mfrac></mrow></mtd></mtr>
+                        <mtr><mtd><mrow><mtext>VSWR</mtext><mo>=</mo><mfrac><mrow><mn>1</mn><mo>+</mo><mo>|</mo><mi>Γ</mi><mo>|</mo></mrow><mrow><mn>1</mn><mo>−</mo><mo>|</mo><mi>Γ</mi><mo>|</mo></mrow></mfrac></mrow></mtd></mtr>
+                        <mtr><mtd><mrow><mtext>RL</mtext><mo>=</mo><mo>−</mo><mn>20</mn><mi>log</mi><mo>|</mo><mi>Γ</mi><mo>|</mo></mrow></mtd></mtr>
+                    </mtable>
+                </math>
+            </div>
+        </div>
 
         <p>工程中常用的匹配标准是VSWR < 2（对应|Γ| < 1/3，回波损耗 > 9.5 dB），意味着反射功率不到输入功率的11%。对于更严苛的应用（如卫星通信），可能要求VSWR < 1.2（|Γ| < 0.09，回波损耗 > 20.8 dB）。</p>
+
+        <div class="widget" id="widget-vswr" role="group" aria-label="VSWR 与回波损耗换算器">
+            <h3>交互：VSWR、回波损耗与反射系数换算</h3>
+            <p>拖动滑块改变电压驻波比 VSWR，换算反射系数 |Γ|、回波损耗与反射功率占比（按 50 Ω 传输线定义，公式精确换算）。</p>
+            <label for="sw-v">VSWR：<output id="sw-v-out">2.00</output></label>
+            <input id="sw-v" type="range" min="1" max="60" value="20" step="1">
+            <button id="sw-calc" type="button">记录到对比表</button>
+            <div class="readout" id="sw-out" aria-live="polite"></div>
+            <table><thead><tr><th>VSWR</th><th>|Γ|</th><th>回波损耗</th><th>反射功率</th></tr></thead><tbody id="sw-rows"></tbody></table>
+        </div>
 
         <h3>带宽定义</h3>
 
@@ -222,7 +334,13 @@
 
         <p>有效口径与增益之间有一个极重要的关系：</p>
 
-        <p><strong>A<sub>eff</sub> = (λ² / 4π) · G</strong></p>
+        <div class="math-equation" role="group" aria-label="有效口径与增益的关系">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="有效口径与增益的关系，可横向滚动">
+                <math display="block" aria-label="有效口径 A eff 等于 lambda 平方除以 4 pi 再乘增益 G">
+                    <mrow><msub><mi>A</mi><mtext>eff</mtext></msub><mo>=</mo><mfrac><msup><mi>λ</mi><mn>2</mn></msup><mrow><mn>4</mn><mi>π</mi></mrow></mfrac><mi>G</mi></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>这个公式是无线通信链路预算（Friis传输方程）的核心推导依据之一。它的物理意义：</p>
         <ul>
@@ -326,6 +444,15 @@ print(f"\n频率: {f/1e9:.1f} GHz, 波长: {lam*100:.1f} cm")
 print(f"有效口径 A_eff: {A_eff*10000:.2f} cm²")
 print(f"物理口径 (假设半波偶极子长 ~λ/2): {(lam/2)*100:.1f} cm × 线径")</code></pre>
 
+        <section id="references" aria-labelledby="ref-heading">
+            <h2 id="ref-heading">本章参考</h2>
+            <ul>
+                <li>天线术语、方向性系数、增益、效率、输入阻抗、有效口径与口径效率：IEEE Std 145-2013；C. A. Balanis, <i>Antenna Theory: Analysis and Design</i>（第 2 章）。</li>
+                <li>Chu 极限 Q ≥ 1/(ka) + 1/(ka)³ 与尺寸-带宽-效率权衡：L. J. Chu, “Physical Limitations of Omni-Directional Antennas,” <i>J. Appl. Phys.</i>, 1948。</li>
+                <li>赫兹偶极子 D₀ = 1.5、半波偶极子 D₀ = 1.64（2.15 dBi）为参考文献中的标准结果；效率表中的范围为教学示意量级。</li>
+            </ul>
+        </section>
+
         <hr style="margin: 30px 0; border: 0; border-top: 2px dashed #fcd34d;">
 
         <p style="font-size: 1.1rem; line-height: 1.8;">
@@ -341,7 +468,32 @@ print(f"物理口径 (假设半波偶极子长 ~λ/2): {(lam/2)*100:.1f} cm × �
             <a href="index.html">📖 返回目录</a>
             <a href="06.html">下一章 →</a>
         </div>
-    </div>
+        <script>
+        (function () {
+            var vEl = document.getElementById('sw-v');
+            var out = document.getElementById('sw-out'), rows = document.getElementById('sw-rows');
+            function calc() {
+                var v = (+vEl.value) / 10;
+                var G = (v - 1) / (v + 1);
+                var rl = -20 * Math.log10(G);
+                var pr = G * G * 100;
+                document.getElementById('sw-v-out').textContent = v.toFixed(2);
+                out.textContent = 'VSWR = ' + v.toFixed(2) + '\n|Γ| = ' + G.toFixed(3) + '\n回波损耗 = ' + rl.toFixed(2) + ' dB\n反射功率占比 = ' + pr.toFixed(1) + ' %';
+                return { v: v.toFixed(2), G: G.toFixed(3), rl: rl.toFixed(2) + ' dB', pr: pr.toFixed(1) + ' %' };
+            }
+            function record() {
+                var r = calc();
+                var tr = document.createElement('tr');
+                [r.v, r.G, r.rl, r.pr].forEach(function (t) { var td = document.createElement('td'); td.textContent = t; tr.appendChild(td); });
+                rows.appendChild(tr);
+            }
+            vEl.addEventListener('input', calc);
+            document.getElementById('sw-calc').addEventListener('click', record);
+            calc();
+        })();
+        </script>
+    </article>
+    </main>
 </div>
 </div>
 </body>
