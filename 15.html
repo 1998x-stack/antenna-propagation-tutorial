@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第15章 天线阻抗匹配与巴伦设计</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -41,8 +69,13 @@
             <li><a href="27.html">第27章 AI驱动的天线设计与优化</a></li>
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
-    </div>
-    <div class="main-content">
+    </nav>
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第15章 天线阻抗匹配与巴伦设计</h1>
+            <p class="dek">匹配决定了天线到底能不能把功率辐射出去。本章从反射系数与 VSWR 出发，讲清 Smith 圆图操作、集总与分布式匹配网络、巴伦抑制共模电流的原理，以及 Bode-Fano 宽带匹配极限。</p>
+        </header>
 
         <p>大家好，我是你们的讲师。想象一下这个场景：你花了整整两周时间，用HFSS精心设计了一款工作于2.45 GHz的矩形微带贴片天线，仿真效率达到了85%，方向图也很漂亮。你兴冲冲地加工了PCB板，焊上SMA接头，接到矢量网络分析仪上一看——S<sub>11</sub>曲线在目标频点处只有-3 dB！这意味着输入功率的<strong>一半</strong>被反射回去了，根本没有辐射出去。</p>
 
@@ -62,11 +95,23 @@
 
         <p>当负载阻抗与传输线特性阻抗不相等时，入射波会在连接处发生反射。反射系数定义为反射波电压与入射波电压之比：</p>
 
-        <pre><code>Γ = (Z_L - Z₀) / (Z_L + Z₀)</code></pre>
+        <div class="math-equation" role="group" aria-label="反射系数定义">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="反射系数定义，可横向滚动">
+                <math display="block" aria-label="反射系数 Gamma 等于负载阻抗 ZL 减特性阻抗 Z0 除以 ZL 加 Z0">
+                    <mrow><mi>Γ</mi><mo>=</mo><mfrac><mrow><msub><mi>Z</mi><mi>L</mi></msub><mo>−</mo><msub><mi>Z</mi><mn>0</mn></msub></mrow><mrow><msub><mi>Z</mi><mi>L</mi></msub><mo>+</mo><msub><mi>Z</mi><mn>0</mn></msub></mrow></mfrac></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>式中 Z<sub>L</sub> 是负载阻抗，Z<sub>0</sub> 是传输线特性阻抗。Γ 是一个复数，包含反射的幅度和相位信息。回波损耗（Return Loss）则用 dB 表示：</p>
 
-        <pre><code>RL = -20 · log₁₀(|Γ|)  (dB)</code></pre>
+        <div class="math-equation" role="group" aria-label="回波损耗定义">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="回波损耗定义，可横向滚动">
+                <math display="block" aria-label="回波损耗 RL 等于负 20 乘以 10 为底 Gamma 的模的对数，单位分贝">
+                    <mrow><mtext>RL</mtext><mo>=</mo><mo>−</mo><mn>20</mn><msub><mi>log</mi><mn>10</mn></msub><mo>|</mo><mi>Γ</mi><mo>|</mo></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>回波损耗越大（数值越正），匹配越好。例如 RL = 20 dB 意味着反射功率只有入射功率的1%。</p>
 
@@ -172,6 +217,28 @@
 
         <p>记住这个关键技巧：串联元件在图上沿等电阻圆移动，并联元件在图上沿等电导圆移动。将阻抗圆图旋转180°就得到导纳圆图，两者叠加使用更为方便。</p>
 
+        <figure id="fig-smith">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 380" role="img" aria-labelledby="fig-smith-title fig-smith-desc">
+                <title id="fig-smith-title">Smith 圆图上的等电阻圆、等电抗弧与一个阻抗点</title>
+                <desc id="fig-smith-desc">Smith 圆图：实轴为归一化电阻，等电阻圆与等电抗弧相交构成坐标网；示例点 Z = 110 + j30 Ω（Z0 = 50 Ω）归一化为 2.2 + j0.6，对应反射系数约 0.396 + j0.113。</desc>
+                <text x="20" y="28" font-family="system-ui, 'PingFang SC', sans-serif" font-size="15" fill="#1e3a8a">Smith 圆图：等电阻圆 + 等电抗弧</text>
+                <circle cx="250" cy="180" r="150" fill="none" stroke="#94a3b8" stroke-width="1.8"/>
+                <line x1="90" y1="180" x2="410" y2="180" stroke="#cbd5e1" stroke-width="1"/>
+                <polyline points="400.0,180.0 399.6,171.3 398.5,162.6 396.6,154.1 394.0,145.8 390.6,137.7 386.6,130.0 381.9,122.6 376.6,115.7 370.7,109.3 364.3,103.4 357.4,98.1 350.0,93.4 342.3,89.4 334.2,86.0 325.9,83.4 317.4,81.5 308.7,80.4 300.0,80.0 291.3,80.4 282.6,81.5 274.1,83.4 265.8,86.0 257.7,89.4 250.0,93.4 242.6,98.1 235.7,103.4 229.3,109.3 223.4,115.7 218.1,122.6 213.4,130.0 209.4,137.7 206.0,145.8 203.4,154.1 201.5,162.6 200.4,171.3 200.0,180.0 200.4,188.7 201.5,197.4 203.4,205.9 206.0,214.2 209.4,222.3 213.4,230.0 218.1,237.4 223.4,244.3 229.3,250.7 235.7,256.6 242.6,261.9 250.0,266.6 257.7,270.6 265.8,274.0 274.1,276.6 282.6,278.5 291.3,279.6 300.0,280.0 308.7,279.6 317.4,278.5 325.9,276.6 334.2,274.0 342.3,270.6 350.0,266.6 357.4,261.9 364.3,256.6 370.7,250.7 376.6,244.3 381.9,237.4 386.6,230.0 390.6,222.3 394.0,214.2 396.6,205.9 398.5,197.4 399.6,188.7 400.0,180.0" fill="none" stroke="#f59e0b" stroke-width="1.6"/>
+                <polyline points="400.0,180.0 399.7,173.5 398.9,167.0 397.4,160.6 395.5,154.3 393.0,148.3 390.0,142.5 386.4,137.0 382.5,131.8 378.0,127.0 373.2,122.5 368.0,118.6 362.5,115.0 356.7,112.0 350.7,109.5 344.4,107.6 338.0,106.1 331.5,105.3 325.0,105.0 318.5,105.3 312.0,106.1 305.6,107.6 299.3,109.5 293.3,112.0 287.5,115.0 282.0,118.6 276.8,122.5 272.0,127.0 267.5,131.8 263.6,137.0 260.0,142.5 257.0,148.3 254.5,154.3 252.6,160.6 251.1,167.0 250.3,173.5 250.0,180.0 250.3,186.5 251.1,193.0 252.6,199.4 254.5,205.7 257.0,211.7 260.0,217.5 263.6,223.0 267.5,228.2 272.0,233.0 276.8,237.5 282.0,241.4 287.5,245.0 293.3,248.0 299.3,250.5 305.6,252.4 312.0,253.9 318.5,254.7 325.0,255.0 331.5,254.7 338.0,253.9 344.4,252.4 350.7,250.5 356.7,248.0 362.5,245.0 368.0,241.4 373.2,237.5 378.0,233.0 382.5,228.2 386.4,223.0 390.0,217.5 393.0,211.7 395.5,205.7 397.4,199.4 398.9,193.0 399.7,186.5 400.0,180.0" fill="none" stroke="#2563eb" stroke-width="1.6"/>
+                <polyline points="250.0,30.0 250.1,36.5 250.6,43.1 251.3,49.6 252.3,56.0 253.6,62.5 255.1,68.8 256.9,75.1 259.0,81.3 261.4,87.4 264.1,93.4 266.9,99.3 270.1,105.0 273.5,110.6 277.1,116.0 281.0,121.3 285.1,126.4 289.4,131.3 293.9,136.1 298.7,140.6 303.6,144.9 308.7,149.0 314.0,152.9 319.4,156.5 325.0,159.9 330.7,163.1 336.6,165.9 342.6,168.6 348.7,171.0 354.9,173.1 361.2,174.9 367.5,176.4 374.0,177.7 380.4,178.7 386.9,179.4 393.5,179.9 400.0,180.0" fill="none" stroke="#16a34a" stroke-width="1.5"/>
+                <polyline points="400.0,180.0 393.5,180.1 386.9,180.6 380.4,181.3 374.0,182.3 367.5,183.6 361.2,185.1 354.9,186.9 348.7,189.0 342.6,191.4 336.6,194.1 330.7,196.9 325.0,200.1 319.4,203.5 314.0,207.1 308.7,211.0 303.6,215.1 298.7,219.4 293.9,223.9 289.4,228.7 285.1,233.6 281.0,238.7 277.1,244.0 273.5,249.4 270.1,255.0 266.9,260.7 264.1,266.6 261.4,272.6 259.0,278.7 256.9,284.9 255.1,291.2 253.6,297.5 252.3,304.0 251.3,310.4 250.6,316.9 250.1,323.5 250.0,330.0" fill="none" stroke="#16a34a" stroke-width="1.5"/>
+                <text x="300" y="70" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#b45309">r = 0.5</text>
+                <text x="250" y="262" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#1d4ed8">r = 1</text>
+                <text x="386" y="150" text-anchor="end" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#166534">x = 1 / x = 0.5</text>
+                <circle cx="309" cy="163" r="5" fill="#dc2626"/>
+                <text x="470" y="150" font-family="system-ui, 'PingFang SC', sans-serif" font-size="13" fill="#dc2626">Z = 110 + j30 Ω</text>
+                <text x="470" y="170" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#475569">归一化 z = 2.2 + j0.6</text>
+                <text x="470" y="190" font-family="system-ui, 'PingFang SC', sans-serif" font-size="12" fill="#475569">Γ ≈ 0.396 + j0.113</text>
+            </svg>
+            <figcaption><b>图 15-1</b> Smith 圆图上的等电阻圆（黄/蓝）与等电抗弧（绿），以及示例阻抗点 Z = 110 + j30 Ω（Z₀ = 50 Ω，教学示意，直接由 Γ = (Z−Z₀)/(Z+Z₀) 计算）。所有无源阻抗都落在单位圆内；点离圆心越远，失配越严重。</figcaption>
+        </figure>
+
         <h3>Python绘制Smith圆图</h3>
 
         <p>现代工程师当然不需要手绘Smith圆图，但理解其原理仍然至关重要。我们来看看如何使用Python的 <code>scikit-rf</code> 库在Smith圆图上标记阻抗点：</p>
@@ -217,6 +284,18 @@ plt.show()</code></pre>
         <p>L型匹配网络（L-match）是最简单的阻抗匹配网络，只包含两个电抗元件（一个串联、一个并联）。它结构简单、成本低，但缺点是<strong>带宽较窄</strong>且<strong>Q值固定</strong>——一旦确定了匹配条件，网络的Q值（即带宽）也随之确定，设计者没有自由度去调节。</p>
 
         <p>L型网络有两类拓扑：如果负载阻抗落在Smith圆图的1 + jx圆内，用"先串后并"的拓扑；否则用"先并后串"。判断方法很简单：用Smith圆图一试便知。</p>
+
+        <div class="widget" id="widget-lmatch" role="group" aria-label="L 型匹配网络估算器">
+            <h3>交互：L 型匹配网络估算</h3>
+            <p>给定负载电阻 R<sub>L</sub>（纯电阻）与工作频率，估算 L 型匹配网络所需的串联/并联电抗与元件值（Z₀ = 50 Ω，教学示意）。</p>
+            <label for="lm-r">负载电阻 R<sub>L</sub>：<output id="lm-r-out">110 Ω</output></label>
+            <input id="lm-r" type="range" min="10" max="400" value="110" step="5">
+            <label for="lm-f">频率 f：<output id="lm-f-out">2.45 GHz</output></label>
+            <input id="lm-f" type="range" min="10" max="600" value="245" step="5">
+            <button id="lm-calc" type="button">记录到对比表</button>
+            <div class="readout" id="lm-out" aria-live="polite"></div>
+            <table><thead><tr><th>R<sub>L</sub></th><th>f</th><th>Q</th><th>元件值</th></tr></thead><tbody id="lm-rows"></tbody></table>
+        </div>
 
         <h3>Pi型和T型网络</h3>
 
@@ -280,7 +359,13 @@ plt.show()</code></pre>
 
         <p>要使输入阻抗等于源阻抗 Z<sub>0</sub>，所需的变换段特性阻抗为：</p>
 
-        <pre><code>Z_λ/4 = √(Z₀ · Z_L)</code></pre>
+        <div class="math-equation" role="group" aria-label="四分之一波长变换器特性阻抗">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="四分之一波长变换器特性阻抗，可横向滚动">
+                <math display="block" aria-label="四分之一波长变换段特性阻抗等于 Z0 与 ZL 乘积的平方根">
+                    <mrow><msub><mi>Z</mi><mrow><mi>λ</mi><mo>/</mo><mn>4</mn></mrow></msub><mo>=</mo><msqrt><mrow><msub><mi>Z</mi><mn>0</mn></msub><msub><mi>Z</mi><mi>L</mi></msub></mrow></msqrt></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>例如，要将一个100 Ω的天线匹配到50 Ω的馈线，需要一段特性阻抗为 √(50 × 100) ≈ 70.7 Ω 的λ/4传输线。这种匹配方式结构简单，但带宽很窄——偏离中心频率，变换器的电长度不再是λ/4，匹配效果急剧恶化。</p>
 
@@ -346,7 +431,13 @@ plt.show()</code></pre>
 
         <p>对于并联RC负载（R和C并联），Bode-Fano准则给出：</p>
 
-        <pre><code>∫₀^∞ ln(1/|Γ(ω)|) dω ≤ π / (RC)</code></pre>
+        <div class="math-equation" role="group" aria-label="Bode-Fano 准则">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="Bode-Fano 准则，可横向滚动">
+                <math display="block" aria-label="从 0 到无穷大对 ln 一除以 Gamma omega 的模积分 d omega 小于等于 pi 除以 RC">
+                    <mrow><msubsup><mo>∫</mo><mn>0</mn><mi>∞</mi></msubsup><mi>ln</mi><mrow><mo>(</mo><mfrac><mn>1</mn><mrow><mo>|</mo><mi>Γ</mi><mo>(</mo><mi>ω</mi><mo>)</mo><mo>|</mo></mrow></mfrac><mo>)</mo></mrow><mi>d</mi><mi>ω</mi><mo>≤</mo><mfrac><mi>π</mi><mrow><mi>R</mi><mi>C</mi></mrow></mfrac></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>这个公式的物理含义非常深刻：在频域上对回波损耗的"品质"进行积分，不可能超过某个由负载RC常数决定的极限。你可以在一个很宽的频带内实现中等程度的匹配（比如VSWR &lt; 2），也可以在一个窄带内实现近乎完美的匹配（VSWR ≈ 1），但不能两者兼得。</p>
 
@@ -390,6 +481,15 @@ plt.show()</code></pre>
 
         <p>这种"基于实测数据的设计"（Measurement-based Design）是业界常用的工程方法，能大幅提高一次成功率。</p>
 
+        <section id="references" aria-labelledby="ref-heading">
+            <h2 id="ref-heading">本章参考</h2>
+            <ul>
+                <li>最大功率传输、反射系数、VSWR、Smith 圆图与集总/分布式匹配网络：D. M. Pozar, <i>Microwave Engineering</i>（第 5 章“Impedance Matching and Tuning”）。</li>
+                <li>50 Ω/75 Ω 标准的由来、四分之一波长变换器、多节/渐变线变换器与 Bode-Fano 极限：同上书第 5 章。</li>
+                <li>巴伦与共模电流、套筒/折叠/Marchand/Guanella/Ruthroff 巴伦：C. A. Balanis, <i>Antenna Theory: Analysis and Design</i>（第 9 章“Broadband Dipoles and Matching Techniques”）。</li>
+            </ul>
+        </section>
+
         <hr style="margin: 30px 0; border: 0; border-top: 2px dashed #fcd34d;">
 
         <p style="font-size: 1.1rem; line-height: 1.8;">
@@ -405,7 +505,37 @@ plt.show()</code></pre>
             <a href="index.html">📖 返回目录</a>
             <a href="16.html">下一章 →</a>
         </div>
-    </div>
+        <script>
+        (function () {
+            var rEl = document.getElementById('lm-r'), fEl = document.getElementById('lm-f');
+            var out = document.getElementById('lm-out'), rows = document.getElementById('lm-rows');
+            var Z0 = 50;
+            function calc() {
+                var RL = +rEl.value, f = (+fEl.value) / 100 * 1e9;
+                var Q, Xs, Xp;
+                if (RL >= Z0) { Q = Math.sqrt(RL / Z0 - 1); Xs = Q * Z0; Xp = RL / Q; }
+                else { Q = Math.sqrt(Z0 / RL - 1); Xs = Q * RL; Xp = Z0 / Q; }
+                var Ls = Xs / (2 * Math.PI * f) * 1e9;
+                var Cp = 1 / (2 * Math.PI * f * Xp) * 1e12;
+                document.getElementById('lm-r-out').textContent = RL + ' Ω';
+                document.getElementById('lm-f-out').textContent = (f / 1e9).toFixed(2) + ' GHz';
+                out.textContent = 'R_L = ' + RL + ' Ω，f = ' + (f / 1e9).toFixed(2) + ' GHz\nQ ≈ ' + Q.toFixed(2) + '\n串联电抗 ≈ ' + Xs.toFixed(1) + ' Ω（等效电感 ≈ ' + Ls.toFixed(2) + ' nH）\n并联电抗 ≈ ' + Xp.toFixed(1) + ' Ω（等效电容 ≈ ' + Cp.toFixed(2) + ' pF）\n（教学示意，按理想无耗元件估算）';
+                return { RL: RL + ' Ω', f: (f / 1e9).toFixed(2) + ' GHz', Q: Q.toFixed(2), el: 'L=' + Ls.toFixed(2) + ' nH / C=' + Cp.toFixed(2) + ' pF' };
+            }
+            function record() {
+                var v = calc();
+                var tr = document.createElement('tr');
+                [v.RL, v.f, v.Q, v.el].forEach(function (t) { var td = document.createElement('td'); td.textContent = t; tr.appendChild(td); });
+                rows.appendChild(tr);
+            }
+            rEl.addEventListener('input', calc);
+            fEl.addEventListener('input', calc);
+            document.getElementById('lm-calc').addEventListener('click', record);
+            calc();
+        })();
+        </script>
+    </article>
+    </main>
 </div>
 </div>
 </body>
