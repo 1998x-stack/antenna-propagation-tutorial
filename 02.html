@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第2章 麦克斯韦方程组与电磁波基础</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -42,9 +70,14 @@
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
     </div>
-    <div class="main-content">
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第2章 麦克斯韦方程组与电磁波基础</h1>
+            <p class="dek">麦克斯韦用位移电流补全了安培定律，把电、磁、光统一到一个方程组里，并预言了电磁波。本章从积分形式走到微分形式，推导波动方程，并用相量法描述均匀平面波的传播。</p>
+        </header>
 
-        <h2>2.1 从库仑定律到麦克斯韦的飞跃</h2>
+        <h2 id="s21">2.1 从库仑定律到麦克斯韦的飞跃</h2>
 
         <p>大家好，我是你们的讲师。今天我们要攻克整个天线与电波传播课程中最为核心的一章——Maxwell方程组。如果说天线是无线系统的心脏，那么Maxwell方程组就是描述这颗心脏搏动的物理定律。</p>
 
@@ -89,6 +122,19 @@
         ∇ × <strong>H</strong> = <strong>J</strong> + ∂<strong>D</strong>/∂t &nbsp;&nbsp;（磁场的旋度等于电流密度加位移电流密度）</p>
 
         <p>微分形式的优雅之处在于：四个方程用四个简单的矢量偏微分方程就描述了电磁场的全部行为。左侧的散度∇·描述了场在一点上的"发散"程度，旋度∇×描述了场的"旋转"程度。</p>
+
+        <div class="math-equation" role="group" aria-label="麦克斯韦方程组微分形式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="麦克斯韦方程组微分形式，可横向滚动">
+                <math display="block" aria-label="四个微分形式方程：D 的散度等于体电荷密度，B 的散度为零，E 的旋度等于负的 B 对时间偏导，H 的旋度等于 J 加 D 对时间偏导">
+                    <mtable>
+                        <mtr><mtd><mrow><mi mathvariant="bold">∇</mi><mo>·</mo><mi mathvariant="bold">D</mi><mo>=</mo><msub><mi>ρ</mi><mi>v</mi></msub></mrow></mtd></mtr>
+                        <mtr><mtd><mrow><mi mathvariant="bold">∇</mi><mo>·</mo><mi mathvariant="bold">B</mi><mo>=</mo><mn>0</mn></mrow></mtd></mtr>
+                        <mtr><mtd><mrow><mi mathvariant="bold">∇</mi><mo>×</mo><mi mathvariant="bold">E</mi><mo>=</mo><mo>−</mo><mfrac><mrow><mo>∂</mo><mi mathvariant="bold">B</mi></mrow><mrow><mo>∂</mo><mi>t</mi></mrow></mfrac></mrow></mtd></mtr>
+                        <mtr><mtd><mrow><mi mathvariant="bold">∇</mi><mo>×</mo><mi mathvariant="bold">H</mi><mo>=</mo><mi mathvariant="bold">J</mi><mo>+</mo><mfrac><mrow><mo>∂</mo><mi mathvariant="bold">D</mi></mrow><mrow><mo>∂</mo><mi>t</mi></mrow></mfrac></mrow></mtd></mtr>
+                    </mtable>
+                </math>
+            </div>
+        </div>
 
         <table>
             <tr>
@@ -135,9 +181,29 @@
 
         <p><strong>∇²<strong>E</strong> - μ₀ε₀ ∂²<strong>E</strong>/∂t² = 0</strong></p>
 
+        <div class="math-equation" role="group" aria-label="三维波动方程">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="三维波动方程，可横向滚动">
+                <math display="block" aria-label="电场 E 的拉普拉斯算符减 mu0 epsilon0 乘 E 对时间二阶偏导等于零">
+                    <mrow>
+                        <msup><mi mathvariant="bold">∇</mi><mn>2</mn></msup><mi mathvariant="bold">E</mi>
+                        <mo>−</mo>
+                        <msub><mi>μ</mi><mn>0</mn></msub><msub><mi>ε</mi><mn>0</mn></msub>
+                        <mfrac><mrow><msup><mo>∂</mo><mn>2</mn></msup><mi mathvariant="bold">E</mi></mrow><mrow><mo>∂</mo><msup><mi>t</mi><mn>2</mn></msup></mrow></mfrac>
+                        <mo>=</mo><mn>0</mn>
+                    </mrow>
+                </math>
+            </div>
+        </div>
+
         <p>这就是经典的<strong>三维波动方程</strong>！它的形式与弦振动方程完全一致，只是波速变成了：</p>
 
-        <p><strong>c = 1 / √(μ₀ε₀)</strong></p>
+        <div class="math-equation" role="group" aria-label="真空光速公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="真空光速公式，可横向滚动">
+                <math display="block" aria-label="光速 c 等于 mu0 与 epsilon0 乘积平方根的倒数">
+                    <mrow><mi>c</mi><mo>=</mo><mfrac><mn>1</mn><msqrt><mrow><msub><mi>μ</mi><mn>0</mn></msub><msub><mi>ε</mi><mn>0</mn></msub></mrow></msqrt></mfrac></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>当Maxwell代入当时的真空介电常数ε₀和磁导率μ₀的测量值时，他得到了一个惊人的结果：<strong>c ≈ 3.1 × 10⁸ m/s</strong>——这与当时已知的光速测量值惊人地一致！Maxwell由此做出了物理学史上最伟大的论断之一：<strong>光就是电磁波</strong>。</p>
 
@@ -150,6 +216,23 @@
         <p><strong>E(r, t) = E₀ e^(j(ωt - k · r))</strong></p>
 
         <p>其中E₀是振幅矢量，ω是角频率，k是波矢量（大小为k = 2π/λ，方向为传播方向），r是位置矢量。这个解描述了一个以速度c沿k方向传播的正弦电磁波。电场E、磁场H和传播方向k三者相互正交，构成右手螺旋关系。</p>
+
+        <figure id="fig-wave">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 312" role="img" aria-labelledby="fig-wave-title fig-wave-desc">
+                <title id="fig-wave-title">均匀平面波的电场与磁场同相振荡示意</title>
+                <desc id="fig-wave-desc">沿 z 方向传播的均匀平面波：电场 E 沿 x 方向极化（蓝色正弦），磁场 H 沿 y 方向（橙色正弦），二者同相、彼此垂直，且都垂直于传播方向 k。</desc>
+                <line x1="90" y1="190" x2="770" y2="190" stroke="#94a3b8" stroke-width="1.5"/>
+                <polygon points="770,190 758,185 758,195" fill="#94a3b8"/>
+                <text x="672" y="182" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#475569">z（传播方向 k）</text>
+                <line x1="120" y1="150" x2="740" y2="150" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 4"/>
+                <line x1="120" y1="232" x2="740" y2="232" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 4"/>
+                <polyline points="120.0,150.0 130.3,142.1 140.7,134.4 151.0,127.0 161.3,120.0 171.7,113.5 182.0,107.7 192.3,102.7 202.7,98.6 213.0,95.4 223.3,93.3 233.7,92.2 244.0,92.1 254.3,93.1 264.7,95.2 275.0,98.3 285.3,102.4 295.7,107.3 306.0,113.0 316.3,119.4 326.7,126.4 337.0,133.8 347.3,141.5 357.7,149.4 368.0,157.3 378.3,165.0 388.7,172.5 399.0,179.5 409.3,186.0 419.7,191.9 430.0,196.9 440.3,201.1 450.7,204.4 461.0,206.6 471.3,207.8 481.7,207.9 492.0,207.0 502.3,205.0 512.7,202.0 523.0,198.0 533.3,193.1 543.7,187.4 554.0,181.1 564.3,174.1 574.7,166.8 585.0,159.1 595.3,151.2 605.7,143.3 616.0,135.6 626.3,128.1 636.7,121.0 647.0,114.5 657.3,108.6 667.7,103.4 678.0,99.2 688.3,95.9 698.7,93.5 709.0,92.3 719.3,92.1 729.7,92.9 740.0,94.8" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+                <polyline points="120.0,232.0 130.3,226.6 140.7,221.2 151.0,216.1 161.3,211.3 171.7,206.8 182.0,202.8 192.3,199.4 202.7,196.6 213.0,194.4 223.3,192.9 233.7,192.1 244.0,192.1 254.3,192.8 264.7,194.2 275.0,196.4 285.3,199.2 295.7,202.6 306.0,206.5 316.3,210.9 326.7,215.7 337.0,220.8 347.3,226.2 357.7,231.6 368.0,237.0 378.3,242.4 388.7,247.5 399.0,252.4 409.3,256.8 419.7,260.9 430.0,264.4 440.3,267.3 450.7,269.5 461.0,271.0 471.3,271.9 481.7,271.9 492.0,271.3 502.3,269.9 512.7,267.8 523.0,265.1 533.3,261.7 543.7,257.8 554.0,253.4 564.3,248.7 574.7,243.6 585.0,238.3 595.3,232.8 605.7,227.4 616.0,222.1 626.3,216.9 636.7,212.0 647.0,207.5 657.3,203.4 667.7,199.9 678.0,196.9 688.3,194.7 698.7,193.1 709.0,192.2 719.3,192.0 729.7,192.6 740.0,194.0" fill="none" stroke="#d97706" stroke-width="2.5"/>
+                <text x="300" y="82" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#2563eb">E（x 极化）</text>
+                <text x="300" y="302" font-family="system-ui, 'PingFang SC', sans-serif" font-size="14" fill="#d97706">H（y 方向）</text>
+            </svg>
+            <figcaption><b>图 2-1</b> 均匀平面波中，E、H、k 三者两两垂直：E 沿 x 极化、H 沿 y 方向、波沿 z 传播（教学示意，纵轴为归一化场强）。两者同相位振荡，且自由空间中 |E|/|H| = η₀ ≈ 377 Ω——电场和磁场被“锁定”，不能独立变化。</figcaption>
+        </figure>
 
         <div class="tip">
             <strong>关于符号约定：</strong>我们在本课程中使用 e^(jωt) 的时间因子约定，这是天线和微波工程中最常用的形式。在光学中更常用 e^(-iωt) 的约定——注意这会导致相位表达方式的差异，但物理本质完全相同。
@@ -223,6 +306,14 @@
 
         <p>当电磁波进入导电媒质（如铜、铝）时，很快被衰减。幅度衰减为表面值的1/e（约37%）时的穿透深度称为<strong>趋肤深度（skin depth）</strong>：</p>
 
+        <div class="math-equation" role="group" aria-label="趋肤深度公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="趋肤深度公式，可横向滚动">
+                <math display="block" aria-label="趋肤深度 delta 等于 pi 乘 f 乘 mu 乘 sigma 的平方根的倒数">
+                    <mrow><mi>δ</mi><mo>=</mo><mfrac><mn>1</mn><msqrt><mrow><mi>π</mi><mi>f</mi><mi>μ</mi><mi>σ</mi></mrow></msqrt></mfrac></mrow>
+                </math>
+            </div>
+        </div>
+
         <p><strong>δ = 1 / √(πfμσ)</strong></p>
 
         <p>对于铜（σ = 5.8×10⁷ S/m, μ = μ₀）：</p>
@@ -234,6 +325,16 @@
         </ul>
 
         <p>这就是为什么高频电路使用<strong>微带线（microstrip）</strong>而非粗导线，且印制板表面镀金或镀银的原因——高频电流只分布在导体表面极薄的一层内，内部导体几乎"浪费"了。</p>
+
+        <div class="widget" id="widget-skin" role="group" aria-label="趋肤深度估算器">
+            <h3>交互：铜导体趋肤深度估算</h3>
+            <p>拖动滑块改变频率，估算铜（σ = 5.8×10⁷ S/m）中的趋肤深度 δ = 1/√(πfμ₀σ)；数据为教学示意，量级与导体手册一致。</p>
+            <label for="sd-f">频率 f：<output id="sd-f-out">1 GHz</output></label>
+            <input id="sd-f" type="range" min="1" max="11" value="9" step="1">
+            <button id="sd-calc" type="button">记录到对比表</button>
+            <div class="readout" id="sd-out" aria-live="polite"></div>
+            <table><thead><tr><th>f</th><th>δ（铜）</th></tr></thead><tbody id="sd-rows"></tbody></table>
+        </div>
 
         <p>让我们用Python写一个简单的均匀平面波场计算：</p>
 
@@ -282,6 +383,15 @@ print(f"  E/H 比值: {Ex.max()/Hy.max():.1f} Ω (应等于 {eta0} Ω)")</code><
 
         <p>跑一下这段代码，你会发现电场与磁场的比值始终是377 Ω——这不是巧合，而是自由空间本征阻抗的直接体现。记住：<strong>在自由空间中，电场和磁场是"锁定"的</strong>，不能独立变化。</p>
 
+        <section id="references" aria-labelledby="ref-heading">
+            <h2 id="ref-heading">本章参考</h2>
+            <ul>
+                <li>位移电流假说与“光即电磁波”：J. C. Maxwell, <i>A Treatise on Electricity and Magnetism</i>, 1873（原文推断 c = 1/√(μ₀ε₀)）。</li>
+                <li>积分/微分形式、波动方程、相量法、坡印廷矢量、本征阻抗 377 Ω 与趋肤深度：C. A. Balanis, <i>Advanced Engineering Electromagnetics</i>（第 1、2、4 章）。</li>
+                <li>趋肤深度滑块的铜参数取 σ = 5.8×10⁷ S/m、μ = μ₀，按 δ = 1/√(πfμσ) 计算，结果为教学示意。</li>
+            </ul>
+        </section>
+
         <hr style="margin: 30px 0; border: 0; border-top: 2px dashed #fcd34d;">
 
         <p style="font-size: 1.1rem; line-height: 1.8;">
@@ -297,7 +407,41 @@ print(f"  E/H 比值: {Ex.max()/Hy.max():.1f} Ω (应等于 {eta0} Ω)")</code><
             <a href="index.html">📖 返回目录</a>
             <a href="03.html">下一章 →</a>
         </div>
-    </div>
+        <script>
+        (function () {
+            var fEl = document.getElementById('sd-f');
+            var out = document.getElementById('sd-out');
+            var rows = document.getElementById('sd-rows');
+            var MU0 = 4 * Math.PI * 1e-7, SIG = 5.8e7;
+            function fmt(x) {
+                var u = [[1e9, 'GHz'], [1e6, 'MHz'], [1e3, 'kHz']];
+                for (var i = 0; i < u.length; i++) {
+                    if (x >= u[i][0]) { var v = x / u[i][0]; return (v < 10 ? v.toFixed(1) : v.toFixed(0)) + ' ' + u[i][1]; }
+                }
+                return x.toFixed(0) + ' Hz';
+            }
+            function calc() {
+                var f = Math.pow(10, +fEl.value);
+                var d = 1 / Math.sqrt(Math.PI * f * MU0 * SIG);
+                var um = d * 1e6;
+                var ds = um >= 1000 ? (d * 1e3).toFixed(1) + ' mm' : um.toFixed(2) + ' μm';
+                document.getElementById('sd-f-out').textContent = fmt(f);
+                out.textContent = 'f = ' + fmt(f) + '，铜中 δ ≈ ' + ds + '\n（教学示意，按 δ = 1/√(πfμ₀σ) 计算）';
+                return { f: fmt(f), d: ds };
+            }
+            function record() {
+                var r = calc();
+                var tr = document.createElement('tr');
+                [r.f, r.d].forEach(function (t) { var td = document.createElement('td'); td.textContent = t; tr.appendChild(td); });
+                rows.appendChild(tr);
+            }
+            fEl.addEventListener('input', calc);
+            document.getElementById('sd-calc').addEventListener('click', record);
+            calc();
+        })();
+        </script>
+    </article>
+    </main>
 </div>
 </div>
 </body>
