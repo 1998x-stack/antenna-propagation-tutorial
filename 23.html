@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第23章 电磁仿真工具导论</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -42,9 +70,14 @@
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
     </div>
-    <div class="main-content">
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第23章 电磁仿真工具导论</h1>
+            <p class="dek">仿真是理论与实物之间的桥梁。本章讲清 FEM / FIT-FDTD / MoM / PO 四类求解器的数学基础与适用场景，以及 CST、HFSS 的实战流程、收敛性检查与仿真陷阱。</p>
+        </header>
 
-        <h2>23.1 电磁仿真工具概览</h2>
+        <h2 id="s23-1">23.1 电磁仿真工具概览</h2>
 
         <p>大家好，我是你们的讲师。走到第23章，我们已经共同完成了从Maxwell方程组到电离层传播的漫长旅程。现在我们手握着天线辐射理论和电波传播机制的武器，足以理解电磁波在从直流到太赫兹的广阔频谱中的行为。但在真实的工程世界里，没有哪个天线设计师是拿着纸笔算完就直接去开模的——在加工第一个原型之前，每一副天线都会在电脑里被"仿真"成千上万次。</p>
 
@@ -137,13 +170,51 @@
 
         <p><strong>核心思想：</strong>高频近似方法。当结构尺寸远大于波长时（例如几十个波长以上），入射波在光滑表面上的行为趋近于几何光学：表面电流近似等于入射磁场的切向分量的两倍。不需要解矩阵方程，直接通过射线和积分计算散射场。</p>
 
+        <div class="math-equation" role="group" aria-label="物理光学表面电流近似">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="物理光学表面电流近似，可横向滚动">
+                <math display="block" aria-label="物理光学近似：表面电流 J_s 约等于 2 倍法向单位矢量 n 与入射磁场 H_inc 的叉积">
+                    <mrow><msub><mi>J</mi><mi>s</mi></msub><mo>≈</mo><mn>2</mn><mover><mi>n</mi><mo>^</mo></mover><mo>×</mo><msub><mi>H</mi><mtext>inc</mtext></msub></mrow>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 n̂ 为表面单位法矢量，H<sub>inc</sub> 为入射磁场。这一近似在光滑、电大的凸表面且远离阴影边界时成立。</p>
+
         <p>PO适合处理非常大的结构——比如整架飞机、整艘舰船、大型卫星平台上的天线方向图分析。在这些场景下，全波求解（FEM/MoM）的计算量会大到无法承受，而PO能以牺牲少量精度为代价，快速给出工程可用的结果。</p>
 
         <div class="highlight">
             <strong>求解器选择速查：</strong>谐振结构（谐振腔、滤波器）→ FEM；宽带天线、EMC → FIT/FDTD；电大纯金属结构 → MoM；电大尺寸平台天线布局 → PO或MLFMM（多层快速多极子）。当你不确定时，问问自己："我的模型里哪些地方是精细结构？哪些地方是平滑大面？"——答案会指引你。
         </div>
 
-        <h2>23.3 CST Studio Suite实战入门</h2>
+        <figure>
+            <svg role="img" aria-labelledby="fig23-solver-title fig23-solver-desc" viewBox="0 0 800 260">
+                <title id="fig23-solver-title">不同求解器的离散区域对比</title>
+                <desc id="fig23-solver-desc">FEM 对整个求解域做四面体体积网格；FIT/FDTD 使用六面体网格充满空间；MoM 仅在金属表面划分网格；PO 用射线近似光滑大表面。</desc>
+                <rect x="0" y="0" width="800" height="260" fill="#fbfdff"/>
+                <g fill="none" stroke="#1e3a8a" stroke-width="2">
+                    <rect x="40" y="50" width="150" height="140"/>
+                    <path d="M40 90 h150 M40 130 h150 M40 170 h150 M70 50 v140 M110 50 v140 M150 50 v140"/>
+                </g>
+                <text x="40" y="225" font-size="13" fill="#475569">FEM：整个求解域体积网格</text>
+                <g fill="none" stroke="#d06d4d" stroke-width="2">
+                    <rect x="230" y="50" width="150" height="140"/>
+                    <circle cx="305" cy="120" r="34"/>
+                </g>
+                <text x="230" y="225" font-size="13" fill="#475569">FIT/FDTD：六面体网格</text>
+                <g fill="none" stroke="#7461ba" stroke-width="2">
+                    <circle cx="515" cy="120" r="45"/>
+                </g>
+                <text x="455" y="225" font-size="13" fill="#475569">MoM：仅金属表面</text>
+                <g stroke="#147f80" stroke-width="2">
+                    <path d="M640 60 Q 700 120 760 60"/>
+                    <line x1="700" y1="120" x2="700" y2="200"/>
+                </g>
+                <text x="635" y="225" font-size="13" fill="#475569">PO：射线近似大表面</text>
+            </svg>
+            <figcaption><b>图 23-1　求解器离散区域的本质区别。</b>FEM/FDTD 需要离散整个求解域（含空气），适合精细复杂结构；MoM 只离散金属表面，适合电大纯金属体；PO 不剖分、直接射线近似，适合更大尺寸的光滑平台。示意图。</figcaption>
+        </figure>
+
+        <h2 id="s23-3">23.3 CST Studio Suite实战入门</h2>
 
         <p>CST Studio Suite是达索系统（Dassault Systèmes）旗下最核心的电磁仿真平台。在通信天线设计领域，CST因其时域求解器的高效性而拥有庞大的用户群体。如果你刚接触CST，下面的工作流是每个CST用户必须印在脑子里的。</p>
 
@@ -273,6 +344,45 @@ MsgBox "参数扫描完成！结果已保存至 patch_sweep.txt"</code></pre>
 
         <p><strong>收敛性检查（Convergence Check）：</strong>永远不要只跑一次仿真就下结论。应该运行一个网格细化研究：先以较稀疏的网格跑一次，然后加密网格再跑一次。如果两次结果之间的S参数差异小于0.5 dB且谐振频率偏移小于1%，可以认为收敛了。否则继续加密网格直到收敛。这个步骤虽然费时间，但却是防止"假收敛"的唯一可靠方法——有时第一次仿真的结果看起来漂亮，但完全是因为网格太粗、数值误差碰巧给出了一条好看的曲线。</p>
 
+        <div class="widget">
+            <h3>小工具：网格收敛判据自检</h3>
+            <p>按本章的判定标准，对比两次网格细化后的 S 参数与谐振频率，看是否“已收敛”。</p>
+            <label for="s1">粗网格 S₁₁ = <output id="s1Out">−18.0</output> dB</label>
+            <input id="s1" type="range" min="-40" max="-5" step="0.5" value="-18" aria-describedby="convReadout">
+            <label for="s2">细网格 S₁₁ = <output id="s2Out">−18.4</output> dB</label>
+            <input id="s2" type="range" min="-40" max="-5" step="0.5" value="-18.5" aria-describedby="convReadout">
+            <label for="f1">粗网格谐振 = <output id="f1Out">2.40</output> GHz</label>
+            <input id="f1" type="range" min="1" max="10" step="0.01" value="2.4" aria-describedby="convReadout">
+            <label for="f2">细网格谐振 = <output id="f2Out">2.41</output> GHz</label>
+            <input id="f2" type="range" min="1" max="10" step="0.01" value="2.41" aria-describedby="convReadout">
+            <div class="readout" id="convReadout" role="status" aria-live="polite"></div>
+            <p style="font-size:.82rem;color:#64748b;margin:.6rem 0 0;">教学示意：判据为 S 参数差异 &lt; 0.5 dB 且谐振频率偏移 &lt; 1%。</p>
+        </div>
+
+        <script>
+        (function(){
+            var ids = ['s1','s2','f1','f2'];
+            var el = {};
+            ids.forEach(function(id){ el[id] = document.getElementById(id); });
+            var ro = document.getElementById('convReadout');
+            function fmt(x){ return String(x).replace('-', '−'); }
+            function upd(){
+                var s1 = Number(el.s1.value), s2 = Number(el.s2.value);
+                var f1 = Number(el.f1.value), f2 = Number(el.f2.value);
+                document.getElementById('s1Out').textContent = fmt(s1.toFixed(1));
+                document.getElementById('s2Out').textContent = fmt(s2.toFixed(1));
+                document.getElementById('f1Out').textContent = f1.toFixed(2);
+                document.getElementById('f2Out').textContent = f2.toFixed(2);
+                var ds = Math.abs(s1 - s2);
+                var dfp = Math.abs(f1 - f2) / f1 * 100;
+                var ok = ds < 0.5 && dfp < 1;
+                ro.textContent = 'ΔS₁₁ = ' + ds.toFixed(2) + ' dB（阈值 0.5）\n谐振偏移 = ' + dfp.toFixed(2) + '%（阈值 1%）\n判定：' + (ok ? '已收敛✓' : '未收敛，需继续加密网格');
+            }
+            ids.forEach(function(id){ el[id].addEventListener('input', upd); });
+            upd();
+        })();
+        </script>
+
         <p><strong>端口去嵌入（Port De-embedding）：</strong>当你在仿真中使用了一段传输线来连接端口和天线时，这段传输线的相移会被计入S参数中。使用端口去嵌入功能可以将这段传输线的效应"减去"，只保留天线的纯响应。这对于将仿真结果与已经校准过的测量结果对比非常关键——VNA在测量时也做了端口延伸校准（port extension），两者必须匹配。</p>
 
         <p><strong>材料属性的不确定性：</strong>FR4这种最常见的PCB基板，其ε<sub>r</sub>在不同批次之间可以从3.9变化到4.7！损耗角正切tan δ也可以在0.015到0.025之间游走。如果你的天线设计依赖于一个精确的谐振频率（比如窄带滤波器），用FR4简直就是自找麻烦。工程上建议的做法是：对材料参数做<strong>边界扫描</strong>——用最低和最高的ε<sub>r</sub>各仿真一次，看看你的设计指标是否仍能满足。如果不行，要么改用更稳定的材料（如Rogers 4000系列），要么重新设计更多的容差余量。</p>
@@ -330,7 +440,8 @@ plt.show()</code></pre>
             <a href="index.html">📖 返回目录</a>
             <a href="24.html">下一章 →</a>
         </div>
-    </div>
+        </article>
+    </main>
 </div>
 </div>
 </body>
