@@ -243,7 +243,7 @@ print(f"辐射带宽: {sum(is_radiating) * (freq[1]-freq[0])/1e9:.2f} GHz")
 
         <div class="widget">
             <h3>小工具：SW-MTS 何时开始辐射</h3>
-            <p>调节平均表面电抗 X₀ 与调制周期 d，观察 −1 阶空间谐波何时满足辐射条件，并估算辐射起始频率。</p>
+            <p>调节平均表面电抗 X₀ 与调制周期 d，计算 −1 阶空间谐波满足辐射条件（|k₋₁| &lt; k₀）的频率区间。</p>
             <label for="x0">表面电抗 X₀ = <output id="x0Out">250</output> Ω</label>
             <input id="x0" type="range" min="100" max="400" step="10" value="250" aria-describedby="mtsReadout">
             <label for="dd">调制周期 d = <output id="ddOut">18</output> mm</label>
@@ -257,22 +257,17 @@ print(f"辐射带宽: {sum(is_radiating) * (freq[1]-freq[0])/1e9:.2f} GHz")
             var x0 = document.getElementById('x0'), dd = document.getElementById('dd');
             var x0Out = document.getElementById('x0Out'), ddOut = document.getElementById('ddOut');
             var ro = document.getElementById('mtsReadout');
-            var c = 3e8, f0 = 10e9, f1 = 15e9, N = 500;
+            var c = 3e8;
             function upd(){
                 var X0 = Number(x0.value), d = Number(dd.value) / 1000;
                 x0Out.textContent = String(X0);
                 ddOut.textContent = String(Number(dd.value));
-                var fRad = null;
-                for (var i = 0; i <= N; i++){
-                    var f = f0 + (f1 - f0) * i / N;
-                    var k0 = 2 * Math.PI * f / c;
-                    var ksw = k0 * Math.sqrt(1 + Math.pow(X0 / 377, 2));
-                    var k1 = ksw - 2 * Math.PI / d;
-                    if (Math.abs(k1) < k0) { fRad = f; break; }
-                }
-                ro.textContent = fRad === null
-                    ? '在 10–15 GHz 区间内未满足辐射条件（可尝试减小 d 或增大 X₀）'
-                    : '−1 阶谐波约在 ' + (fRad / 1e9).toFixed(2) + ' GHz 开始辐射\n对应表面波波长 ≈ ' + (c / fRad * 1e3).toFixed(1) + ' mm';
+                var A = Math.sqrt(1 + Math.pow(X0 / 377, 2));
+                var fLo = c / (d * (A + 1)) / 1e9;
+                var fHi = c / (d * (A - 1)) / 1e9;
+                ro.textContent = 'A = √(1+(X₀/377)²) ≈ ' + A.toFixed(3)
+                    + '\n−1 阶谐波辐射频段 ≈ ' + fLo.toFixed(2) + ' – ' + fHi.toFixed(2) + ' GHz'
+                    + '\n（低于下界为慢波不辐射，高于上界也退出快波区间）';
             }
             x0.addEventListener('input', upd);
             dd.addEventListener('input', upd);
