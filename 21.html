@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第21章 对流层电波传播</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -42,9 +70,14 @@
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
     </div>
-    <div class="main-content">
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第21章 对流层电波传播</h1>
+            <p class="dek">对流层是距我们最近、也最会影响通信的一层大气。本章从折射率差 N 与等效地球半径 k 因子出发，讲清折射、大气波导、气体吸收与雨衰，以及对流层散射通信的工程取舍。</p>
+        </header>
 
-        <h2>21.1 对流层的大气结构</h2>
+        <h2 id="s21-1">21.1 对流层的大气结构</h2>
 
         <p>大家好，我是你们的讲师。你有没有想过这样一个问题：为什么在天朗气清的日子里，手机基站的信号可以传得很远，但在大雾弥漫的早晨，信号反而时好时坏？为什么海边的雷达能看到地平线以下的目标？这些问题的答案都藏在与我们朝夕相处却常被忽视的大气层中。</p>
 
@@ -52,20 +85,42 @@
 
         <p>对流层对电波的影响主要通过<strong>大气折射率</strong>来刻画。折射率n非常接近1，因此通常用<strong>折射率差N</strong>来表示：</p>
 
-        <pre><code>N = (n - 1) × 10⁶
+        <div class="math-equation" role="group" aria-label="对流层折射率差 N 的定义">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="折射率差 N 定义，可横向滚动">
+                <math display="block" aria-label="N 等于 n 减 1 乘以 10 的 6 次方，也等于 77.6 倍 P 除以 T 加 3.73 乘以 10 的 5 次方乘以 e 除以 T 平方">
+                    <mrow><mi>N</mi><mo>=</mo><mo>(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo>)</mo><mo>×</mo><msup><mn>10</mn><mn>6</mn></msup><mo>=</mo><mn>77.6</mn><mfrac><mi>P</mi><mi>T</mi></mfrac><mo>+</mo><mn>3.73</mn><mo>×</mo><msup><mn>10</mn><mn>5</mn></msup><mfrac><mi>e</mi><msup><mi>T</mi><mn>2</mn></msup></mfrac></mrow>
+                </math>
+            </div>
+        </div>
 
-其中:
-N = 77.6 · P / T + 3.73 × 10⁵ · e / T²
+        <p>式中 P 为大气压（hPa，即百帕），T 为绝对温度（K），e 为水汽压（hPa）。由于 n 与 1 相差极小（地面附近约 1.0003），工程上改用放大百万倍的 N 来描述大气剖面——这样数字就落在几百的量级，便于作图与比较。</p>
 
-P : 大气压 (hPa, 即百帕)
-T : 绝对温度 (K)
-e : 水汽压 (hPa)</code></pre>
-
-        <p>在标准大气条件下，N随高度下降的速率约为<strong>40 N-units/km</strong>。这意味着什么？折射率随高度降低，意味着电磁波在对流层中传播时会向折射率更大的方向弯曲——即<strong>向地面弯曲</strong>。这就是所谓的<strong>大气折射</strong>。</p>
+        <p>在标准大气条件下，N 随高度下降的速率约为 <strong>40 N-units/km</strong>。折射率随高度降低，意味着电磁波在对流层中传播时会向折射率更大的方向弯曲——即<strong>向地面弯曲</strong>。这就是所谓的<strong>大气折射</strong>。</p></p>
 
         <div class="tip">
             <strong>国际标准参考：</strong>ITU-R P.453建议书提供了全球参考大气折射率模型，包括标准大气剖面、地图化的月平均N₀（地面折射率）以及年变化统计。在做任何地面微波链路设计时，P.453都是第一个需要查阅的ITU文件。
         </div>
+
+        <figure>
+            <svg role="img" aria-labelledby="fig21-refract-title fig21-refract-desc" viewBox="0 0 800 300">
+                <title id="fig21-refract-title">大气折射与射线弯曲</title>
+                <desc id="fig21-refract-desc">地面向上，标准大气、超折射与波导三种情形下射线的弯曲程度对比；箭头表示波向折射率更大的低空弯曲。</desc>
+                <rect x="0" y="0" width="800" height="300" fill="#fbfdff"/>
+                <line x1="40" y1="250" x2="760" y2="250" stroke="#8a6d3b" stroke-width="3"/>
+                <text x="40" y="272" font-size="14" fill="#8a6d3b">地面</text>
+                <line x1="40" y1="30" x2="40" y2="250" stroke="#94a3b8" stroke-width="1.5"/>
+                <text x="12" y="24" font-size="13" fill="#64748b">高度</text>
+                <path d="M60 60 Q 400 130 740 60" fill="none" stroke="#147f80" stroke-width="3"/>
+                <text x="330" y="108" font-size="14" fill="#147f80">标准大气 k≈4/3</text>
+                <path d="M60 90 Q 400 240 740 150" fill="none" stroke="#d06d4d" stroke-width="3"/>
+                <text x="470" y="196" font-size="14" fill="#d06d4d">超折射 k&gt;1</text>
+                <path d="M60 120 Q 400 300 740 250" fill="none" stroke="#7461ba" stroke-width="3" stroke-dasharray="8 5"/>
+                <text x="470" y="262" font-size="14" fill="#7461ba">波导捕获 k→−∞</text>
+                <circle cx="60" cy="60" r="5" fill="#1e3a8a"/>
+                <text x="50" y="48" font-size="13" fill="#1e3a8a">发射</text>
+            </svg>
+            <figcaption><b>图 21-1　大气折射使射线向地面弯曲。</b>折射率随高度下降得越快，射线弯曲越剧烈：k 因子越大，等效视线越远；当 N 的下降速率超过约 157 N-units/km，射线曲率超过地球曲率而被“捕获”在大气波导中。曲线形状为说明性示意，不按真实比例绘制。</figcaption>
+        </figure>
 
         <h2>21.2 大气折射与等效地球半径</h2>
 
@@ -73,12 +128,15 @@ e : 水汽压 (hPa)</code></pre>
 
         <p><strong>k因子（等效地球半径因子）</strong>的定义：</p>
 
-        <pre><code>a_e = k · a
+        <div class="math-equation" role="group" aria-label="等效地球半径与 k 因子的定义">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="等效地球半径与 k 因子定义，可横向滚动">
+                <math display="block" aria-label="等效地球半径 a_e 等于 k 乘以真实地球半径 a，其中 k 等于 1 除以 1 加 a 乘以折射率梯度 dn 比 dh">
+                    <mrow><msub><mi>a</mi><mi>e</mi></msub><mo>=</mo><mi>k</mi><mi>a</mi><mo>,</mo><mspace width="1.5em"/><mi>k</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><mi>a</mi><mfrac><mrow><mi>d</mi><mi>n</mi></mrow><mrow><mi>d</mi><mi>h</mi></mrow></mfrac></mrow></mfrac></mrow>
+                </math>
+            </div>
+        </div>
 
-其中:
-k = 1 / (1 + a · dn/dh)
-a  = 真实地球半径 (6370 km)
-dn/dh = 折射率梯度</code></pre>
+        <p>式中 a 为真实地球半径（约 6370 km），dn/dh 为折射率沿高度的梯度。</p>
 
         <p>在标准大气下，dn/dh ≈ -40 × 10⁻⁶ / km，代入可得 k ≈ 4/3，等效地球半径 a_e ≈ 8500 km。这意味着一对相距50 km的收发天线，在k=4/3的条件下，其"等效视线距离"比真实几何视线远了约15%。</p>
 
@@ -134,7 +192,35 @@ dn/dh = 折射率梯度</code></pre>
             <strong>实测踩坑故事：</strong>某次在沿海城市进行5G毫米波覆盖测试，团队发现一个距离基站4公里的测试点信号异常强——比2公里处的功率还高出5 dB。所有人百思不得其解，怀疑设备故障。重新检查气象日志后发现：测试当天海面温度低于气温约6°C，形成了强烈的超折射条件，信号被"弯曲"到了原本的阴影区域。这个案例提醒我们：<strong>任何野外测试，必须先记录气象数据</strong>——不对传播条件做记录，根本无法解释测试结果的异常。
         </div>
 
-        <h2>21.3 大气波导效应</h2>
+        <div class="widget">
+            <h3>小工具：由 N 梯度估算 k 因子</h3>
+            <p>拖动滑块改变地面附近的折射率梯度 dN/dh（单位 N-units/km），看看等效地球半径 a<sub>e</sub> 如何变化。标准大气为 −40 N-units/km，对应 k ≈ 4/3；当梯度低于约 −157 N-units/km 时进入波导条件。</p>
+            <label for="dn">dN/dh = <output id="dnOut">−40</output> N-units/km</label>
+            <input id="dn" type="range" min="-200" max="0" step="1" value="-40" aria-describedby="dnReadout">
+            <div class="readout" id="dnReadout" role="status" aria-live="polite"></div>
+            <p style="font-size:.82rem;color:#64748b;margin:.6rem 0 0;">教学示意：这里用 dN/dh 近似 dn/dh×10⁶，并取 a = 6370 km；负梯度的绝对值越大，k 越大、等效半径越远。</p>
+        </div>
+
+        <script>
+        (function(){
+            var s = document.getElementById('dn');
+            var out = document.getElementById('dnOut');
+            var ro = document.getElementById('dnReadout');
+            var A = 6370;
+            function upd(){
+                var dn = Number(s.value);
+                var k = 1 / (1 + A * (dn * 1e-6));
+                out.textContent = String(dn).replace('-', '−');
+                var ae = k * A;
+                var regime = k <= 0 ? '波导条件（射线被捕获）' : (k > 1 ? '超折射（射线下弯）' : (k < 1 ? '次折射（射线上弯）' : '无折射（直线）'));
+                ro.textContent = 'k = ' + k.toFixed(3) + '\n等效地球半径 a_e = ' + (k > 0 ? ae.toFixed(0) + ' km' : '无定义') + '\n传播状态：' + regime;
+            }
+            s.addEventListener('input', upd);
+            upd();
+        })();
+        </script>
+
+        <h2 id="s21-3">21.3 大气波导效应</h2>
 
         <p><strong>大气波导（Atmospheric Duct）</strong>是对流层中最壮观的传播现象之一。当N的下降速率超过约157 N-units/km时，射线向下弯曲的曲率超过了地球表面的曲率——电磁波被困在一个"大气波导"中传播，就像光在光纤中传播一样。</p>
 
@@ -170,10 +256,15 @@ dn/dh = 折射率梯度</code></pre>
 
         <p>雨衰（Rain Attenuation）是10 GHz以上无线通信的最大敌人。雨滴对电磁波的散射和吸收随频率升高而急剧增加。ITU-R P.838给出了雨衰率的计算模型：</p>
 
-        <pre><code>γ_R = k · R^α   (dB/km)
+        <div class="math-equation" role="group" aria-label="雨衰率经验公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="雨衰率公式，可横向滚动">
+                <math display="block" aria-label="雨衰率 gamma R 等于系数 k 乘以降雨率 R 的 alpha 次方，单位分贝每公里">
+                    <mrow><msub><mi>γ</mi><mi>R</mi></msub><mo>=</mo><mi>k</mi><msup><mi>R</mi><mi>α</mi></msup><mspace width="1em"/><mo>[</mo><mi>dB</mi><mo>/</mo><mi>km</mi><mo>]</mo></mrow>
+                </math>
+            </div>
+        </div>
 
-其中 R 是降雨率 (mm/h)
-k 和 α 由频率、极化和仰角决定（P.838给出表值）</code></pre>
+        <p>式中 R 是降雨率（mm/h）；系数 k 和 α 由频率、极化和仰角决定，ITU-R P.838 以表值形式给出。</p>
 
         <p>例如，在28 GHz（5G毫米波），水平极化时的k ≈ 0.15, α ≈ 1.14。这意味着一场50 mm/h的大雨会造成约12 dB/km的衰减——如果链路长度是500米，那就是6 dB的额外损耗，足以让链路余量告急。</p>
 
@@ -209,6 +300,32 @@ k 和 α 由频率、极化和仰角决定（P.838给出表值）</code></pre>
                 <td>85 dB/km</td>
             </tr>
         </table>
+
+        <figure>
+            <svg role="img" aria-labelledby="fig21-rain-title fig21-rain-desc" viewBox="0 0 800 340">
+                <title id="fig21-rain-title">雨衰率随频率与降雨率的变化</title>
+                <desc id="fig21-rain-desc">对数横轴为 1 至 100 GHz，三条曲线分别对应 10、50、100 毫米每小时的降雨率；可见雨衰随频率和降雨率急剧上升。</desc>
+                <rect x="0" y="0" width="800" height="340" fill="#fbfdff"/>
+                <line x1="70" y1="290" x2="760" y2="290" stroke="#64748b" stroke-width="1.5"/>
+                <line x1="70" y1="30" x2="70" y2="290" stroke="#64748b" stroke-width="1.5"/>
+                <text x="330" y="325" font-size="14" fill="#475569">频率 (GHz，对数轴)</text>
+                <text x="18" y="160" font-size="14" fill="#475569" transform="rotate(-90 28 160)">雨衰 (dB/km)</text>
+                <g font-size="12" fill="#64748b">
+                    <text x="70" y="308">1</text><text x="270" y="308">3</text><text x="430" y="308">10</text><text x="590" y="308">30</text><text x="730" y="308">100</text>
+                </g>
+                <polyline points="70,285 270,270 430,240 590,190 730,120" fill="none" stroke="#147f80" stroke-width="3"/>
+                <polyline points="70,280 270,235 430,155 590,90 730,45" fill="none" stroke="#d06d4d" stroke-width="3"/>
+                <polyline points="70,278 270,215 430,120 590,58 730,33" fill="none" stroke="#7461ba" stroke-width="3"/>
+                <g font-size="13">
+                    <text x="640" y="120" fill="#147f80">10 mm/h</text>
+                    <text x="640" y="85" fill="#d06d4d">50 mm/h</text>
+                    <text x="640" y="52" fill="#7461ba">100 mm/h</text>
+                </g>
+            </svg>
+            <figcaption><b>图 21-2　雨衰随频率、降雨率迅速增长。</b>该图依据本章表中的量级绘制（如 28 GHz、50 mm/h 约 2.8 dB/km，100 GHz、100 mm/h 约 85 dB/km），为教学示意曲线，非逐点计算值。工程上需按 ITU-R P.838/P.530 结合本地降雨率统计精确计算。</figcaption>
+        </figure>
+
+        <h3>雨衰对链路设计的影响</h3>
 
         <p>对于5G毫米波（28 GHz）小站来说，一个好消息是站间距通常只有200米左右。在200米的路径上，即使是大雨造成的衰减也是可控的（约0.5-1 dB）。而对于卫星通信（常用20/30 GHz频段）来说，地面站到卫星的路径长度很长，雨衰会非常显著——因此<strong>自适应编码调制（ACM）</strong>和<strong>上行功率控制</strong>是Ka波段卫星系统的标配功能。</p>
 
@@ -292,7 +409,8 @@ print(f"同等距离自由空间损耗: {fspl_300km:.1f} dB")
             <a href="index.html">📖 返回目录</a>
             <a href="22.html">下一章 →</a>
         </div>
-    </div>
+    </article>
+    </main>
 </div>
 </div>
 </body>
