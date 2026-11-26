@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第27章 AI驱动的天线设计与优化</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -42,7 +70,12 @@
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
     </div>
-    <div class="main-content">
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第27章 AI驱动的天线设计与优化</h1>
+            <p class="dek">当设计空间的维度超出人力所能及，算法登场了。本章讲清传统优化的三大困局、GA/PSO 等生物启发式算法、神经网络替代模型加速仿真，以及深度学习在信道估计与波束管理中的应用。</p>
+        </header>
 
         <p>大家好，我是你们的讲师。在上一章中，我们一窥了6G天线的前沿方向：超大阵列、Pinching天线、ISAC和太赫兹通信。这些系统的共同特点是——设计空间大得令人窒息。一个典型的ELDAA阵列可能有上千个单元，每个单元的馈电幅度和相位都需要优化，这已经超出了任何人力能及的范畴。</p>
 
@@ -68,6 +101,56 @@
 
         <p>AI和自然启发式优化算法正是为这三个问题而生的。它们通过智能搜索策略、并行评估、和全局探索能力，在巨大的设计空间中高效寻找最优解。</p>
 
+        <figure>
+            <svg role="img" aria-labelledby="fig27-land-title fig27-land-desc" viewBox="0 0 800 300">
+                <title id="fig27-land-title">梯度下降卡在局部最优与全局搜索对比</title>
+                <desc id="fig27-land-desc">一条多峰目标函数曲线；梯度下降从左侧出发陷入局部极小，而全局搜索方法在多个峰谷间探索后找到全局极小。</desc>
+                <rect x="0" y="0" width="800" height="300" fill="#fbfdff"/>
+                <path d="M40 60 Q 130 220 190 150 Q 250 80 320 150 Q 380 220 440 220 Q 520 220 560 120 Q 610 20 700 80" fill="none" stroke="#1e3a8a" stroke-width="3"/>
+                <line x1="40" y1="250" x2="760" y2="250" stroke="#64748b" stroke-width="1.5"/>
+                <text x="330" y="280" font-size="14" fill="#475569">设计参数（如贴片尺寸）</text>
+                <text x="10" y="150" font-size="14" fill="#475569" transform="rotate(-90 24 150)">代价函数</text>
+                <circle cx="190" cy="150" r="7" fill="#d06d4d"/>
+                <text x="120" y="120" font-size="13" fill="#d06d4d">梯度下降陷入局部极小</text>
+                <circle cx="700" cy="80" r="7" fill="#147f80"/>
+                <text x="600" y="55" font-size="13" fill="#147f80">全局最优</text>
+                <g fill="#7461ba"><circle cx="320" cy="150" r="5"/><circle cx="440" cy="220" r="5"/><circle cx="560" cy="120" r="5"/></g>
+                <text x="300" y="240" font-size="13" fill="#7461ba">GA/PSO 多峰探索</text>
+            </svg>
+            <figcaption><b>图 27-1　局部最优与全局最优。</b>天线性能对几何参数高度非凸，梯度类方法容易陷入局部极小；GA/PSO 通过种群多样性和全局信息共享在多个峰谷间探索。曲线为说明性示意。</figcaption>
+        </figure>
+
+        <div class="widget">
+            <h3>小工具：设计空间的“维度灾难”</h3>
+            <p>选择参数个数 k 与每个参数的取值数 n，看看穷举全空间需要多少种组合——以及按每组合仿真 1 秒要跑多久。</p>
+            <label for="k27">参数个数 k = <output id="k27Out">10</output></label>
+            <input id="k27" type="range" min="2" max="20" step="1" value="10" aria-describedby="dsReadout">
+            <label for="n27">每参数取值数 n = <output id="n27Out">10</output></label>
+            <input id="n27" type="range" min="2" max="20" step="1" value="10" aria-describedby="dsReadout">
+            <div class="readout" id="dsReadout" role="status" aria-live="polite"></div>
+            <p style="font-size:.82rem;color:#64748b;margin:.6rem 0 0;">教学示意：组合数 = n^k；假设每种组合仿真 1 秒。高维时数字会迅速变得天文数字级。</p>
+        </div>
+
+        <script>
+        (function(){
+            var k = document.getElementById('k27'), n = document.getElementById('n27');
+            var ro = document.getElementById('dsReadout');
+            function upd(){
+                var kk = Number(k.value), nn = Number(n.value);
+                document.getElementById('k27Out').textContent = String(kk);
+                document.getElementById('n27Out').textContent = String(nn);
+                var log10c = kk * Math.log10(nn);
+                var combos = log10c < 15 ? Math.pow(nn, kk).toExponential(2) : '10^' + log10c.toFixed(1);
+                var secs = log10c * Math.log(10) > 700 ? Infinity : Math.pow(nn, kk);
+                var years = secs === Infinity ? '天文数字' : (secs / 3.15e7).toExponential(2);
+                ro.textContent = '组合数 ≈ ' + combos + '\n每种仿真 1 秒，需 ≈ ' + years + ' 年';
+            }
+            k.addEventListener('input', upd);
+            n.addEventListener('input', upd);
+            upd();
+        })();
+        </script>
+
         <h2>27.2 生物启发式优化算法</h2>
 
         <p>大自然花了数十亿年进化出了优化的高级策略。生物启发式算法试图复制这些策略来解决工程优化问题。在天线设计中，最常用的三种算法是：</p>
@@ -90,6 +173,16 @@
         <p>PSO的灵感来自鸟群或鱼群的集体运动。想象一群鸟在广阔的空间中寻找食物最密集的区域。每只鸟（粒子）有自己的位置（设计参数）和速度（参数更新方向和大小）。每个粒子记住自己找到过的最好位置（pbest），同时整个种群知道全局最好位置（gbest）。每个粒子根据这三个信息——当前位置、pbest和gbest——来更新自己的速度，向更优区域移动。</p>
 
         <p>PSO对比GA的优点是：没有交叉和变异操作，实现更简单，收敛通常更快。</p>
+
+        <div class="math-equation" role="group" aria-label="PSO 速度更新公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="PSO 速度更新公式，可横向滚动">
+                <math display="block" aria-label="速度 v_i 在 t 加 1 步等于惯性项 w 乘当前速度，加个体学习项 c1 r1 乘 pbest 减当前位置，加社会学习项 c2 r2 乘 gbest 减当前位置">
+                    <mrow><msub><mi>v</mi><mi>i</mi></msub><mo>(</mo><mi>t</mi><mo>+</mo><mn>1</mn><mo>)</mo><mo>=</mo><mi>w</mi><msub><mi>v</mi><mi>i</mi></msub><mo>(</mo><mi>t</mi><mo>)</mo><mo>+</mo><msub><mi>c</mi><mn>1</mn></msub><msub><mi>r</mi><mn>1</mn></msub><mo>(</mo><msub><mi>p</mi><mtext>best</mtext></msub><mo>−</mo><msub><mi>x</mi><mi>i</mi></msub><mo>(</mo><mi>t</mi><mo>)</mo><mo>)</mo><mo>+</mo><msub><mi>c</mi><mn>2</mn></msub><msub><mi>r</mi><mn>2</mn></msub><mo>(</mo><msub><mi>g</mi><mtext>best</mtext></msub><mo>−</mo><msub><mi>x</mi><mi>i</mi></msub><mo>(</mo><mi>t</mi><mo>)</mo><mo>)</mo></mrow>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 w 为惯性权重，c₁、c₂ 为学习因子，r₁、r₂ 为 [0,1] 上的随机数，位置则按 x<sub>i</sub>(t+1) = x<sub>i</sub>(t) + v<sub>i</sub>(t+1) 更新。</p>
 
         <h3>冬虫夏草优化（CFO, 2026）</h3>
 
@@ -304,7 +397,8 @@ if __name__ == "__main__":
             <a href="index.html">📖 返回目录</a>
             <a href="28.html">下一章 →</a>
         </div>
-    </div>
+        </article>
+    </main>
 </div>
 </div>
 </body>

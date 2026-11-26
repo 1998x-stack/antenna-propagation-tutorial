@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第28章 综合项目：5G毫米波阵列设计</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -42,7 +70,12 @@
             <li><a href="28.html" class="active">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
     </div>
-    <div class="main-content">
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第28章 综合项目：5G毫米波阵列设计</h1>
+            <p class="dek">全书的收官实战：把一个 5G 毫米波（n261）室内小基站天线阵列从需求定义、单元选型、阵列综合与波束扫描，一路做到链路预算与部署权衡。</p>
+        </header>
 
         <p>大家好，我是你们的讲师。欢迎来到第28章——这门课程的最后一章，也是你们的"毕业设计"。在过去的27章中，我们从一个历史回望开始，走过了Maxwell方程组的殿堂，掌握了天线辐射的物理本质，学习了各种天线类型的设计方法，理解了电波在各种环境中的传播机制，实战演练了链路预算、仿真工具和实测分析，还展望了6G前沿和AI优化。</p>
 
@@ -155,6 +188,24 @@
 
         <p>现在，我们使用简化公式计算贴片的基本尺寸。矩形贴片天线的谐振长度和宽度由腔体模型给出：</p>
 
+        <div class="math-equation" role="group" aria-label="矩形贴片宽度公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="矩形贴片宽度公式，可横向滚动">
+                <math display="block" aria-label="贴片宽度 W 等于 c 除以 2 倍 f0 乘以根号下 2 除以 epsilon_r 加 1">
+                    <mrow><mi>W</mi><mo>=</mo><mfrac><mi>c</mi><mrow><mn>2</mn><msub><mi>f</mi><mn>0</mn></msub></mrow></mfrac><msqrt><mfrac><mn>2</mn><mrow><msub><mi>ε</mi><mi>r</mi></msub><mo>+</mo><mn>1</mn></mrow></mfrac></msqrt></mrow>
+                </math>
+            </div>
+        </div>
+
+        <div class="math-equation" role="group" aria-label="有效介电常数与谐振长度公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="有效介电常数与谐振长度公式，可横向滚动">
+                <math display="block" aria-label="有效介电常数等于 epsilon_r 加 1 的一半 加 epsilon_r 减 1 的一半乘 1 加 12h 比 W 的负二分之一次方；谐振长度 L 等于 c 除以 2 f0 根号 epsilon_eff 再减 2 倍边缘延长量">
+                    <mrow><msub><mi>ε</mi><mtext>eff</mtext></msub><mo>=</mo><mfrac><mrow><msub><mi>ε</mi><mi>r</mi></msub><mo>+</mo><mn>1</mn></mrow><mn>2</mn></mfrac><mo>+</mo><mfrac><mrow><msub><mi>ε</mi><mi>r</mi></msub><mo>−</mo><mn>1</mn></mrow><mn>2</mn></mfrac><msup><mrow><mo>(</mo><mn>1</mn><mo>+</mo><mfrac><mrow><mn>12</mn><mi>h</mi></mrow><mi>W</mi></mfrac><mo>)</mo></mrow><mrow><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></mrow></msup><mo>,</mo><mspace width="1em"/><mi>L</mi><mo>=</mo><mfrac><mi>c</mi><mrow><mn>2</mn><msub><mi>f</mi><mn>0</mn></msub><msqrt><msub><mi>ε</mi><mtext>eff</mtext></msub></msqrt></mrow></mfrac><mo>−</mo><mn>2</mn><mi mathvariant="normal">Δ</mi><mi>L</mi></mrow>
+                </math>
+            </div>
+        </div>
+
+        <p>其中边缘延长量 ΔL = 0.412h · [(ε<sub>eff</sub>+0.3)(W/h+0.264)] / [(ε<sub>eff</sub>−0.258)(W/h+0.8)]，用于修正贴片两端边缘场造成的电长度延长。</p>
+
         <pre><code>import numpy as np
 
 def patch_design(f0, epsilon_r, h):
@@ -229,7 +280,39 @@ print(f"单元间距 d = {d_x*1e3:.3f} mm (≈ 0.5λ)")</code></pre>
             <strong>经验之谈：</strong>微带贴片天线的仿真结果与理论计算之间通常有5-10%的频率偏移。原因包括：制造公差（ε_r的实际值可能有±2%的偏差）、接地板尺寸有限导致的边缘效应、以及馈线的寄生辐射。好的设计会在初始尺寸基础上做5%的频率微调裕量。
         </div>
 
-        <h2>28.3 阵列综合与波束扫描验证</h2>
+        <div class="widget">
+            <h3>小工具：矩形贴片尺寸估算</h3>
+            <p>按上述腔体模型公式，调节谐振频率与基板相对介电常数，估算贴片的宽度 W 与谐振长度 L（固定 h = 0.254 mm）。</p>
+            <label for="f28">谐振频率 f₀ = <output id="f28Out">27.93</output> GHz</label>
+            <input id="f28" type="range" min="10" max="40" step="0.05" value="27.925" aria-describedby="patchReadout">
+            <label for="er28">相对介电常数 ε_r = <output id="er28Out">3.66</output></label>
+            <input id="er28" type="range" min="2" max="12" step="0.01" value="3.66" aria-describedby="patchReadout">
+            <div class="readout" id="patchReadout" role="status" aria-live="polite"></div>
+            <p style="font-size:.82rem;color:#64748b;margin:.6rem 0 0;">教学示意：采用本章示例代码同样的腔体模型公式，取 h = 0.254 mm；实际设计需根据全波仿真与制造公差微调。</p>
+        </div>
+
+        <script>
+        (function(){
+            var f = document.getElementById('f28'), er = document.getElementById('er28');
+            var ro = document.getElementById('patchReadout');
+            var c = 3e8, h = 0.254e-3;
+            function upd(){
+                var f0 = Number(f.value) * 1e9, er0 = Number(er.value);
+                document.getElementById('f28Out').textContent = (f0 / 1e9).toFixed(2);
+                document.getElementById('er28Out').textContent = er0.toFixed(2);
+                var W = c / (2 * f0) * Math.sqrt(2 / (er0 + 1));
+                var eeff = (er0 + 1) / 2 + (er0 - 1) / 2 * Math.pow(1 + 12 * h / W, -0.5);
+                var dL = 0.412 * h * ((eeff + 0.3) * (W / h + 0.264)) / ((eeff - 0.258) * (W / h + 0.8));
+                var L = c / (2 * f0 * Math.sqrt(eeff)) - 2 * dL;
+                ro.textContent = '贴片宽度 W = ' + (W * 1e3).toFixed(3) + ' mm\n谐振长度 L = ' + (L * 1e3).toFixed(3) + ' mm\n有效介电常数 = ' + eeff.toFixed(4) + '\n边缘延长 = ' + (dL * 1e6).toFixed(1) + ' μm';
+            }
+            f.addEventListener('input', upd);
+            er.addEventListener('input', upd);
+            upd();
+        })();
+        </script>
+
+        <h2 id="s28-3">28.3 阵列综合与波束扫描验证</h2>
 
         <p>单个贴片增益约6.5 dBi，距目标20 dBi还差约13.5 dB。为了达到目标增益，我们需要组成阵列。阵列增益的粗略估算为10log₁₀(N)，其中N是单元数——要获得13.5 dB的阵列增益，需要N > 22.4。考虑到馈电网络损耗（约1-2 dB）和扫描损耗（扫描到45°时增益下降约cosθ），实际需要的单元数更多。</p>
 
@@ -243,9 +326,38 @@ print(f"单元间距 d = {d_x*1e3:.3f} mm (≈ 0.5λ)")</code></pre>
             <li><strong>相位配置：</strong>渐进相位差实现波束扫描</li>
         </ul>
 
+        <figure>
+            <svg role="img" aria-labelledby="fig28-array-title fig28-array-desc" viewBox="0 0 800 320">
+                <title id="fig28-array-title">8×8 平面阵列栅格布局</title>
+                <desc id="fig28-array-desc">8 行 8 列的贴片单元以半个波长间距排列成方形栅格，标注单元间距 d 与整体孔径。</desc>
+                <rect x="0" y="0" width="800" height="320" fill="#fbfdff"/>
+                <g fill="#bfdbfe" stroke="#1e3a8a" stroke-width="1.5">
+                    <rect x="120" y="60" width="40" height="40"/><rect x="180" y="60" width="40" height="40"/><rect x="240" y="60" width="40" height="40"/><rect x="300" y="60" width="40" height="40"/><rect x="360" y="60" width="40" height="40"/><rect x="420" y="60" width="40" height="40"/><rect x="480" y="60" width="40" height="40"/><rect x="540" y="60" width="40" height="40"/>
+                    <rect x="120" y="120" width="40" height="40"/><rect x="180" y="120" width="40" height="40"/><rect x="240" y="120" width="40" height="40"/><rect x="300" y="120" width="40" height="40"/><rect x="360" y="120" width="40" height="40"/><rect x="420" y="120" width="40" height="40"/><rect x="480" y="120" width="40" height="40"/><rect x="540" y="120" width="40" height="40"/>
+                    <rect x="120" y="180" width="40" height="40"/><rect x="180" y="180" width="40" height="40"/><rect x="240" y="180" width="40" height="40"/><rect x="300" y="180" width="40" height="40"/><rect x="360" y="180" width="40" height="40"/><rect x="420" y="180" width="40" height="40"/><rect x="480" y="180" width="40" height="40"/><rect x="540" y="180" width="40" height="40"/>
+                </g>
+                <text x="130" y="255" font-size="14" fill="#475569">（示意：仅绘出 3 行代表 8 行，行间距相同）</text>
+                <line x1="160" y1="118" x2="220" y2="118" stroke="#d06d4d" stroke-width="2"/>
+                <text x="140" y="112" font-size="13" fill="#d06d4d">d ≈ 0.5λ₀ ≈ 5.36 mm</text>
+                <line x1="120" y1="290" x2="580" y2="290" stroke="#147f80" stroke-width="2"/>
+                <text x="290" y="310" font-size="13" fill="#147f80">8 × d = 42.9 mm</text>
+            </svg>
+            <figcaption><b>图 28-1　8×8 平面阵列的栅格布局。</b>单元间距取 0.5λ₀（约 5.36 mm），在 ±45° 扫描范围内避免栅瓣；8 单元的总宽度约 42.9 mm，在 100×100 mm 的尺寸限制内。为便于阅读仅绘出 3 行，行间距与列间距相同。</figcaption>
+        </figure>
+
         <p>Taylor -25 dB分布是一种常用的低副瓣幅度加权方案。它在主瓣附近保持等副瓣电平（-25 dB），在主瓣远处副瓣逐渐降低。与切比雪夫加权相比，Taylor分布的边缘单元激励幅度下降更平缓，馈电效率更高。</p>
 
         <p>对于波束扫描，每个单元的相位配置为：</p>
+
+        <div class="math-equation" role="group" aria-label="均匀线阵的阵因子">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="均匀线阵阵因子，可横向滚动">
+                <math display="block" aria-label="阵因子 AF theta 等于 n 从 1 到 N 求和，第 n 个单元的权 w_n 乘以 e 的 j n 倍 kd sin theta 加 beta 次方">
+                    <mrow><mi>AF</mi><mo>(</mo><mi>θ</mi><mo>)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>w</mi><mi>n</mi></msub><msup><mi>e</mi><mrow><mi>j</mi><mi>n</mi><mo>(</mo><mi>k</mi><mi>d</mi><mi>sin</mi><mi>θ</mi><mo>+</mo><mi>β</mi><mo>)</mo></mrow></msup></mrow>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 w<sub>n</sub> 为幅度加权系数，k = 2π/λ 为波数，d 为单元间距，β 为相邻单元之间的渐进相位差——改变 β 即可把主瓣指向任意扫描角。</p>
 
         <pre><code>import numpy as np
 
@@ -358,6 +470,14 @@ for theta_s in [0, 30, 45]:
 
         <p>整个阵列的<strong>有效全向辐射功率（EIRP）</strong>计算如下：</p>
 
+        <div class="math-equation" role="group" aria-label="EIRP 计算">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="EIRP 计算，可横向滚动">
+                <math display="block" aria-label="EIRP 等于单元输入功率加 10 log N 加阵列增益减馈电损耗">
+                    <mrow><mi>EIRP</mi><mo>=</mo><msub><mi>P</mi><mtext>in,elem</mtext></msub><mo>+</mo><mn>10</mn><msub><mi>log</mi><mn>10</mn></msub><mo>(</mo><mi>N</mi><mo>)</mo><mo>+</mo><msub><mi>G</mi><mtext>array</mtext></msub><mo>−</mo><msub><mi>L</mi><mtext>feed</mtext></msub></mrow>
+                </math>
+            </div>
+        </div>
+
         <ul>
             <li>单元输入功率：P_in_elem = 18 dBm</li>
             <li>单元数：N = 64 → 10log₁₀(64) = 18.1 dB</li>
@@ -368,6 +488,14 @@ for theta_s in [0, 30, 45]:
         <p>EIRP = 18 + 18.1 + 21.3 - 2 = <strong>55.4 dBm</strong></p>
 
         <p>现在计算接收端。在28 GHz、200米距离下，自由空间路径损耗为：</p>
+
+        <div class="math-equation" role="group" aria-label="自由空间路径损耗">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="自由空间路径损耗，可横向滚动">
+                <math display="block" aria-label="自由空间路径损耗 FSL 等于 20 log d 加 20 log f 加 20 log 4π 除以 c">
+                    <mrow><mi>FSL</mi><mo>=</mo><mn>20</mn><msub><mi>log</mi><mn>10</mn></msub><mo>(</mo><mi>d</mi><mo>)</mo><mo>+</mo><mn>20</mn><msub><mi>log</mi><mn>10</mn></msub><mo>(</mo><mi>f</mi><mo>)</mo><mo>+</mo><mn>20</mn><msub><mi>log</mi><mn>10</mn></msub><mrow><mo>(</mo><mfrac><mrow><mn>4</mn><mi>π</mi></mrow><mi>c</mi></mfrac><mo>)</mo></mrow></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>FSL = 20log₁₀(d) + 20log₁₀(f) + 20log₁₀(4π/c) = 107.4 dB</p>
 
@@ -448,7 +576,8 @@ for theta_s in [0, 30, 45]:
             <a href="index.html">📖 返回目录</a>
             <a href="javascript:void(0)">下一章 →</a>
         </div>
-    </div>
+        </article>
+    </main>
 </div>
 </div>
 </body>
