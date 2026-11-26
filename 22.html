@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第22章 电离层电波传播</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -42,9 +70,14 @@
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
     </div>
-    <div class="main-content">
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第22章 电离层电波传播</h1>
+            <p class="dek">电离层是一座免费的全球通信中继站，也是一面会随机漂移的镜子。本章从 D/E/F 分层与等离子体频率讲到 MUF/LUF/FOT 预测、电离层闪烁对 GNSS 的影响，并串起短波天波链路设计。</p>
+        </header>
 
-        <h2>22.1 电离层的形成与分层结构</h2>
+        <h2 id="s22-1">22.1 电离层的形成与分层结构</h2>
 
         <p>大家好，我是你们的讲师。你是否注意到一个日常现象：白天收听AM中波广播时，本地电台很清楚，但到了夜里，你却能收到几百甚至上千公里外的远方电台？这个看似平凡的现象背后，隐藏着一个关于<strong>电离层</strong>的神奇故事。</p>
 
@@ -102,13 +135,39 @@
             </tr>
         </table>
 
-        <h2>22.2 电离层的电波反射与折射</h2>
+        <figure>
+            <svg role="img" aria-labelledby="fig22-layers-title fig22-layers-desc" viewBox="0 0 800 340">
+                <title id="fig22-layers-title">电离层分层与短波反射、穿透</title>
+                <desc id="fig22-layers-desc">左侧标出 D、E、F1、F2 层的高度范围；一条斜射短波在 F2 层被折射回地面形成天波，另一条频率更高的电波则穿透电离层进入太空。</desc>
+                <rect x="0" y="0" width="800" height="340" fill="#fbfdff"/>
+                <g font-size="13" fill="#475569">
+                    <rect x="40" y="270" width="720" height="50" fill="#fef3c7"/><text x="48" y="298">D 层 60–90 km（白天吸收）</text>
+                    <rect x="40" y="210" width="720" height="60" fill="#fde68a"/><text x="48" y="244">E 层 90–130 km</text>
+                    <rect x="40" y="150" width="720" height="60" fill="#fcd34d"/><text x="48" y="184">F1 层 130–210 km</text>
+                    <rect x="40" y="60" width="720" height="90" fill="#fbbf24"/><text x="48" y="104">F2 层 250–400 km（主反射层）</text>
+                    <line x1="40" y1="320" x2="760" y2="320" stroke="#8a6d3b" stroke-width="3"/><text x="700" y="338" fill="#8a6d3b">地面</text>
+                </g>
+                <path d="M120 320 L 360 150 Q 400 132 440 150 L 680 320" fill="none" stroke="#147f80" stroke-width="3"/>
+                <text x="360" y="118" font-size="14" fill="#147f80">天波（斜射反射）</text>
+                <path d="M240 320 L 470 60 L 700 20" fill="none" stroke="#d06d4d" stroke-width="3" stroke-dasharray="8 5"/>
+                <text x="480" y="44" font-size="14" fill="#d06d4d">高于 MUF 则穿透</text>
+            </svg>
+            <figcaption><b>图 22-1　电离层分层与反射几何。</b>电子密度随高度先增后减，F₂ 层峰值最高。低于等离子体频率（且低于 MUF）的电波被折射回地面；频率过高则穿透电离层。分层高度为典型日光条件下的量级，夜间 D、E 层基本消失。</figcaption>
+        </figure>
+
+        <h2 id="s22-2">22.2 电离层的电波反射与折射</h2>
 
         <p>为什么电离层能反射无线电波？关键参数是<strong>等离子体频率（Plasma Frequency）</strong>：</p>
 
-        <pre><code>f_p = 9 · √N_e   (Hz)
+        <div class="math-equation" role="group" aria-label="等离子体频率的定义">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="等离子体频率定义，可横向滚动">
+                <math display="block" aria-label="等离子体频率 f_p 等于 9 乘以根号 N_e，其中 N_e 为电子密度，单位每立方米">
+                    <mrow><msub><mi>f</mi><mi>p</mi></msub><mo>=</mo><mn>9</mn><msqrt><msub><mi>N</mi><mi>e</mi></msub></msqrt><mspace width="1em"/><mo>[</mo><mi>Hz</mi><mo>]</mo></mrow>
+                </math>
+            </div>
+        </div>
 
-其中 N_e 是电子密度，单位 m⁻³</code></pre>
+        <p>式中 N<sub>e</sub> 是电子密度，单位 m⁻³。</p>
 
         <p>当电波频率低于等离子体频率时，电波无法穿透电离层，被<strong>反射</strong>回地面。当频率高于等离子体频率时，电波会<strong>穿透</strong>电离层进入太空。对于一个电子密度为10¹² e⁻/m³的F₂层来说，其等离子体频率约为9 MHz。这也是为什么我们日常短波通信通常使用3-30 MHz的原因——低于3 MHz会被D层大量吸收，高于30 MHz则会穿透电离层而无法反射回地面。</p>
 
@@ -118,9 +177,15 @@
 
         <p><strong>正割定律（Secant Law）</strong>：当电波斜射向电离层时，等效于垂直入射路径被"拉伸"了。斜射时能被反射的最高频率（即MUF）为：</p>
 
-        <pre><code>f_MUF = f₀F₂ · sec(φ)
+        <div class="math-equation" role="group" aria-label="正割定律">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="正割定律，可横向滚动">
+                <math display="block" aria-label="最大可用频率 f_MUF 等于临界频率 f0F2 乘以斜射角的 sec">
+                    <mrow><msub><mi>f</mi><mtext>MUF</mtext></msub><mo>=</mo><msub><mi>f</mi><mn>0</mn></msub><msub><mi>F</mi><mn>2</mn></msub><mo>·</mo><mi>sec</mi><mspace width="0.25em"/><mi>φ</mi></mrow>
+                </math>
+            </div>
+        </div>
 
-其中 φ 是电波在电离层反射点的入射角（相对于法线）</code></pre>
+        <p>式中 φ 是电波在电离层反射点的入射角（相对于法线）。</p>
 
         <p>这意味着，同样是面对f₀F₂=9 MHz的电离层，垂直入射只能反射9 MHz以下的信号；但以60°角斜射时，可以反射18 MHz以下的信号！这就是为什么短波远程通信（需要低入射角）可以比本地通信（需要高入射角）使用更高频率的原因。</p>
 
@@ -134,7 +199,39 @@
             <strong>实测经验：</strong>如果你是一名短波爱好者，当你和远距离电台通联信号良好，但和100-300公里范围内的电台却通不上时——你很可能处于跃迁区内。解决方法是：更换频率（降低频率尝试NVIS模式），或更换天线（使用高仰角天线）。
         </div>
 
-        <h2>22.3 MUF与LUF预测</h2>
+        <div class="widget">
+            <h3>小工具：由临界频率估算 MUF / FOT</h3>
+            <p>给定 F₂ 层临界频率 f₀F₂ 与通信距离，按照本章 Python 示例同样的几何与正割定律估算 MUF 与 FOT（FOT = 0.85×MUF）。</p>
+            <label for="f0">f₀F₂ = <output id="f0Out">8.0</output> MHz</label>
+            <input id="f0" type="range" min="2" max="14" step="0.5" value="8" aria-describedby="mufReadout">
+            <label for="dist">通信距离 = <output id="distOut">2000</output> km</label>
+            <input id="dist" type="range" min="100" max="4000" step="50" value="2000" aria-describedby="mufReadout">
+            <div class="readout" id="mufReadout" role="status" aria-live="polite"></div>
+            <p style="font-size:.82rem;color:#64748b;margin:.6rem 0 0;">教学示意：取地球半径 6370 km、F₂ 层虚拟高度 300 km。实际 MUF 预测（ITU-R P.533）还需修正地磁纬度、季节与吸收损耗。</p>
+        </div>
+
+        <script>
+        (function(){
+            var f0 = document.getElementById('f0'), dist = document.getElementById('dist');
+            var f0Out = document.getElementById('f0Out'), distOut = document.getElementById('distOut');
+            var ro = document.getElementById('mufReadout');
+            var Re = 6370, hF2 = 300;
+            function upd(){
+                var f = Number(f0.value), d = Number(dist.value);
+                f0Out.textContent = f.toFixed(1);
+                distOut.textContent = String(d);
+                var theta = d / Re;
+                var phi = Math.atan(Re * Math.sin(theta) / (Re + hF2 - Re * Math.cos(theta)));
+                var muf = f / Math.cos(phi);
+                ro.textContent = '入射角 φ ≈ ' + (phi * 180 / Math.PI).toFixed(1) + '°\nMUF = ' + muf.toFixed(1) + ' MHz\nFOT = ' + (0.85 * muf).toFixed(1) + ' MHz';
+            }
+            f0.addEventListener('input', upd);
+            dist.addEventListener('input', upd);
+            upd();
+        })();
+        </script>
+
+        <h2 id="s22-3">22.3 MUF与LUF预测</h2>
 
         <p>短波通信频率的选择就像"金发姑娘原则"——不能太高（会穿透电离层），不能太低（会被D层吸收）。因此工程师们为每条短波通信链路定义了两个关键频率：</p>
 
@@ -242,16 +339,15 @@ print(f"FOT = {FOT_min:.1f} MHz")
         <h3>完整HF链路预算</h3>
 
         <p>短波链路预算的要素包括：</p>
-        <pre><code>P_rx = P_tx + G_tx + G_rx - L_fs - L_abs - L_iono - M_fade
+        <div class="math-equation" role="group" aria-label="短波天波链路预算方程">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="短波链路预算方程，可横向滚动">
+                <math display="block" aria-label="接收功率 P_rx 等于发射功率加发射天线增益加接收天线增益减自由空间损耗减 D 层吸收损耗减电离层反射损耗减衰落余量">
+                    <mrow><msub><mi>P</mi><mtext>rx</mtext></msub><mo>=</mo><msub><mi>P</mi><mtext>tx</mtext></msub><mo>+</mo><msub><mi>G</mi><mtext>tx</mtext></msub><mo>+</mo><msub><mi>G</mi><mtext>rx</mtext></msub><mo>−</mo><msub><mi>L</mi><mtext>fs</mtext></msub><mo>−</mo><msub><mi>L</mi><mtext>abs</mtext></msub><mo>−</mo><msub><mi>L</mi><mtext>iono</mtext></msub><mo>−</mo><msub><mi>M</mi><mtext>fade</mtext></msub></mrow>
+                </math>
+            </div>
+        </div>
 
-其中:
-P_tx   : 发射功率 (dBW 或 dBm)
-G_tx   : 发射天线增益 (dBi)
-G_rx   : 接收天线增益 (dBi)
-L_fs   : 自由空间损耗 (dB) — 按实际传播路径长度计算
-L_abs  : D层吸收损耗 (dB) — 白天大、夜间小
-L_iono : 电离层反射损耗 (dB) — 每次反射约1-3 dB
-M_fade : 衰落余量 (dB) — 推荐 10-15 dB</code></pre>
+        <p>式中 L<sub>fs</sub> 为自由空间损耗（按实际传播路径长度计算），L<sub>abs</sub> 为 D 层吸收损耗（白天大、夜间小），L<sub>iono</sub> 为电离层反射损耗（每次反射约 1–3 dB），M<sub>fade</sub> 为衰落余量（推荐 10–15 dB）。</p>
 
         <p>一个好的工程准则是：接收信号中值应比接收机的最低灵敏度高<strong>20 dB以上</strong>（含衰落余量），以确保99%以上的时间可用。</p>
 
@@ -299,7 +395,8 @@ M_fade : 衰落余量 (dB) — 推荐 10-15 dB</code></pre>
             <a href="index.html">📖 返回目录</a>
             <a href="23.html">下一章 →</a>
         </div>
-    </div>
+    </article>
+    </main>
 </div>
 </div>
 </body>
