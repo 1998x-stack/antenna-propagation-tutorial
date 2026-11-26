@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第26章 6G天线与传播技术前沿</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -42,7 +70,12 @@
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
     </div>
-    <div class="main-content">
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第26章 6G天线与传播技术前沿</h1>
+            <p class="dek">面向 2030 年的无线世界：本章预览超大尺度阵列（ELDAA/xMIMO）带来的近场革命、Pinching 天线、通信感知一体化（ISAC），以及太赫兹通信的天线与传播挑战。</p>
+        </header>
 
         <p>大家好，我是你们的讲师。恭喜大家一路走到第26章——我们已经穿越了天线理论、电波传播、阵列综合、仿真工具和实测案例的广阔领域。现在，是时候把目光投向最前沿了。</p>
 
@@ -128,6 +161,14 @@
 
         <p>回忆一下第7章学过的<strong>Fraunhofer距离（远场距离）</strong>：</p>
 
+        <div class="math-equation" role="group" aria-label="Fraunhofer 远场距离">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="Fraunhofer 远场距离，可横向滚动">
+                <math display="block" aria-label="Fraunhofer 距离 d_f 等于 2 倍 D 平方除以波长 lambda">
+                    <mrow><msub><mi>d</mi><mi>f</mi></msub><mo>=</mo><mfrac><mrow><mn>2</mn><msup><mi>D</mi><mn>2</mn></msup></mrow><mi>λ</mi></mfrac><mo>,</mo><mspace width="1em"/><mi>λ</mi><mo>=</mo><mfrac><mi>c</mi><mi>f</mi></mfrac></mrow>
+                </math>
+            </div>
+        </div>
+
         <pre><code>import numpy as np
 
 def fraunhofer_distance(D, f):
@@ -161,6 +202,28 @@ print(f"Fraunhofer距离: {d_f_6g2:.1f} m")</code></pre>
 
         <p><strong>波束聚焦 vs 波束转向。</strong>在远场中，我们只能控制波束的<em>方向</em>（波束转向，beam steering）。而在近场中，我们可以同时控制波束的<em>方向和距离</em>——这就是波束聚焦（beam focusing）。你在不同距离上可以形成不同的波束，这为<strong>空间复用</strong>增加了一个全新的维度。</p>
 
+        <figure>
+            <svg role="img" aria-labelledby="fig26-nf-title fig26-nf-desc" viewBox="0 0 800 300">
+                <title id="fig26-nf-title">远场波束转向与近场波束聚焦</title>
+                <desc id="fig26-nf-desc">左图阵列在远场只能控制波束方向，等相位面为平面；右图阵列在近场可同时控制方向与距离，让球面波前聚焦到特定位置。</desc>
+                <rect x="0" y="0" width="800" height="300" fill="#fbfdff"/>
+                <g stroke="#1e3a8a" stroke-width="3"><line x1="80" y1="100" x2="80" y2="200"/></g>
+                <g stroke="#147f80" stroke-width="2" fill="none">
+                    <line x1="80" y1="150" x2="330" y2="90"/><line x1="80" y1="150" x2="330" y2="210"/>
+                </g>
+                <line x1="200" y1="40" x2="200" y2="260" stroke="#cbd5e1" stroke-dasharray="6 4"/>
+                <text x="140" y="130" font-size="13" fill="#147f80">平面波前</text>
+                <text x="90" y="285" font-size="13" fill="#475569">远场：只能控方向</text>
+                <g stroke="#d06d4d" stroke-width="3"><line x1="520" y1="100" x2="520" y2="200"/></g>
+                <path d="M520 100 Q 620 150 700 170" fill="none" stroke="#d06d4d" stroke-width="2"/>
+                <path d="M520 200 Q 620 150 700 170" fill="none" stroke="#d06d4d" stroke-width="2"/>
+                <circle cx="700" cy="170" r="7" fill="#d06d4d"/>
+                <text x="640" y="150" font-size="13" fill="#d06d4d">球面波前聚焦</text>
+                <text x="530" y="285" font-size="13" fill="#475569">近场：可同时控方向与距离</text>
+            </svg>
+            <figcaption><b>图 26-1　远场波束转向与近场波束聚焦。</b>远场中阵列只能控制波束方向；当用户落入近场区，阵列可以同时控制方向和距离，把能量“聚焦”到特定位置，为空间复用增加一个维度。示意图。</figcaption>
+        </figure>
+
         <p>更妙的是，研究人员发现近场实际上可以<strong>增加</strong>系统的自由度（DOF）。我给你们讲一个故事：</p>
 
         <p>2021年，几个意大利和瑞典的研究者在IEEE TSP上发表了一篇论文，题目很不起眼——"近场信道的自由度增加"。他们严格证明了一个反直觉的结论：对于同样的阵列孔径，球面波前相对于平面波前提供了更多的空间自由度。原因是球面波前的相位曲率携带了距离信息——这相当于从2D（角度域）扩展到了3D（角度-距离域）。起初审稿人都不太相信——"近场不是一直被认为是个麻烦事吗？"但数学证明无懈可击。今天，近场MIMO已经成为一个独立的研究子领域，每年有数百篇论文发表。</p>
@@ -173,7 +236,36 @@ print(f"Fraunhofer距离: {d_f_6g2:.1f} m")</code></pre>
 
         <p>ELDAA的信道建模至少需要处理以下四个新的复杂性：球面波前（而非平面波）、空间非平稳性、单元间互耦（大阵列中尤其严重）、以及双移动性（基站和用户都可能高速移动）。这是一个正在积极研究中的开放问题。</p>
 
-        <h2>26.3 Pinching天线系统</h2>
+        <div class="widget">
+            <h3>小工具：Fraunhofer 距离估算</h3>
+            <p>选择阵列孔径 D 与频率，看看远场边界胀到多远——体会 6G 大型阵列为何把用户“困”在近场里。</p>
+            <label for="D26">阵列孔径 D = <output id="D26Out">1.0</output> m</label>
+            <input id="D26" type="range" min="0.1" max="3" step="0.1" value="1" aria-describedby="nf26Readout">
+            <label for="f26">频率 = <output id="f26Out">30</output> GHz</label>
+            <input id="f26" type="range" min="1" max="300" step="1" value="30" aria-describedby="nf26Readout">
+            <div class="readout" id="nf26Readout" role="status" aria-live="polite"></div>
+            <p style="font-size:.82rem;color:#64748b;margin:.6rem 0 0;">教学示意：取 d_f = 2D²/λ，λ = c/f。</p>
+        </div>
+
+        <script>
+        (function(){
+            var D = document.getElementById('D26'), f = document.getElementById('f26');
+            var ro = document.getElementById('nf26Readout');
+            function upd(){
+                var d = Number(D.value), fh = Number(f.value) * 1e9;
+                document.getElementById('D26Out').textContent = d.toFixed(1);
+                document.getElementById('f26Out').textContent = String(Number(f.value));
+                var lam = 3e8 / fh;
+                var df = 2 * d * d / lam;
+                ro.textContent = '波长 λ ≈ ' + (lam * 1000).toFixed(2) + ' mm\nFraunhofer 距离 ≈ ' + (df >= 1000 ? (df / 1000).toFixed(2) + ' km' : df.toFixed(1) + ' m');
+            }
+            D.addEventListener('input', upd);
+            f.addEventListener('input', upd);
+            upd();
+        })();
+        </script>
+
+        <h2 id="s26-3">26.3 Pinching天线系统</h2>
 
         <p>在2022年，日本运营商NTT DOCOMO展示了一种令人好奇的天线概念——你拿一根看起来像普通电缆的东西，用手指在某处"捏"一下，电磁波就从那里辐射出来了。这就是<strong>Pinching天线</strong>（"捏合"天线）的基本想法。</p>
 
@@ -211,6 +303,16 @@ print(f"Fraunhofer距离: {d_f_6g2:.1f} m")</code></pre>
         </ul>
 
         <p>传播建模方面，ISAC需要同时描述<strong>通信信道</strong>和<strong>目标散射</strong>。这意味着传播模型需要扩展到包含目标的雷达散射截面（RCS）、微多普勒特征、以及杂波统计。传统上，通信信道建模和雷达目标建模是两个几乎不交流的领域——ISAC正在推动它们的融合。</p>
+
+        <div class="math-equation" role="group" aria-label="雷达距离分辨率">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="雷达距离分辨率，可横向滚动">
+                <math display="block" aria-label="距离分辨率 Delta R 等于光速 c 除以 2 倍带宽 B">
+                    <mrow><mi mathvariant="normal">Δ</mi><mi>R</mi><mo>=</mo><mfrac><mi>c</mi><mrow><mn>2</mn><mi>B</mi></mrow></mfrac></mrow>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 c 为光速，B 为信号带宽；要实现厘米级距离分辨率，需要 GHz 量级的带宽。</p>
 
         <p>波形设计上，OFDM成为了一个自然的候选，因为5G/NR已经基于OFDM。OFDM天然支持频域处理，可以通过对通信符号进行距离-多普勒处理来提取感知信息。一个典型的ISAC接收机结构是：通信接收机提取比特，同时雷达处理模块从相同的OFDM符号中计算距离-多普勒图。</p>
 
@@ -287,7 +389,7 @@ print(f"Fraunhofer距离: {d_f_6g2:.1f} m")</code></pre>
         <hr style="margin: 30px 0; border: 0; border-top: 2px dashed #fcd34d;">
 
         <p style="font-size: 1.1rem; line-height: 1.8;">
-            本章我们预览了6G時代天线与传播技术的5个前沿方向。从ELDAA超越Fraunhofer距离带来的近场波束聚焦革命，到Pinching天线用介质波导"捏"出可编程辐射点，从ISAC让基站既能说话又能"看"，到THz频段极端的传播限制和天线挑战——每一个方向都在重新定义我们这门学科的传统边界。
+            本章我们预览了6G时代天线与传播技术的5个前沿方向。从ELDAA超越Fraunhofer距离带来的近场波束聚焦革命，到Pinching天线用介质波导"捏"出可编程辐射点，从ISAC让基站既能说话又能"看"，到THz频段极端的传播限制和天线挑战——每一个方向都在重新定义我们这门学科的传统边界。
         </p>
 
         <p style="font-size: 1.1rem; line-height: 1.8;">
@@ -299,7 +401,8 @@ print(f"Fraunhofer距离: {d_f_6g2:.1f} m")</code></pre>
             <a href="index.html">📖 返回目录</a>
             <a href="27.html">下一章 →</a>
         </div>
-    </div>
+        </article>
+    </main>
 </div>
 </div>
 </body>

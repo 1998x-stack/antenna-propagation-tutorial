@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第25章 天线与传播实测案例分析</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -42,9 +70,14 @@
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
     </div>
-    <div class="main-content">
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第25章 天线与传播实测案例分析</h1>
+            <p class="dek">四个真实案例把理论落地：基站天线故障与 PIM 诊断、短波天波实测与 VOACAP 对比、28 GHz 室外到室内信道测量、以及 16 单元相控阵的 REV 校准。</p>
+        </header>
 
-        <h2>25.1 基站天线实测与故障诊断</h2>
+        <h2 id="s25-1">25.1 基站天线实测与故障诊断</h2>
 
         <p>大家好，我是你们的讲师。理论和仿真给予了我们信心，但无线工程师最信任的工具永远是——<strong>测量</strong>。这一章我们将通过几个真实的实测案例，看看天线与电波传播在实际系统中是如何表现，以及当"理论失效"时，工程师是如何一步步定位问题的。</p>
 
@@ -55,7 +88,33 @@
 
         <p>测量结果显示：距离天线端口约1.2米处出现了一个明显的反射尖峰。工程师沿着馈线检查到那个位置——发现<strong>天线罩（radome）的密封胶条已经老化开裂，雨水渗入导致内部电缆接头处腐蚀</strong>。腐蚀的接触面形成了一个整流结（rectifying junction）——这不仅增加了插入损耗，还导致了另一个更加隐蔽的问题：<strong>无源交调（Passive Intermodulation, PIM）</strong>。</p>
 
+        <figure>
+            <svg role="img" aria-labelledby="fig25-fdr-title fig25-fdr-desc" viewBox="0 0 800 300">
+                <title id="fig25-fdr-title">频域反射测量的距离域回波</title>
+                <desc id="fig25-fdr-desc">横轴为沿馈线的距离，纵轴为回波幅度；在天线端口处有正常小反射，在约 1.2 米处出现一个明显的反射尖峰，标明为故障点。</desc>
+                <rect x="0" y="0" width="800" height="300" fill="#fbfdff"/>
+                <line x1="70" y1="240" x2="760" y2="240" stroke="#64748b" stroke-width="1.5"/>
+                <line x1="70" y1="40" x2="70" y2="240" stroke="#64748b" stroke-width="1.5"/>
+                <text x="360" y="275" font-size="14" fill="#475569">距天线端口的距离 (m)</text>
+                <text x="14" y="150" font-size="14" fill="#475569" transform="rotate(-90 24 150)">回波幅度</text>
+                <polyline points="70,230 160,220 250,226 340,224 430,228 520,222 610,226 700,224 760,228" fill="none" stroke="#147f80" stroke-width="2"/>
+                <polyline points="250,226 300,120 340,224" fill="none" stroke="#d06d4d" stroke-width="3"/>
+                <line x1="300" y1="40" x2="300" y2="240" stroke="#d06d4d" stroke-dasharray="6 4"/>
+                <text x="260" y="32" font-size="14" fill="#d06d4d">故障点 ≈ 1.2 m</text>
+                <text x="80" y="210" font-size="13" fill="#147f80">接头/天线正常小反射</text>
+            </svg>
+            <figcaption><b>图 25-1　FDR 把频域反射变换到距离域定位故障。</b>Site Master 在目标频段扫频测量反射，经逆傅里叶变换得到回波随距离的分布；约 1.2 m 处的反射尖峰指向老化的天线罩密封处。曲线为说明性示意，非实测原始数据。</figcaption>
+        </figure>
+
         <p><strong>PIM——看不见的杀手：</strong>当两个或多个大功率载波信号通过一个非线性接触面（如锈蚀的螺栓连接、松动的金属-金属界面）时，会产生混合频率分量——即交调产物。在基站场景中，发射频率（如1930 MHz和1990 MHz）的三阶交调IM3（2×1930 - 1990 = 1870 MHz）恰好落在接收频段内：</p>
+
+        <div class="math-equation" role="group" aria-label="三阶交调频率">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="三阶交调频率，可横向滚动">
+                <math display="block" aria-label="三阶交调 f_IM3 等于 2 倍 f1 减 f2，例 2 乘 1930 减 1990 等于 1870 兆赫兹">
+                    <mrow><msub><mi>f</mi><mtext>IM3</mtext></msub><mo>=</mo><mn>2</mn><msub><mi>f</mi><mn>1</mn></msub><mo>−</mo><msub><mi>f</mi><mn>2</mn></msub><mo>=</mo><mn>2</mn><mo>×</mo><mn>1930</mn><mo>−</mo><mn>1990</mn><mo>=</mo><mn>1870</mn><mspace width="0.3em"/><mi>MHz</mi></mrow>
+                </math>
+            </div>
+        </div>
 
         <div class="warning">
             <strong>一个真实的PIM惨剧：</strong>某运营商曾有一个繁忙的市区基站，尽管设备一切正常，但接收机灵敏度突降20 dB——相当于整个扇区的覆盖半径缩小了约68%（因为覆盖半径正比于灵敏度的1/n次方，n≈3.5）。工程师花了三天时间排查：更换了RRU、光纤、基带板——问题依旧。最终发现元凶是天线抱箍上的一个锈蚀的螺栓。这个螺栓在强烈的射频场中产生了约为-110 dBc的PIM产物。虽然-110 dBc听起来很小，但当发射功率为40 dBm（10 W）时，-110 dBc对应的PIM功率为-70 dBm——而接收机的噪声基底约为-105 dBm。这意味着PIM比噪声还高出35 dB，直接淹没了弱信号！解决方案仅仅是：换上新的不锈钢螺栓并涂抹抗氧化油脂，重新以正确的扭矩拧紧。PIM瞬间降到-155 dBc以下，接收机灵敏度完全恢复。
@@ -71,7 +130,38 @@
             <li>PIM测试应作为基站验收的必检项目——这不是"可选"的</li>
         </ul>
 
-        <h2>25.2 短波天波传播实测</h2>
+        <div class="widget">
+            <h3>小工具：三阶交调频率速算</h3>
+            <p>给定两个下行载波 f₁、f₂，计算它们的三阶交调产物 2f₁−f₂ 与 2f₂−f₁，判断是否落入接收频段。</p>
+            <label for="f1p">载波 f₁ = <output id="f1pOut">1930</output> MHz</label>
+            <input id="f1p" type="range" min="1800" max="2200" step="10" value="1930" aria-describedby="pimReadout">
+            <label for="f2p">载波 f₂ = <output id="f2pOut">1990</output> MHz</label>
+            <input id="f2p" type="range" min="1800" max="2200" step="10" value="1990" aria-describedby="pimReadout">
+            <div class="readout" id="pimReadout" role="status" aria-live="polite"></div>
+            <p style="font-size:.82rem;color:#64748b;margin:.6rem 0 0;">教学示意：此处按本例的频段约定（接收频段 1850–1990 MHz）判别；实际运营商频段以当地分配为准。</p>
+        </div>
+
+        <script>
+        (function(){
+            var a = document.getElementById('f1p'), b = document.getElementById('f2p');
+            var ro = document.getElementById('pimReadout');
+            function upd(){
+                var f1 = Number(a.value), f2 = Number(b.value);
+                document.getElementById('f1pOut').textContent = String(f1);
+                document.getElementById('f2pOut').textContent = String(f2);
+                var im3lo = 2 * Math.min(f1, f2) - Math.max(f1, f2);
+                var im3hi = 2 * Math.max(f1, f2) - Math.min(f1, f2);
+                var inBand = function(v){ return v >= 1850 && v <= 1990; };
+                ro.textContent = '2f₁−f₂ = ' + im3lo + ' MHz' + (inBand(im3lo) ? '（落入接收频段⚠）' : '') +
+                    '\n2f₂−f₁ = ' + im3hi + ' MHz' + (inBand(im3hi) ? '（落入接收频段⚠）' : '');
+            }
+            a.addEventListener('input', upd);
+            b.addEventListener('input', upd);
+            upd();
+        })();
+        </script>
+
+        <h2 id="s25-2">25.2 短波天波传播实测</h2>
 
         <p><strong>案例：7 MHz（40米波段）北京-新加坡通信实验</strong></p>
         <p>短波通信虽然已有百年历史，但天波传播的实时测量仍然充满了迷人的不确定性。让我们来看一次真实的实验：从北京（北纬39.9°）到新加坡（北纬1.3°）的短波链路，距离约4,500公里。实验目的是验证VOACAP（Voice of America Coverage Analysis Program）预测模型在低纬度路径上的准确性。</p>
@@ -180,6 +270,16 @@
         </ul>
 
         <p><strong>基于簇的信道模型（Cluster-based Channel Model）：</strong>测量数据的后处理采用了基于SAGE（Space-Alternating Generalized Expectation-maximization）算法提取信道参数。结果清楚地显示，信道由4-6个"簇"（cluster）组成——每个簇对应一组来自同一物理反射体的多径分量（MPC）。信号从窗外进入后，在房间内形成多次反射（墙壁→天花板→地板），产生不同的时延和角度扩展。</p>
+
+        <div class="math-equation" role="group" aria-label="路径损耗指数模型">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="路径损耗指数模型，可横向滚动">
+                <math display="block" aria-label="路径损耗 PL 在距离 d 处等于参考距离 d0 处的损耗加 10 乘以路径损耗指数 n 乘以 d 比 d0 的以 10 为底的对数">
+                    <mrow><mi>PL</mi><mo>(</mo><mi>d</mi><mo>)</mo><mo>=</mo><mi>PL</mi><mo>(</mo><msub><mi>d</mi><mn>0</mn></msub><mo>)</mo><mo>+</mo><mn>10</mn><mi>n</mi><msub><mi>log</mi><mn>10</mn></msub><mrow><mo>(</mo><mfrac><mi>d</mi><msub><mi>d</mi><mn>0</mn></msub></mfrac><mo>)</mo></mrow></mrow>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 n 为路径损耗指数：自由空间 n=2，本例室内区域实测 n≈3.2——距离翻倍时衰减由 6 dB 增大到约 9.6 dB。</p>
 
         <div class="tip">
             <strong>测量工程经验：</strong>毫米波信道测量对环境变化极其敏感——一个人的走动、一扇门的开合、甚至笔记本电脑屏幕的翻折都能在接收信号上产生2-5 dB的变化。所以测量时一定要：①在深夜/周末进行以最小化人员活动；②每个位置至少采集3次以上以确保可重复性；③记录详细的"场景照片"——文本描述远远不够，因为你永远想不到后期分析时会需要什么细节。
@@ -388,7 +488,8 @@ def plot_antenna_measurement(freq, s11_db, title="Antenna Measurement"):
             <a href="index.html">📖 返回目录</a>
             <a href="26.html">下一章 →</a>
         </div>
-    </div>
+        </article>
+    </main>
 </div>
 </div>
 </body>
