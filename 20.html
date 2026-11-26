@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第20章 超材料与超表面天线</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -42,9 +70,14 @@
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
     </div>
-    <div class="main-content">
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第20章 超材料与超表面天线</h1>
+            <p class="dek">超材料让我们能“设计”自然界不存在的等效介电常数与磁导率。本章从双负介质讲到 AMC/EBG、表面波调制超表面、可重构智能表面（RIS），以及全息天线与轨道角动量（OAM）。</p>
+        </header>
 
-        <h2>20.1 超材料的基本概念</h2>
+        <h2 id="s20-1">20.1 超材料的基本概念</h2>
 
         <p>大家好，我是你们的讲师。在前面的章节中，我们讨论的所有天线都由传统的金属和介质构成——铜、铝、FR4、Rogers板材。这些材料的电磁特性由它们的<strong>本构参数</strong>决定：介电常数ε和磁导率μ。但自然界中ε和μ的取值范围非常有限。如果我问你："有没有一种材料，它的介电常数和磁导率同时为负？"你的第一反应可能是"那是不可能的"。</p>
 
@@ -58,6 +91,26 @@
 
         <p>当ε和μ都小于0时，我们得到<strong>双负介质（Double Negative, DNG）</strong>。这种材料的折射率为负——这意味着当光从空气射入DNG材料时，折射光线会偏向入射线<strong>的同侧</strong>！这就是著名的"反向Snell定律"。这种材料可以做出"完美透镜"——理论上超越衍射极限的分辨率。</p>
 
+        <figure>
+            <svg role="img" aria-labelledby="fig20-dng-title fig20-dng-desc" viewBox="0 0 800 300">
+                <title id="fig20-dng-title">正折射与负折射对比</title>
+                <desc id="fig20-dng-desc">左侧为普通介质中折射光线偏向法线另一侧；右侧为双负介质中折射光线偏向入射线的同一侧，形成反向 Snell 定律。</desc>
+                <rect x="0" y="0" width="800" height="300" fill="#fbfdff"/>
+                <g stroke="#94a3b8" stroke-width="1.5"><line x1="40" y1="150" x2="360" y2="150"/><line x1="440" y1="150" x2="760" y2="150"/></g>
+                <line x1="200" y1="30" x2="200" y2="270" stroke="#cbd5e1" stroke-dasharray="6 4"/>
+                <line x1="600" y1="30" x2="600" y2="270" stroke="#cbd5e1" stroke-dasharray="6 4"/>
+                <path d="M120 60 L 200 150 L 300 230" fill="none" stroke="#147f80" stroke-width="3"/>
+                <path d="M520 60 L 600 150 L 700 230" fill="none" stroke="#d06d4d" stroke-width="3"/>
+                <text x="110" y="45" font-size="14" fill="#147f80">入射</text>
+                <text x="510" y="45" font-size="14" fill="#d06d4d">入射</text>
+                <text x="312" y="244" font-size="14" fill="#147f80">折射（异侧）</text>
+                <text x="470" y="244" font-size="14" fill="#d06d4d">折射（同侧）</text>
+                <text x="150" y="286" font-size="14" fill="#475569">普通介质 ε&gt;0, μ&gt;0</text>
+                <text x="550" y="286" font-size="14" fill="#475569">双负介质 ε&lt;0, μ&lt;0</text>
+            </svg>
+            <figcaption><b>图 20-1　正折射与负折射的几何对比。</b>当 ε 与 μ 同时为负时，折射光线偏向入射线的同侧（负折射），这是“反向 Snell 定律”的直接后果。示意图，折射角仅用于说明方向关系。</figcaption>
+        </figure>
+
         <div class="highlight">
             <strong>里程碑故事：</strong>2000年，美国加州大学圣地亚哥分校的<strong>David Smith</strong>教授将Pendry设计的金属线和SRR结合在一起，在实验中首次实现了双负超材料，从实验上验证了负折射现象。这篇发表在<em>Science</em>上的论文引爆了超材料研究的热潮。从此，一个全新的电磁学分支诞生了。20年后，超材料已从实验室奇观演变为工程实用的技术——尤其是在天线领域。
         </div>
@@ -69,6 +122,24 @@
         <p>传统微带天线使用金属地平面（PEC），其反射相位为180°。这意味着为了让反射波与辐射波同相叠加，天线距离地面的高度必须为λ/4——对于低频来说，这太厚了。</p>
 
         <p><strong>人工磁导体（Artificial Magnetic Conductor, AMC）</strong>则不同——它在特定频段内以<strong>0°相位</strong>反射电磁波。这意味着我们可以把天线紧贴在AMC表面上方（λ/50甚至更薄），依然保持良好的阻抗匹配和辐射效率。这就是所谓的<strong>超薄腔体天线</strong>。一个AMC表面通常由周期性排列的金属贴片组成（如蘑菇形结构，即Sievenpiper结构），通过调整贴片尺寸和间距来控制反射相位零点所在的频率。</p>
+
+        <figure>
+            <svg role="img" aria-labelledby="fig20-amc-title fig20-amc-desc" viewBox="0 0 800 300">
+                <title id="fig20-amc-title">PEC 与 AMC 的反射相位与腔体高度</title>
+                <desc id="fig20-amc-desc">左图对比 PEC 反射相位约 180 度与 AMC 约 0 度；右图表示 PEC 需 λ/4 高度，而 AMC 可把天线放在远小于波长的距离上。</desc>
+                <rect x="0" y="0" width="800" height="300" fill="#fbfdff"/>
+                <g font-size="14" fill="#475569"><text x="60" y="28">反射相位</text><text x="500" y="28">腔体高度</text></g>
+                <line x1="60" y1="200" x2="300" y2="200" stroke="#64748b"/><line x1="60" y1="40" x2="60" y2="200" stroke="#64748b"/>
+                <text x="24" y="60" font-size="12" fill="#64748b">180°</text><text x="36" y="206" font-size="12" fill="#64748b">0°</text>
+                <rect x="90" y="55" width="40" height="145" fill="#d06d4d"/><text x="86" y="222" font-size="12" fill="#d06d4d">PEC</text>
+                <rect x="200" y="198" width="40" height="3" fill="#147f80"/><text x="196" y="222" font-size="12" fill="#147f80">AMC</text>
+                <rect x="480" y="240" width="250" height="8" fill="#94a3b8"/>
+                <rect x="500" y="110" width="120" height="14" fill="#d06d4d"/><text x="630" y="122" font-size="12" fill="#d06d4d">λ/4</text>
+                <rect x="500" y="228" width="120" height="12" fill="#147f80"/><text x="630" y="238" font-size="12" fill="#147f80">λ/50</text>
+                <line x1="560" y1="124" x2="560" y2="228" stroke="#d06d4d" stroke-width="2"/>
+            </svg>
+            <figcaption><b>图 20-2　AMC 把超薄腔体变成可能。</b>传统 PEC 地面反射相位约 180°，天线需离地 λ/4 才能同相叠加；AMC 在谐振频段以约 0° 反射，天线可紧贴表面放置（λ/50 量级）。代价是 AMC 的 0° 相位只在一个窄频带内成立。</figcaption>
+        </figure>
 
         <h3>电磁带隙结构（EBG）</h3>
 
@@ -119,6 +190,16 @@
 
         <p>根据<strong>Floquet-Bloch理论</strong>，当表面阻抗被周期性地调制时，传播常数会分裂成多个空间谐波。其中-1阶谐波的相速度可以大于光速——成为快波，从而向外辐射。通过精心设计调制的空间频率分布，我们可以控制辐射波束的方向。更神奇的是，通过设计二维的调制图案（类似全息图），可以合成任意形状的波束——包括锥形波束、平顶波束、甚至多波束。</p>
 
+        <div class="math-equation" role="group" aria-label="表面波传播常数与辐射条件">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="表面波传播常数与辐射条件，可横向滚动">
+                <math display="block" aria-label="表面波传播常数 k_sw 等于 k0 乘以根号下 1 加 X0 除以 377 的平方；当 k_sw 减 2π 除以 d 的绝对值小于 k0 时辐射">
+                    <mrow><msub><mi>k</mi><mtext>sw</mtext></msub><mo>=</mo><msub><mi>k</mi><mn>0</mn></msub><msqrt><mn>1</mn><mo>+</mo><msup><mrow><mo>(</mo><mfrac><msub><mi>X</mi><mn>0</mn></msub><mn>377</mn></mfrac><mo>)</mo></mrow><mn>2</mn></msup></msqrt><mo>,</mo><mspace width="1em"/><mrow><mo>|</mo><msub><mi>k</mi><mtext>sw</mtext></msub><mo>−</mo><mfrac><mrow><mn>2</mn><mi>π</mi></mrow><mi>d</mi></mfrac><mo>|</mo></mrow><mo>&lt;</mo><msub><mi>k</mi><mn>0</mn></msub></mrow>
+                </math>
+            </div>
+        </div>
+
+        <p>式中 k<sub>0</sub> = 2πf/c 为自由空间波数，X<sub>0</sub> 为平均表面电抗（Ω），377 Ω 为自由空间波阻抗，d 为调制周期。当 −1 阶空间谐波变成快波（|k<sub>−1</sub>| &lt; k<sub>0</sub>）时，能量才开始向自由空间辐射。</p>
+
         <div class="tip">
             <strong>SW-MTS的突出优势：</strong>剖面极低（λ/20以下），孔径效率高达70-80%（远优于传统微带贴片阵列），且辐射方向图灵活可控。2025-2026年的最新趋势是使用<strong>PIN二极管或变容二极管</strong>加载到超表面单元中，实现动态可重构的波束扫描——无需移相器！这正在成为6G卫星通信终端的候选技术。
         </div>
@@ -160,7 +241,46 @@ print(f"开始辐射频率: {freq[np.where(is_radiating)[0][0]]/1e9:.2f} GHz")
 print(f"辐射带宽: {sum(is_radiating) * (freq[1]-freq[0])/1e9:.2f} GHz")
 # 期望输出: 约 11.8 GHz 开始辐射, 带宽约 2.5 GHz</code></pre>
 
-        <h2>20.4 可重构智能表面(RIS)</h2>
+        <div class="widget">
+            <h3>小工具：SW-MTS 何时开始辐射</h3>
+            <p>调节平均表面电抗 X₀ 与调制周期 d，观察 −1 阶空间谐波何时满足辐射条件，并估算辐射起始频率。</p>
+            <label for="x0">表面电抗 X₀ = <output id="x0Out">250</output> Ω</label>
+            <input id="x0" type="range" min="100" max="400" step="10" value="250" aria-describedby="mtsReadout">
+            <label for="dd">调制周期 d = <output id="ddOut">18</output> mm</label>
+            <input id="dd" type="range" min="8" max="40" step="1" value="18" aria-describedby="mtsReadout">
+            <div class="readout" id="mtsReadout" role="status" aria-live="polite"></div>
+            <p style="font-size:.82rem;color:#64748b;margin:.6rem 0 0;">教学示意：采用本章示例代码中的近似式 k_sw ≈ k₀√(1+(X₀/377)²)，在 10–15 GHz 区间向高频扫描找到起始辐射频率。</p>
+        </div>
+
+        <script>
+        (function(){
+            var x0 = document.getElementById('x0'), dd = document.getElementById('dd');
+            var x0Out = document.getElementById('x0Out'), ddOut = document.getElementById('ddOut');
+            var ro = document.getElementById('mtsReadout');
+            var c = 3e8, f0 = 10e9, f1 = 15e9, N = 500;
+            function upd(){
+                var X0 = Number(x0.value), d = Number(dd.value) / 1000;
+                x0Out.textContent = String(X0);
+                ddOut.textContent = String(Number(dd.value));
+                var fRad = null;
+                for (var i = 0; i <= N; i++){
+                    var f = f0 + (f1 - f0) * i / N;
+                    var k0 = 2 * Math.PI * f / c;
+                    var ksw = k0 * Math.sqrt(1 + Math.pow(X0 / 377, 2));
+                    var k1 = ksw - 2 * Math.PI / d;
+                    if (Math.abs(k1) < k0) { fRad = f; break; }
+                }
+                ro.textContent = fRad === null
+                    ? '在 10–15 GHz 区间内未满足辐射条件（可尝试减小 d 或增大 X₀）'
+                    : '−1 阶谐波约在 ' + (fRad / 1e9).toFixed(2) + ' GHz 开始辐射\n对应表面波波长 ≈ ' + (c / fRad * 1e3).toFixed(1) + ' mm';
+            }
+            x0.addEventListener('input', upd);
+            dd.addEventListener('input', upd);
+            upd();
+        })();
+        </script>
+
+        <h2 id="s20-4">20.4 可重构智能表面(RIS)</h2>
 
         <p>如果说超材料是"创造自然界不存在的材料"，那么<strong>可重构智能表面（Reconfigurable Intelligent Surface, RIS）</strong>则是超材料的"主动化"版本——它是6G的核心候选技术之一。</p>
 
@@ -222,7 +342,8 @@ print(f"辐射带宽: {sum(is_radiating) * (freq[1]-freq[0])/1e9:.2f} GHz")
             <a href="index.html">📖 返回目录</a>
             <a href="21.html">下一章 →</a>
         </div>
-    </div>
+        </article>
+    </main>
 </div>
 </div>
 </body>

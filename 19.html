@@ -5,11 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>第19章 宽带/超宽带天线与MIMO天线</title>
     <link rel="stylesheet" href="theme.css">
+    <style>
+        .article-header { max-width: 900px; margin: 0 0 2rem; padding-bottom: 1rem; border-bottom: 2px solid #f0e6d2; }
+        .article-header h1 { font-size: clamp(1.5rem, 3vw, 2.1rem); color: #1e3a8a; line-height: 1.3; }
+        .dek { color: #475569; font-size: 1rem; margin-top: .5rem; line-height: 1.7; }
+        main.main-content { display: block; min-width: 0; }
+        main.main-content article { max-width: 900px; }
+        figure { margin: 1.6rem 0; padding: 1rem; background: #fbfdff; border: 1px solid #e2e8f0; border-radius: 16px; }
+        figure svg { display: block; width: 100%; height: auto; }
+        figcaption { margin-top: .6rem; font-size: .9rem; color: #475569; line-height: 1.6; }
+        figcaption b { color: #1e3a8a; }
+        .math-equation { margin: 1.2rem 0; max-width: 100%; min-width: 0; }
+        .math-scroll { max-width: 100%; min-width: 0; overflow-x: auto; overflow-y: hidden; padding: .4rem 0; }
+        .math-scroll:focus-visible { outline: 3px solid #147f80; outline-offset: 2px; }
+        .math-scroll math[display="block"] { width: max-content; min-width: 100%; font-size: 1.25rem; }
+        .widget { margin: 1.4rem 0; padding: 1rem 1.2rem; background: #f0f7ff; border: 1px solid #bfdbfe; border-radius: 16px; }
+        .widget h3 { margin-top: 0; }
+        .widget label { display: block; font-size: .9rem; color: #334155; margin: .6rem 0 .2rem; }
+        .widget input[type=range] { width: 100%; }
+        .widget output { font-weight: 700; color: #1e40af; }
+        .widget button { font: inherit; padding: .45rem 1.2rem; background: #1e40af; color: #fff; border: 0; border-radius: 40px; cursor: pointer; }
+        .widget button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+        .readout { font-family: 'JetBrains Mono', monospace; font-size: .9rem; background: #fff; border-radius: 10px; padding: .6rem .8rem; margin-top: .6rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+        pre { max-width: 100%; overflow-x: auto; }
+        table { max-width: 100%; }
+        img, svg { max-width: 100%; }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+        @media print { .widget { display: none; } .math-scroll { overflow: visible; } }
+    </style>
 </head>
 <body>
 <div class="double-border">
 <div class="container">
-    <div class="sidebar">
+    <nav class="sidebar" aria-label="课程目录">
         <h3>📡 课程目录</h3>
         <ul class="chapter-list">
             <li><a href="01.html">第1章 课程导论与历史回顾</a></li>
@@ -42,9 +70,14 @@
             <li><a href="28.html">第28章 综合项目：5G毫米波阵列设计</a></li>
         </ul>
     </div>
-    <div class="main-content">
+    <main class="main-content" id="content">
+    <article>
+        <header class="article-header">
+            <h1>第19章 宽带/超宽带天线与MIMO天线</h1>
+            <p class="dek">从 UWB 的宽带到 MIMO 的多天线协同，本章讲清宽带辐射器的设计约束、MIMO 的 ECC/TARC/DG/MEG 指标、常用去耦技术，以及特征模分析（CMA）如何帮助确定天线布局。</p>
+        </header>
 
-        <h2>19.1 超宽带(UWB)技术与天线要求</h2>
+        <h2 id="s19-1">19.1 超宽带(UWB)技术与天线要求</h2>
 
         <p>大家好，我是你们的讲师。想象这样一个场景：你走进一个巨大的地下停车场，手机App实时显示你的位置，精度在10厘米以内——它甚至知道你把车停在了哪个车位编号前。这不是未来的魔法，而是今天正在发生的现实。背后的关键技术就是<strong>超宽带（Ultra-Wideband, UWB）</strong>无线电技术。</p>
 
@@ -114,6 +147,28 @@
             </tr>
         </table>
 
+        <figure>
+            <svg role="img" aria-labelledby="fig19-uwb-title fig19-uwb-desc" viewBox="0 0 800 300">
+                <title id="fig19-uwb-title">三类常见 UWB 天线结构</title>
+                <desc id="fig19-uwb-desc">从左到右分别是圆形平面单极子、蝶形偶极子和 Vivaldi 渐变槽缝天线的俯视轮廓示意。</desc>
+                <rect x="0" y="0" width="800" height="300" fill="#fbfdff"/>
+                <g stroke="#1e3a8a" stroke-width="3" fill="none">
+                    <circle cx="130" cy="150" r="55"/>
+                    <line x1="130" y1="205" x2="130" y2="260"/>
+                    <polygon points="300,150 240,80 240,220" fill="none"/>
+                    <polygon points="300,150 360,80 360,220" fill="none"/>
+                    <polygon points="470,80 470,220 660,110 660,190"/>
+                </g>
+                <g fill="#475569" font-size="14" text-anchor="middle">
+                    <text x="130" y="285">平面圆形单极子</text>
+                    <text x="300" y="285">蝶形天线</text>
+                    <text x="565" y="285">Vivaldi 渐变槽缝</text>
+                </g>
+                <line x1="60" y1="260" x2="720" y2="260" stroke="#cbd5e1" stroke-width="1"/>
+            </svg>
+            <figcaption><b>图 19-1　三类常见 UWB 天线的结构示意（俯视）。</b>平面单极子靠圆形贴片的渐变实现宽带；蝶形天线把偶极子振子扩展为三角形获得自互补特性；Vivaldi 天线用指数渐变槽缝把不同频率成分在不同位置辐射。示意轮廓，不按真实比例。</figcaption>
+        </figure>
+
         <div class="tip">
             <strong>设计要点：</strong>UWB天线设计中最具挑战性的不是"带宽有多宽"，而是"如何在如此宽的带宽内同时维持阻抗匹配和稳定的辐射方向图"。你会发现，很多天线在低频辐射方向图是偶极子状，到了高频却变成了多瓣状——这会导致脉冲的波形在空间中随角度变化，严重影响精密定位的准确性。
         </div>
@@ -128,9 +183,18 @@
 
         <p>通过S参数计算ECC的简化公式如下：</p>
 
-        <pre><code>ρ_e ≈ |S*₁₁S₁₂ + S*₂₁S₂₂|²
-  ────────────────────────────────────
-  [(1-|S₁₁|²-|S₂₁|²)(1-|S₂₂|²-|S₁₂|²)]</code></pre>
+        <div class="math-equation" role="group" aria-label="由 S 参数计算包络相关系数">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="包络相关系数公式，可横向滚动">
+                <math display="block" aria-label="包络相关系数 rho_e 约等于 S11 共轭乘 S12 加 S21 共轭乘 S22 的模平方，除以 1 减 S11 平方减 S21 平方与 1 减 S22 平方减 S12 平方的乘积">
+                    <mrow><msub><mi>ρ</mi><mi>e</mi></msub><mo>≈</mo><mfrac>
+                    <msup><mrow><mo>|</mo><msubsup><mi>S</mi><mn>11</mn><mo>*</mo></msubsup><msub><mi>S</mi><mn>12</mn></msub><mo>+</mo><msubsup><mi>S</mi><mn>21</mn><mo>*</mo></msubsup><msub><mi>S</mi><mn>22</mn></msub><mo>|</mo></mrow><mn>2</mn></msup>
+                    <mrow><mo>(</mo><mn>1</mn><mo>−</mo><msup><mrow><mo>|</mo><msub><mi>S</mi><mn>11</mn></msub><mo>|</mo></mrow><mn>2</mn></msup><mo>−</mo><msup><mrow><mo>|</mo><msub><mi>S</mi><mn>21</mn></msub><mo>|</mo></mrow><mn>2</mn></msup><mo>)</mo><mo>(</mo><mn>1</mn><mo>−</mo><msup><mrow><mo>|</mo><msub><mi>S</mi><mn>22</mn></msub><mo>|</mo></mrow><mn>2</mn></msup><mo>−</mo><msup><mrow><mo>|</mo><msub><mi>S</mi><mn>12</mn></msub><mo>|</mo></mrow><mn>2</mn></msup><mo>)</mo></mrow>
+                    </mfrac></mrow>
+                </math>
+            </div>
+        </div>
+
+        <p>其中 S* 表示共轭复数。</p>
 
         <p>其中S*表示共轭复数。需要注意的是，这个S参数公式只在<strong>无损耗天线</strong>和<strong>均匀散射环境</strong>下才严格成立。对于有损耗的天线（实际中几乎总是如此），这个公式会低估真实的ECC，因此更可靠的方法是直接从三维辐射方向图计算。</p>
 
@@ -142,13 +206,25 @@
 
         <p><strong>分集增益（Diversity Gain）</strong>描述了由于多路接收带来的信噪比改善：</p>
 
-        <pre><code>DG = 10 · √(1 - |ρ|²)</code></pre>
+        <div class="math-equation" role="group" aria-label="分集增益公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="分集增益公式，可横向滚动">
+                <math display="block" aria-label="分集增益 DG 等于 10 乘以根号下 1 减 rho 的模平方，单位分贝">
+                    <mrow><mi>DG</mi><mo>=</mo><mn>10</mn><mo>·</mo><msqrt><mn>1</mn><mo>−</mo><msup><mrow><mo>|</mo><mi>ρ</mi><mo>|</mo></mrow><mn>2</mn></msup></msqrt><mspace width="0.75em"/><mo>[</mo><mi>dB</mi><mo>]</mo></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>当ECC = 0时，DG达到最大值10 dB。每增加一点点相关性，分集增益就会下降。</p>
 
         <p><strong>平均有效增益（Mean Effective Gain, MEG）</strong>则更进一步——它不仅考虑天线自身的辐射效率，还结合了传播环境的角分布和极化分布。公式为：</p>
 
-        <pre><code>MEG = ∮[G_θ(Ω)·P_θ(Ω) + G_φ(Ω)·P_φ(Ω)] dΩ</code></pre>
+        <div class="math-equation" role="group" aria-label="平均有效增益公式">
+            <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="平均有效增益公式，可横向滚动">
+                <math display="block" aria-label="平均有效增益 MEG 等于对 G_theta 乘 P_theta 加 G_phi 乘 P_phi 的球面积分">
+                    <mrow><mi>MEG</mi><mo>=</mo><mo>∮</mo><mo>[</mo><msub><mi>G</mi><mi>θ</mi></msub><mo>(</mo><mi>Ω</mi><mo>)</mo><msub><mi>P</mi><mi>θ</mi></msub><mo>(</mo><mi>Ω</mi><mo>)</mo><mo>+</mo><msub><mi>G</mi><mi>φ</mi></msub><mo>(</mo><mi>Ω</mi><mo>)</mo><msub><mi>P</mi><mi>φ</mi></msub><mo>(</mo><mi>Ω</mi><mo>)</mo><mo>]</mo><mi>d</mi><mi>Ω</mi></mrow>
+                </math>
+            </div>
+        </div>
 
         <p>其中G是天线增益方向图，P是入射波的角功率密度分布。一个设计良好的MIMO天线应该使各端口的MEG尽可能接近，否则会出现"一个端口吃饱，另一个端口饿死"的不平衡现象。</p>
 
@@ -156,7 +232,41 @@
             <strong>常见踩坑：</strong>很多初学者只关注S₁₁和ECC两个指标，在仿真中调得漂漂亮亮，结果实际测试时通信吞吐量远低于预期。原因往往在于——TARC超标或MEG不平衡。一定要记住：MIMO天线是<strong>系统</strong>，不是单根天线的简单堆叠！
         </div>
 
-        <h2>19.4 MIMO天线去耦技术</h2>
+        <div class="widget">
+            <h3>小工具：由 S 参数估算 ECC 与分集增益</h3>
+            <p>假设两端口天线近似对称（S₂₂≈S₁₁）且耦合相位为最坏情况，则 ρ<sub>e</sub> ≈ [2|S₁₁||S₂₁| / (1−|S₁₁|²−|S₂₁|²)]²。拖动两个隔离度指标看看 ECC 与 DG 如何变化。</p>
+            <label for="s11">回波损耗 |S₁₁| = <output id="s11Out">−12</output> dB</label>
+            <input id="s11" type="range" min="-30" max="-5" step="0.5" value="-12" aria-describedby="eccReadout">
+            <label for="iso">隔离度 |S₂₁| = <output id="isoOut">−15</output> dB</label>
+            <input id="iso" type="range" min="-40" max="-5" step="0.5" value="-15" aria-describedby="eccReadout">
+            <div class="readout" id="eccReadout" role="status" aria-live="polite"></div>
+            <p style="font-size:.82rem;color:#64748b;margin:.6rem 0 0;">教学示意：采用无耗、均匀散射环境下的简化 S 参数公式，且取耦合相位最坏情况；实际设计应从三维方向图或全波仿真的复数 S 参数计算。</p>
+        </div>
+
+        <script>
+        (function(){
+            var s11 = document.getElementById('s11'), iso = document.getElementById('iso');
+            var s11Out = document.getElementById('s11Out'), isoOut = document.getElementById('isoOut');
+            var ro = document.getElementById('eccReadout');
+            function lin(dB){ return Math.pow(10, dB / 20); }
+            function upd(){
+                var r11 = lin(Number(s11.value)), r21 = lin(Number(iso.value));
+                s11Out.textContent = String(Number(s11.value)).replace('-', '−');
+                isoOut.textContent = String(Number(iso.value)).replace('-', '−');
+                var denom = 1 - r11*r11 - r21*r21;
+                var ecc = denom > 0.01 ? Math.pow(2*r11*r21/denom, 2) : 1;
+                ecc = Math.min(1, ecc);
+                var dg = 10 * Math.sqrt(Math.max(0, 1 - ecc));
+                var grade = ecc < 0.3 ? '满足 5G NR (ECC<0.3)' : (ecc < 0.5 ? '满足 4G LTE (ECC<0.5)' : '不达标');
+                ro.textContent = 'ECC ≈ ' + ecc.toFixed(3) + '\n分集增益 DG ≈ ' + dg.toFixed(2) + ' dB\n判定：' + grade;
+            }
+            s11.addEventListener('input', upd);
+            iso.addEventListener('input', upd);
+            upd();
+        })();
+        </script>
+
+        <h2 id="s19-4">19.4 MIMO天线去耦技术</h2>
 
         <p>MIMO系统的核心目标是利用多天线实现空间复用——每根天线发送不同的数据流。但如果天线之间的<strong>互耦（mutual coupling）</strong>严重，天线单元接收到的信号就会变得高度相关，分集增益和复用增益都会急剧下降。说白了就是"两根天线等于一根"。</p>
 
@@ -313,7 +423,8 @@ print(f"满足 ECC < 0.5: {np.all(rho < 0.5)}")
             <a href="index.html">📖 返回目录</a>
             <a href="20.html">下一章 →</a>
         </div>
-    </div>
+        </article>
+    </main>
 </div>
 </div>
 </body>
