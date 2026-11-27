@@ -406,6 +406,17 @@ print(f"满足 ECC < 0.5: {np.all(rho < 0.5)}")
 
         <p>这就是为什么现在的手机摄像头模组越来越大、内部空间越来越紧，但天线性能并没有崩盘——CMA帮工程师找到了"用结构本身做天线"的智慧。</p>
 
+        <section id="references" aria-labelledby="ref-heading">
+            <h2 id="ref-heading">本章参考与出处</h2>
+            <ul>
+                <li>UWB 的定义（绝对带宽 &gt; 500 MHz 或分数带宽 &gt; 20%）与 3.1–10.6 GHz、−41.3 dBm/MHz 发射掩模：美国 FCC <i>Revision of Part 15 of the Commission's Rules Regarding Ultra-Wideband Transmission Systems</i>, ET Docket 98-153, FCC 02-48, 2002。</li>
+                <li>平面单极子、蝶形天线、Vivaldi 等宽带/频率无关辐射器与微带天线：C. A. Balanis, <i>Antenna Theory: Analysis and Design</i>（Traveling Wave and Broadband Antennas、Frequency Independent Antennas、Microstrip Antennas 等章）。</li>
+                <li>特征模分析（CMA）：R. F. Harrington &amp; J. R. Mautz, "Theory of characteristic modes for conducting bodies," <i>IEEE Trans. Antennas Propag.</i>, vol. AP-19, no. 5, pp. 622–628, 1971。</li>
+                <li>由 S 参数计算 ECC 的闭式：S. Blanch, J. Romeu, I. Corbella, "Exact representation of antenna system diversity performance from input parameter description," <i>Electron. Lett.</i>, 2003。</li>
+                <li>ECC &lt; 0.5（4G）/ &lt; 0.3（5G）、群时延波动 &lt; 1 ns 等为工程常用经验阈值（非强制标准）；ECC 滑块按页面给出的 S 参数公式计算，结果为教学示意。</li>
+            </ul>
+        </section>
+
         <hr style="margin: 30px 0; border: 0; border-top: 2px dashed #fcd34d;">
 
         <p style="font-size: 1.1rem; line-height: 1.8;">
