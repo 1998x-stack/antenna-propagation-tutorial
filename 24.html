@@ -524,11 +524,11 @@ print(f"无杂散动态范围: {DR:.1f} dB")</code></pre>
         <p>链路预算和系统噪声分析帮助我们回答了"系统能工作吗"的问题——从发射功率到天线增益、从路径损耗到接收机灵敏度，每一步都是可以计算的。但现实世界不会完全按照计算书来运行：生产公差、装配偏差、环境变化、器件老化——这些不确定性让链路预算成为一张"有余量的预算表"而不是精确的预测。那么，当我们把理论计算和仿真模型带到实际测试中时，会发生什么？第25章我们将通过一系列<strong>真实的实测案例</strong>，看看测量结果与理论预测之间的差距，并从中学到对付这些偏差的实战经验。</p>
 
         <section id="references" aria-labelledby="ref-heading">
-            <h2 id="ref-heading">本章参考</h2>
+            <h2 id="ref-heading">本章参考与出处</h2>
             <ul>
                 <li>卫星链路预算与 C/N₀、G/T：ITU-R Recommendation P.618, <i>Propagation data and prediction methods required for Earth-space telecommunication systems</i>：<a href="https://www.itu.int/rec/R-REC-P.618/en">itu.int/rec/R-REC-P.618</a></li>
                 <li>降雨衰减预测方法：ITU-R Recommendation P.837：<a href="https://www.itu.int/rec/R-REC-P.837/en">itu.int/rec/R-REC-P.837</a></li>
-                <li>级联噪声系数与灵敏度：T. S. Rappaport, <i>Wireless Communications: Principles and Practice</i>，第 6 章“Receiver noise”。</li>
+                <li>级联噪声系数（Friis 公式）与接收灵敏度：H. T. Friis, “Noise Figures of Radio Receivers,” <i>Proc. IRE</i>, vol. 32, no. 7, pp. 419–422, 1944；T. S. Rappaport, <i>Wireless Communications: Principles and Practice</i>（接收机噪声相关章节）。</li>
                 <li>文中可用度换算（99.5% ≈ 43.8 h/年）为按全年 8760 h 的简单换算，实际可用度定义以运营指标为准。</li>
             </ul>
         </section>
