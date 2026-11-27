@@ -435,6 +435,18 @@ plt.show()</code></pre>
 
         <p>有了仿真工具的加持，我们现在能够准确预测天线的性能参数——方向图、增益、阻抗匹配——从而在设计阶段就完成大部分的优化工作。但天线本身只是无线链路中的一个环节。天线辐射出去的信号，还要经过复杂的传播环境才能抵达接收端。那么问题来了：发射功率多大才能保证接收端有足够的信号？我们需要一套系统的方法来回答这个问题——这就是下一章的<strong>链路预算（Link Budget）</strong>。</p>
 
+        <section id="references" aria-labelledby="ref-heading">
+            <h2 id="ref-heading">本章参考与出处</h2>
+            <ul>
+                <li>矩量法（MoM）：R. F. Harrington, <i>Field Computation by Moment Methods</i>, 1968；W. C. Gibson, <i>The Method of Moments in Electromagnetics</i>。</li>
+                <li>有限元法（FEM）：J.-M. Jin, <i>The Finite Element Method in Electromagnetics</i>。</li>
+                <li>时域有限差分（FDTD）：A. Taflove &amp; S. C. Hagness, <i>Computational Electrodynamics: The Finite-Difference Time-Domain Method</i>。</li>
+                <li>有限积分技术（FIT）：T. Weiland, "A discretization method for the solution of Maxwell's equations for six-component fields," <i>AEÜ</i>, 1977；商用实现见 CST Studio Suite（Dassault Systèmes）。</li>
+                <li>商用 FEM 求解器示例：ANSYS HFSS。</li>
+                <li>网格收敛、端口/去嵌入与仿真陷阱的数值示例为教学示意（非特定版本的实测对比）。</li>
+            </ul>
+        </section>
+
         <div class="footer-nav">
             <a href="22.html">← 上一章</a>
             <a href="index.html">📖 返回目录</a>
