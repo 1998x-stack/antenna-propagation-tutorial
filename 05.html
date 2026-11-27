@@ -445,10 +445,11 @@ print(f"有效口径 A_eff: {A_eff*10000:.2f} cm²")
 print(f"物理口径 (假设半波偶极子长 ~λ/2): {(lam/2)*100:.1f} cm × 线径")</code></pre>
 
         <section id="references" aria-labelledby="ref-heading">
-            <h2 id="ref-heading">本章参考</h2>
+            <h2 id="ref-heading">本章参考与出处</h2>
             <ul>
                 <li>天线术语、方向性系数、增益、效率、输入阻抗、有效口径与口径效率：IEEE Std 145-2013；C. A. Balanis, <i>Antenna Theory: Analysis and Design</i>（第 2 章）。</li>
                 <li>Chu 极限 Q ≥ 1/(ka) + 1/(ka)³ 与尺寸-带宽-效率权衡：L. J. Chu, “Physical Limitations of Omni-Directional Antennas,” <i>J. Appl. Phys.</i>, 1948。</li>
+                <li>VSWR、回波损耗与反射系数换算 |Γ| = (VSWR−1)/(VSWR+1)、RL = −20log₁₀|Γ|：IEEE Std 145-2013；滑块按该式精确计算，非示意。</li>
                 <li>赫兹偶极子 D₀ = 1.5、半波偶极子 D₀ = 1.64（2.15 dBi）为参考文献中的标准结果；效率表中的范围为教学示意量级。</li>
             </ul>
         </section>
